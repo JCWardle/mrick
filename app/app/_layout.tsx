@@ -14,6 +14,8 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(auth)/login" />
           <Stack.Screen name="(auth)/signup" />
+          <Stack.Screen name="(auth)/gender" />
+          <Stack.Screen name="(auth)/sexual-preference" />
           <Stack.Screen name="(auth)/age-range" />
           <Stack.Screen name="(swipe)/index" />
           <Stack.Screen name="(tabs)" />

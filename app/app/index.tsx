@@ -12,24 +12,22 @@ export default function Index() {
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments[0] === '(auth)';
-    const inSwipeGroup = segments[0] === '(swipe)';
+    // Only handle navigation if we're at the root index route (segments empty or just 'index')
+    // Let other screens (like login) handle their own navigation
+    const isAtRoot = segments.length === 0 || (segments.length === 1 && segments[0] === 'index');
+    if (!isAtRoot) {
+      return;
+    }
 
     if (!isAuthenticated) {
       // User is not authenticated, redirect to auth welcome screen
-      if (!inAuthGroup) {
-        router.replace('/(auth)');
-      }
+      router.replace('/(auth)');
     } else if (!isProfileComplete) {
       // User is authenticated but profile incomplete, redirect to onboarding
-      if (!inAuthGroup) {
-        router.replace('/(auth)/age-range');
-      }
+      router.replace('/(auth)/gender');
     } else {
       // User is authenticated and profile complete, redirect to swipe
-      if (inAuthGroup || segments.length === 0) {
-        router.replace('/(swipe)');
-      }
+      router.replace('/(swipe)');
     }
   }, [isAuthenticated, isProfileComplete, isLoading, segments, router]);
 

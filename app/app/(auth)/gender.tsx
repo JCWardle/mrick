@@ -3,21 +3,19 @@ import { useRouter } from 'expo-router';
 import { OnboardingStep } from '../../components/auth/OnboardingStep';
 import { RadioOption } from '../../components/ui/RadioOption';
 import { useAuth } from '../../hooks/useAuth';
-import { updateProfile, getProfile, AgeRange } from '../../lib/profiles';
+import { updateProfile, getProfile, Gender } from '../../lib/profiles';
 
-const AGE_RANGES: { value: AgeRange; label: string }[] = [
-  { value: '18-24', label: '18-24' },
-  { value: '25-34', label: '25-34' },
-  { value: '35-44', label: '35-44' },
-  { value: '45-54', label: '45-54' },
-  { value: '55+', label: '55+' },
+const GENDERS: { value: Gender; label: string }[] = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+  { value: 'non-binary', label: 'Non-binary' },
   { value: 'prefer-not-to-say', label: 'Prefer not to say' },
 ];
 
-export default function AgeRangeScreen() {
+export default function GenderScreen() {
   const router = useRouter();
   const { refreshProfile } = useAuth();
-  const [selectedAgeRange, setSelectedAgeRange] = useState<AgeRange | null>(null);
+  const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -26,8 +24,8 @@ export default function AgeRangeScreen() {
     const loadProfile = async () => {
       try {
         const profile = await getProfile();
-        if (profile?.age_range) {
-          setSelectedAgeRange(profile.age_range);
+        if (profile?.gender) {
+          setSelectedGender(profile.gender);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -39,23 +37,18 @@ export default function AgeRangeScreen() {
   }, []);
 
   const handleContinue = async () => {
-    if (!selectedAgeRange) return;
+    if (!selectedGender) return;
 
     setIsLoading(true);
     try {
-      await updateProfile({ age_range: selectedAgeRange });
-      await refreshProfile();
-      router.push('/(auth)/relationship-status');
+      await updateProfile({ gender: selectedGender });
+      router.push('/(auth)/sexual-preference');
     } catch (error: any) {
-      console.error('Error saving age range:', error);
+      console.error('Error saving gender:', error);
       // TODO: Show error message to user
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleBack = () => {
-    router.back();
   };
 
   if (isLoadingProfile) {
@@ -64,24 +57,24 @@ export default function AgeRangeScreen() {
 
   return (
     <OnboardingStep
-      step={3}
+      step={1}
       totalSteps={4}
-      question="Select your age range"
+      question="How can we refer to you?"
       instruction="Please select one option:"
       onContinue={handleContinue}
-      onBack={handleBack}
-      canContinue={!!selectedAgeRange}
+      canContinue={!!selectedGender}
       isLoading={isLoading}
     >
-      {AGE_RANGES.map((range) => (
+      {GENDERS.map((gender) => (
         <RadioOption
-          key={range.value}
-          label={range.label}
-          value={range.value}
-          selected={selectedAgeRange === range.value}
-          onSelect={() => setSelectedAgeRange(range.value)}
+          key={gender.value}
+          label={gender.label}
+          value={gender.value}
+          selected={selectedGender === gender.value}
+          onSelect={() => setSelectedGender(gender.value)}
         />
       ))}
     </OnboardingStep>
   );
 }
+

@@ -1,10 +1,11 @@
 # Card Data Architecture - Summary
 
 ## Overview
-Cards in Mr. Ick have three core attributes:
+Cards in Mr. Ick have four core attributes:
 - **Text**: Main description (e.g., "Bratty/Playful resistance")
 - **Intensity**: 0-5 scale rating
 - **Labels**: Multiple tags (e.g., "playful", "teasing")
+- **Dirty Talk Templates**: Multiple conversation prompts per card
 
 ## Database Schema
 
@@ -15,7 +16,6 @@ Cards in Mr. Ick have three core attributes:
 - `text` (TEXT) - Main card content
 - `intensity` (INTEGER 0-5) - Required
 - `category` (TEXT, optional)
-- `display_order` (INTEGER, optional)
 - `is_active` (BOOLEAN)
 
 **`labels`**
@@ -30,51 +30,38 @@ Cards in Mr. Ick have three core attributes:
 - `label_id` → `labels.id`
 - Unique constraint: `(card_id, label_id)`
 
-## TypeScript Types
+**`dirty_talk_templates`**
+- `id` (UUID)
+- `card_id` → `cards.id` (Many-to-One: many templates per card)
+- `text` (TEXT) - The conversation prompt/template text
+- `is_active` (BOOLEAN)
+- `created_at` (TIMESTAMPTZ)
 
-```typescript
-interface Label {
-  id: string;
-  name: string;
-  description?: string | null;
-  color?: string | null;
-  created_at: string;
-}
+## Relationships
 
-interface Card {
-  id: string;
-  text: string;
-  intensity: number; // 0-5
-  category?: string | null;
-  display_order?: number | null;
-  is_active: boolean;
-  labels: Label[]; // Populated via join
-  created_at: string;
-  updated_at: string;
-}
-```
+### Cards to Labels
+- **Many-to-Many**: A card can have multiple labels, and a label can be on multiple cards
+- Junction table: `card_labels`
+
+### Cards to Dirty Talk Templates
+- **One-to-Many**: A card can have many dirty talk templates
+- Foreign key: `dirty_talk_templates.card_id` → `cards.id`
+- Each template is specific to one card
 
 ## Event Sourcing
 
 ### `swipe_events` Table
-Immutable append-only log:
+Immutable append-only log of all swipe interactions:
 - `event_type`: 'swiped' | 'changed' | 'deleted'
 - `response`: 'yum' | 'ick' | 'maybe'
-- `metadata` (JSONB): Auto-populated with card context:
-  ```json
-  {
-    "card_intensity": 2,
-    "card_labels": [
-      {"id": "uuid", "name": "playful"},
-      {"id": "uuid", "name": "teasing"}
-    ]
-  }
-  ```
+- `metadata` (JSONB): Auto-populated with card context including intensity and labels
+- Provides complete audit trail for analytics
 
 ### `swipes` Table
 Current state projection (materialized view):
 - Latest response per user/card
-- Updated via triggers when events are created
+- Updated automatically via triggers when events are created
+- Enables fast queries for current state
 
 ## Intensity Scale
 
@@ -87,76 +74,39 @@ Current state projection (materialized view):
 | 4 | intense | Red |
 | 5 | very intense | Dark red |
 
-## Key Functions
+## Features
 
-### Database Functions
-- `get_cards_with_labels()` - Fetch cards with labels
-- `get_response_rate_by_label()` - Analytics by label
-- `get_response_rate_by_intensity()` - Analytics by intensity
-- `get_card_context_for_event()` - Get card metadata for events
+### Card Labeling
+- Cards can have multiple labels for flexible categorization
+- Labels are reusable across cards
+- Enables filtering and analytics by label
 
-### TypeScript Utilities (`utils/cardHelpers.ts`)
-- `getIntensityLabel(intensity)` - Get display label
-- `getIntensityColor(intensity)` - Get color for UI
-- `cardHasLabel(card, labelName)` - Check if card has label
-- `filterCardsByLabel(cards, labelName)` - Filter cards
-- `filterCardsByIntensity(cards, min, max)` - Filter by intensity
+### Intensity Rating
+- 0-5 scale provides granular intensity levels
+- Used for content filtering and user preference matching
+- Displayed visually with color coding
 
-## Query Examples
+### Dirty Talk Templates
+- Each card can have multiple conversation prompts
+- Templates provide suggested ways to discuss the card topic
+- Enables guided conversations between partners
+- Templates are card-specific but can be varied for different approaches
 
-### Fetch Cards with Labels
-```typescript
-const { data } = await supabase.rpc('get_cards_with_labels', {
-  active_only: true,
-  limit_count: null,
-  offset_count: 0
-});
-```
-
-### Manual Query (Fallback)
-```typescript
-const { data } = await supabase
-  .from('cards')
-  .select(`
-    *,
-    card_labels (
-      label:labels (*)
-    )
-  `)
-  .eq('is_active', true);
-```
-
-### Analytics: Response by Label
-```sql
-SELECT 
-  l.name,
-  se.response,
-  COUNT(*) AS count
-FROM swipe_events se
-INNER JOIN cards c ON c.id = se.card_id
-INNER JOIN card_labels cl ON cl.card_id = c.id
-INNER JOIN labels l ON l.id = cl.label_id
-WHERE se.event_type = 'swiped'
-GROUP BY l.name, se.response;
-```
-
-## Files
-
-### Documentation
-- `CARD_ARCHITECTURE.md` - Full architecture details
-- `EVENT_SOURCING.md` - Event sourcing and analytics
-- `CARD_DATA_SUMMARY.md` - This file
-
-### Code
-- `hooks/useCards.ts` - Card fetching with labels
-- `utils/cardHelpers.ts` - Helper functions
-- `supabase/migrations/20240101000002_add_card_labels_and_intensity.sql` - Migration
+### Event Sourcing
+- All swipe actions are recorded as immutable events
+- Events include full card context (intensity, labels) in metadata
+- Enables rich analytics queries:
+  - Response rates by label
+  - Response rates by intensity
+  - Temporal trends
+  - Label co-occurrence analysis
+  - User behavior patterns
 
 ## Benefits
 
 1. **Flexible Labeling**: Many-to-many relationship allows unlimited labels per card
 2. **Rich Analytics**: Event sourcing captures full context for every swipe
-3. **Query Performance**: Indexed relationships enable fast filtering
-4. **Scalability**: Architecture supports thousands of cards and labels
-5. **Data Integrity**: Foreign keys and constraints ensure consistency
-
+3. **Conversation Support**: Multiple templates per card enable varied discussion approaches
+4. **Query Performance**: Indexed relationships enable fast filtering
+5. **Scalability**: Architecture supports thousands of cards, labels, and templates
+6. **Data Integrity**: Foreign keys and constraints ensure consistency

@@ -3,21 +3,21 @@ import { useRouter } from 'expo-router';
 import { OnboardingStep } from '../../components/auth/OnboardingStep';
 import { RadioOption } from '../../components/ui/RadioOption';
 import { useAuth } from '../../hooks/useAuth';
-import { updateProfile, getProfile, AgeRange } from '../../lib/profiles';
+import { updateProfile, getProfile, RelationshipStatus } from '../../lib/profiles';
 
-const AGE_RANGES: { value: AgeRange; label: string }[] = [
-  { value: '18-24', label: '18-24' },
-  { value: '25-34', label: '25-34' },
-  { value: '35-44', label: '35-44' },
-  { value: '45-54', label: '45-54' },
-  { value: '55+', label: '55+' },
+const RELATIONSHIP_STATUSES: { value: RelationshipStatus; label: string }[] = [
+  { value: 'single', label: 'Single' },
+  { value: 'in-a-relationship', label: 'In a relationship' },
+  { value: 'married', label: 'Married' },
+  { value: 'divorced', label: 'Divorced' },
+  { value: 'widowed', label: 'Widowed' },
   { value: 'prefer-not-to-say', label: 'Prefer not to say' },
 ];
 
-export default function AgeRangeScreen() {
+export default function RelationshipStatusScreen() {
   const router = useRouter();
   const { refreshProfile } = useAuth();
-  const [selectedAgeRange, setSelectedAgeRange] = useState<AgeRange | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<RelationshipStatus | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -26,8 +26,8 @@ export default function AgeRangeScreen() {
     const loadProfile = async () => {
       try {
         const profile = await getProfile();
-        if (profile?.age_range) {
-          setSelectedAgeRange(profile.age_range);
+        if (profile?.relationship_status) {
+          setSelectedStatus(profile.relationship_status);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -39,15 +39,15 @@ export default function AgeRangeScreen() {
   }, []);
 
   const handleContinue = async () => {
-    if (!selectedAgeRange) return;
+    if (!selectedStatus) return;
 
     setIsLoading(true);
     try {
-      await updateProfile({ age_range: selectedAgeRange });
+      await updateProfile({ relationship_status: selectedStatus });
       await refreshProfile();
-      router.push('/(auth)/relationship-status');
+      router.replace('/(swipe)');
     } catch (error: any) {
-      console.error('Error saving age range:', error);
+      console.error('Error saving relationship status:', error);
       // TODO: Show error message to user
     } finally {
       setIsLoading(false);
@@ -64,24 +64,25 @@ export default function AgeRangeScreen() {
 
   return (
     <OnboardingStep
-      step={3}
+      step={4}
       totalSteps={4}
-      question="Select your age range"
+      question="What is your relationship status?"
       instruction="Please select one option:"
       onContinue={handleContinue}
       onBack={handleBack}
-      canContinue={!!selectedAgeRange}
+      canContinue={!!selectedStatus}
       isLoading={isLoading}
     >
-      {AGE_RANGES.map((range) => (
+      {RELATIONSHIP_STATUSES.map((status) => (
         <RadioOption
-          key={range.value}
-          label={range.label}
-          value={range.value}
-          selected={selectedAgeRange === range.value}
-          onSelect={() => setSelectedAgeRange(range.value)}
+          key={status.value}
+          label={status.label}
+          value={status.value}
+          selected={selectedStatus === status.value}
+          onSelect={() => setSelectedStatus(status.value)}
         />
       ))}
     </OnboardingStep>
   );
 }
+

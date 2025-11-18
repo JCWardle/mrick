@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import Constants from 'expo-constants';
+import * as SecureStore from 'expo-secure-store';
 
 // Get Supabase URL and anon key from environment variables
 // These should be set in app.json under extra, or via .env file
@@ -15,6 +16,11 @@ export const supabase = createClient(
   supabaseAnonKey || 'placeholder-key',
   {
     auth: {
+      storage: {
+        getItem: (key: string) => SecureStore.getItemAsync(key),
+        setItem: (key: string, value: string) => SecureStore.setItemAsync(key, value),
+        removeItem: (key: string) => SecureStore.deleteItemAsync(key),
+      },
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,

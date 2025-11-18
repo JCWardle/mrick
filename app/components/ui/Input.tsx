@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, ViewStyle, TextInputProps, Platform } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, ViewStyle, TextStyle, TextInputProps, Platform } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { BorderRadius } from '../../constants/borderRadius';
 import { Spacing } from '../../constants/spacing';
@@ -12,7 +12,7 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
   success?: boolean;
   type?: 'text' | 'password';
   containerStyle?: ViewStyle;
-  labelStyle?: ViewStyle;
+  labelStyle?: TextStyle;
 }
 
 export function Input({
@@ -113,8 +113,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: BorderRadius.md,
     paddingHorizontal: Spacing.md,
-    paddingTop: Spacing.sm + 2,
-    paddingBottom: Spacing.md,
     minHeight: 52,
   },
   input: {
@@ -122,9 +120,9 @@ const styles = StyleSheet.create({
     flex: 1,
     color: Colors.textPrimary,
     padding: 0,
-    lineHeight: 26,
-    paddingTop: Platform.OS === 'ios' ? 2 : 0,
-    paddingBottom: Platform.OS === 'ios' ? 2 : 0,
+    lineHeight: 20,
+    paddingTop: 0,
+    paddingBottom: 0,
     ...(Platform.OS === 'android' && {
       textAlignVertical: 'center',
       includeFontPadding: false,

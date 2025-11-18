@@ -3,7 +3,20 @@ import { View, StyleSheet } from 'react-native';
 import { Menu, Button, Text } from 'react-native-paper';
 import { AgeRange } from '../../lib/profiles';
 
-const AGE_RANGES: AgeRange[] = ['18-24', '25-34', '35-44', '45-54', '55+'];
+const AGE_RANGES: { value: AgeRange; label: string }[] = [
+  { value: '18-24', label: '18-24' },
+  { value: '25-34', label: '25-34' },
+  { value: '35-44', label: '35-44' },
+  { value: '45-54', label: '45-54' },
+  { value: '55+', label: '55+' },
+  { value: 'prefer-not-to-say', label: 'Prefer not to say' },
+];
+
+const getAgeRangeLabel = (value: AgeRange | null): string => {
+  if (!value) return 'Select age range';
+  const range = AGE_RANGES.find((r) => r.value === value);
+  return range?.label || value;
+};
 
 interface AgeRangeSelectorProps {
   selected?: AgeRange | null;
@@ -36,15 +49,15 @@ export function AgeRangeSelector({ selected, onSelect }: AgeRangeSelectorProps) 
             style={styles.button}
             contentStyle={styles.buttonContent}
           >
-            {selected || 'Select age range'}
+            {getAgeRangeLabel(selected)}
           </Button>
         }
       >
         {AGE_RANGES.map((range) => (
           <Menu.Item
-            key={range}
-            onPress={() => handleSelect(range)}
-            title={range}
+            key={range.value}
+            onPress={() => handleSelect(range.value)}
+            title={range.label}
           />
         ))}
       </Menu>

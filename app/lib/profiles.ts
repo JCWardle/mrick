@@ -1,14 +1,16 @@
 import { supabase } from './supabase';
 
-export type AgeRange = '18-24' | '25-34' | '35-44' | '45-54' | '55+';
+export type AgeRange = '18-24' | '25-34' | '35-44' | '45-54' | '55+' | 'prefer-not-to-say';
 export type Gender = 'male' | 'female' | 'non-binary' | 'prefer-not-to-say';
 export type SexualPreference = 'straight' | 'gay' | 'lesbian' | 'bisexual' | 'pansexual' | 'asexual' | 'prefer-not-to-say';
+export type RelationshipStatus = 'single' | 'in-a-relationship' | 'married' | 'divorced' | 'widowed' | 'prefer-not-to-say';
 
 export interface Profile {
   id: string;
   age_range: AgeRange | null;
   gender: Gender | null;
   sexual_preference: SexualPreference | null;
+  relationship_status: RelationshipStatus | null;
   partner_id: string | null;
   created_at: string;
   updated_at: string;
@@ -18,6 +20,7 @@ export interface ProfileUpdate {
   age_range?: AgeRange;
   gender?: Gender;
   sexual_preference?: SexualPreference;
+  relationship_status?: RelationshipStatus;
 }
 
 /**
@@ -114,14 +117,15 @@ export async function updateProfile(data: ProfileUpdate): Promise<Profile> {
 }
 
 /**
- * Check if profile is complete (has age_range, gender, and sexual_preference)
+ * Check if profile is complete (has age_range, gender, sexual_preference, and relationship_status)
  */
 export function isProfileComplete(profile: Profile | null): boolean {
   if (!profile) return false;
   return !!(
     profile.age_range &&
     profile.gender &&
-    profile.sexual_preference
+    profile.sexual_preference &&
+    profile.relationship_status
   );
 }
 

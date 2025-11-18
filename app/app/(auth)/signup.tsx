@@ -17,7 +17,7 @@ export default function SignUpScreen() {
       if (isProfileComplete) {
         router.replace('/(swipe)');
       } else {
-        router.replace('/(auth)/age-range');
+        router.replace('/(auth)/gender');
       }
     }
   }, [isAuthenticated, isProfileComplete, isLoading, router]);
