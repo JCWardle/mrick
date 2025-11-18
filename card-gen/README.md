@@ -1,147 +1,138 @@
-# Card Generation Guide
+# Card Import Script
 
-A guide for creating cards that help couples discover what they both enjoy — without the awkwardness.
+This directory contains tools for managing and importing cards into the Supabase database.
 
----
+## Files
 
-## 📋 Card Data Structure
+- `cards.json` - The card data file containing all cards with their metadata
+- `import-cards.js` - Script to import cards from `cards.json` into the database
+- `card_gen_prompt.md` - Guide for creating and editing cards
 
-```json
-{
-  "text": "Bratty/Playful resistance",
-  "description": "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries and communication.",
-  "intensity": 2,
-  "category": "playful",
-  "labels": ["playful", "teasing", "consent"],
-  "dirty_talk_templates": [
-    "How do you feel about playful resistance?",
-    "What if I said 'no' but meant 'yes'?",
-    "Tell me about times you've enjoyed being teased."
-  ]
-}
+## Importing Cards
+
+The `import-cards.js` script imports cards from `cards.json` into your Supabase database. It handles:
+
+1. Inserting/updating cards in the `cards` table
+2. Creating labels in the `labels` table (if they don't exist)
+3. Linking labels to cards via the `card_labels` junction table
+4. Inserting dirty talk templates into the `dirty_talk_templates` table
+
+### Prerequisites
+
+1. **Supabase Service Role Key**: You need the service role key to bypass Row Level Security (RLS) policies. Get it from:
+   - Supabase Dashboard → Project Settings → API → `service_role` key
+   - ⚠️ **Keep this key secret!** Never commit it to version control.
+
+2. **Node.js**: The script requires Node.js (comes with npm)
+
+3. **Install Dependencies**: Install the required dependencies in this directory:
+   ```bash
+   cd card-gen
+   npm install
+   ```
+
+### Usage
+
+First, install dependencies (if you haven't already):
+```bash
+cd card-gen
+npm install
 ```
 
-**Fields:**
-- `text` (required): Main card content, 2-5 words. Clear and descriptive.
-- `description` (required): Brief explanation, 2 sentences max. Displayed in mobile dialog. Explains what the topic is in approachable, non-clinical language.
-- `intensity` (required): 0-5 scale (see below). Most cards should be 1-3.
-- `category` (optional): High-level organization (e.g., "playful", "kink", "romantic", "toys").
-- `labels` (required): 3-5 tags for filtering (e.g., ["playful", "teasing", "consent"]).
-- `dirty_talk_templates` (required): 3-5 open-ended conversation prompts.
-
----
-
-## 🎯 Intensity Scale
-
-| Value | Label | Use Case |
-|-------|-------|----------|
-| 0 | Very Mild | Gentle exploration, beginners |
-| 1 | Mild | Comfortable experimentation |
-| 2 | Medium | Balanced experiences |
-| 3 | Moderate | Deeper exploration |
-| 4 | Intense | Advanced users |
-| 5 | Very Intense | Niche interests, experienced users |
-
----
-
-## ✍️ Writing Guidelines
-
-**Voice:** Playful but mature, approachable, shame-free, couples-first.
-
-**✅ DO:**
-- Clear, conversational language ("Roleplay scenarios", "Using toys together")
-- Normalize exploration ("Trying new things", "Exploring kinks together")
-- Focus on couples ("Trying new positions together", "Discussing boundaries together")
-- Be specific but not explicit ("BDSM exploration" not "Hardcore BDSM")
-
-**Descriptions:**
-- 2 sentences maximum (mobile-friendly)
-- Briefly explain what the topic is
-- Use approachable, non-clinical language
-- Keep it informative but concise
-- Example: "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries."
-
-**❌ DON'T:**
-- Clinical language ("Sexual compatibility assessment")
-- Explicit language ("Fucking in public")
-- Porn-like language ("Hot sex acts", "Kinky stuff")
-- Judgmental language ("Normal sex", "Weird kinks")
-- Singles-focused language ("What turns you on")
-
----
-
-## 🎨 Baseline Principles
-
-1. **Clarity Over Cleverness** - Immediately understandable
-2. **Inclusive Language** - Works for all couples
-3. **Positive Framing** - Opportunities, not problems
-4. **Respect Boundaries** - Invitations, not pressure
-5. **Couples-First** - Shared exploration context
-6. **Appropriate Intensity** - Match rating to content
-7. **Meaningful Labels** - Specific and useful for filtering
-8. **Helpful Templates** - Open-ended conversation starters, not scripts
-
----
-
-## 📝 Dirty Talk Templates
-
-**Principles:**
-- Open-ended questions ("How do you feel about exploring this together?")
-- Non-judgmental ("What would make this comfortable for you?")
-- Couples-focused ("How could we explore this together?")
-- Respectful of boundaries ("What are your thoughts on this?")
-
-**Example for "Roleplay scenarios":**
-- "Have you ever thought about trying roleplay together?"
-- "What kind of scenarios interest you?"
-- "How could we make roleplay fun and comfortable?"
-
----
-
-## 📊 Categories & Labels
-
-**Common Categories:** `playful`, `romantic`, `kink`, `toys`, `roleplay`, `communication`, `exploration`, `public`, `sensual`
-
-**Common Labels:** `playful`, `teasing`, `romantic`, `intimate`, `kink`, `bdsm`, `toys`, `roleplay`, `communication`, `consent`, `boundaries`, `exploration`, `beginner-friendly`, `advanced`
-
-**Guidelines:**
-- Use 3-5 labels per card
-- Mix broad and specific labels
-- Keep categories broad (8-12 total)
-- Use lowercase, consistent naming
-
----
-
-## ✅ Quality Checklist
-
-- [ ] Text is clear and immediately understandable
-- [ ] Description is 2 sentences max and explains what the topic is
-- [ ] Follows playful but mature voice
-- [ ] Intensity rating is appropriate
-- [ ] Labels are useful and specific
-- [ ] Templates are open-ended and natural
-- [ ] Couples-focused (not singles-focused)
-- [ ] Avoids clinical or explicit language
-- [ ] Would feel comfortable showing to partner
-
----
-
-## 📚 Example Card
-
-```json
-{
-  "text": "Bratty/Playful resistance",
-  "intensity": 2,
-  "category": "playful",
-  "labels": ["playful", "teasing", "consent", "communication"],
-  "dirty_talk_templates": [
-    "How do you feel about playful resistance?",
-    "What if I said 'no' but meant 'yes'?",
-    "How could we explore this in a way that feels safe?"
-  ]
-}
+Then run the import script:
+```bash
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here node import-cards.js
 ```
 
----
+Or use the npm script:
+```bash
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here npm run import
+```
 
-*For more details, see [Branding Guidelines](../prompting/BRANDING.md) and [Card Data Summary](../app/CARD_DATA_SUMMARY.md).*
+You can also set the environment variable separately:
+```bash
+export SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+node import-cards.js
+```
+
+### Environment Variables
+
+- `SUPABASE_URL` (optional): Your Supabase project URL. Defaults to the URL in `app.json` if not set.
+- `SUPABASE_SERVICE_ROLE_KEY` (required): Your Supabase service role key for admin access.
+
+### How It Works
+
+The script:
+
+1. **Reads** `cards.json` from the same directory
+2. **For each card**:
+   - Checks if a card with the same text already exists
+   - Updates existing cards or creates new ones
+   - Ensures all labels exist (creates them if needed)
+   - Links labels to the card
+   - Removes old dirty talk templates and inserts new ones
+3. **Reports** success/failure counts at the end
+
+### Card Matching
+
+Cards are matched by their `text` field. If a card with the same text exists:
+- The existing card is **updated** with new data
+- Labels and templates are **replaced** (old ones deleted, new ones inserted)
+
+If no matching card exists:
+- A new card is **created**
+
+### Example Output
+
+```
+🚀 Starting card import...
+
+📡 Connecting to Supabase: https://dresvbfhcefwlujogzag.supabase.co
+
+✅ Loaded 97 cards from cards.json
+
+[1/97] Processing: Massage with oils
+  ✓ Created card: Massage with oils
+  ✓ Created label: romantic
+  ✓ Created label: intimate
+
+[2/97] Processing: Trying new positions together
+  ✓ Created card: Trying new positions together
+  ...
+
+==================================================
+📊 Import Summary
+==================================================
+✅ Successfully imported: 97 cards
+📦 Total processed: 97 cards
+==================================================
+```
+
+### Troubleshooting
+
+**Error: SUPABASE_SERVICE_ROLE_KEY environment variable is required**
+- Make sure you've set the service role key as an environment variable
+- Get it from your Supabase project settings
+
+**Error: cards.json not found**
+- Make sure you're running the script from the `card-gen` directory
+- Verify that `cards.json` exists in the same directory
+
+**Error: Permission denied or RLS policy violation**
+- Verify you're using the **service_role** key, not the anon key
+- The service role key bypasses RLS policies
+
+**Error: Duplicate key violation**
+- This shouldn't happen with the current logic, but if it does, check for duplicate card texts in `cards.json`
+
+### Database Schema
+
+The script works with these tables:
+
+- `cards` - Main card data (text, category, intensity, description)
+- `labels` - Available labels/tags
+- `card_labels` - Many-to-many relationship between cards and labels
+- `dirty_talk_templates` - Conversation prompts for each card
+
+See the Supabase migrations in `../app/supabase/migrations/` for the full schema.
+

@@ -30,49 +30,107 @@ export function useAuth() {
   // Initialize auth state and listen for changes
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setState((prev) => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-        isAuthenticated: !!session,
-        isLoading: false,
-      }));
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      // Load profile when initial session is loaded
+      if (session) {
+        try {
+          const profile = await getProfile();
+          const profileComplete = isProfileComplete(profile);
+          console.log('[useAuth] Initial session - Profile loaded:', {
+            hasProfile: !!profile,
+            profileComplete,
+            profileData: profile ? {
+              age_range: profile.age_range,
+              gender: profile.gender,
+              sexual_preference: profile.sexual_preference,
+              relationship_status: profile.relationship_status,
+            } : null,
+          });
+          setState((prev) => ({
+            ...prev,
+            session,
+            user: session?.user ?? null,
+            isAuthenticated: !!session,
+            profile,
+            isProfileComplete: profileComplete,
+            isLoading: false,
+          }));
+        } catch (error: any) {
+          console.error('Error loading profile:', error);
+          // If table doesn't exist, set profile to null and let user know
+          if (error?.code === 'PGRST205') {
+            console.warn('Profiles table not found. Please run database migrations.');
+          }
+          setState((prev) => ({
+            ...prev,
+            session,
+            user: session?.user ?? null,
+            isAuthenticated: !!session,
+            isLoading: false,
+          }));
+        }
+      } else {
+        setState((prev) => ({
+          ...prev,
+          session,
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+        }));
+      }
     });
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      // Set loading to true while we fetch the profile
       setState((prev) => ({
         ...prev,
         session,
         user: session?.user ?? null,
         isAuthenticated: !!session,
+        isLoading: !!session, // Set loading to true if we have a session (need to load profile)
       }));
 
       // Load profile when session changes
       if (session) {
-        getProfile()
-          .then((profile) => {
-            setState((prev) => ({
-              ...prev,
-              profile,
-              isProfileComplete: isProfileComplete(profile),
-            }));
-          })
-          .catch((error: any) => {
-            console.error('Error loading profile:', error);
-            // If table doesn't exist, set profile to null and let user know
-            if (error?.code === 'PGRST205') {
-              console.warn('Profiles table not found. Please run database migrations.');
-            }
+        try {
+          const profile = await getProfile();
+          const profileComplete = isProfileComplete(profile);
+          console.log('[useAuth] Auth state changed - Profile loaded:', {
+            hasProfile: !!profile,
+            profileComplete,
+            profileData: profile ? {
+              age_range: profile.age_range,
+              gender: profile.gender,
+              sexual_preference: profile.sexual_preference,
+              relationship_status: profile.relationship_status,
+            } : null,
           });
+          setState((prev) => ({
+            ...prev,
+            profile,
+            isProfileComplete: profileComplete,
+            isLoading: false,
+          }));
+        } catch (error: any) {
+          console.error('Error loading profile:', error);
+          // If table doesn't exist, set profile to null and let user know
+          if (error?.code === 'PGRST205') {
+            console.warn('Profiles table not found. Please run database migrations.');
+          }
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+          }));
+        }
       } else {
         setState((prev) => ({
           ...prev,
           profile: null,
           isProfileComplete: false,
+          isLoading: false,
         }));
       }
     });

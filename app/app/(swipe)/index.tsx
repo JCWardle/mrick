@@ -49,7 +49,7 @@ export default function SwipeScreen() {
   const handleSignOut = async () => {
     try {
       await logout();
-      router.replace('/(auth)/login');
+      router.replace('/(auth)');
     } catch (err: any) {
       setDeleteError(err.message || 'Failed to sign out');
       setShowError(true);

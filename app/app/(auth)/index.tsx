@@ -62,7 +62,7 @@ export default function AuthWelcomeScreen() {
 
         {/* Tagline */}
         <Text variant="tagline" style={styles.tagline}>
-          Discover what you both enjoy — without the awkwardness
+          Discover what you both enjoy  without the awkwardness
         </Text>
 
         {/* Buttons */}

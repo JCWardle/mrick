@@ -1,0 +1,13 @@
+{
+  "name": "card-gen",
+  "version": "1.0.0",
+  "description": "Card import script for mrick",
+  "main": "import-cards.js",
+  "scripts": {
+    "import": "node import-cards.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.81.1"
+  }
+}
+
