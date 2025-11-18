@@ -9,6 +9,7 @@ A guide for creating cards that help couples discover what they both enjoy — w
 ```json
 {
   "text": "Bratty/Playful resistance",
+  "description": "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries and communication.",
   "intensity": 2,
   "category": "playful",
   "labels": ["playful", "teasing", "consent"],
@@ -22,6 +23,7 @@ A guide for creating cards that help couples discover what they both enjoy — w
 
 **Fields:**
 - `text` (required): Main card content, 2-5 words. Clear and descriptive.
+- `description` (required): Brief explanation, 2 sentences max. Displayed in mobile dialog. Explains what the topic is in approachable, non-clinical language.
 - `intensity` (required): 0-5 scale (see below). Most cards should be 1-3.
 - `category` (optional): High-level organization (e.g., "playful", "kink", "romantic", "toys").
 - `labels` (required): 3-5 tags for filtering (e.g., ["playful", "teasing", "consent"]).
@@ -51,6 +53,13 @@ A guide for creating cards that help couples discover what they both enjoy — w
 - Normalize exploration ("Trying new things", "Exploring kinks together")
 - Focus on couples ("Trying new positions together", "Discussing boundaries together")
 - Be specific but not explicit ("BDSM exploration" not "Hardcore BDSM")
+
+**Descriptions:**
+- 2 sentences maximum (mobile-friendly)
+- Briefly explain what the topic is
+- Use approachable, non-clinical language
+- Keep it informative but concise
+- Example: "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries."
 
 **❌ DON'T:**
 - Clinical language ("Sexual compatibility assessment")
@@ -106,6 +115,7 @@ A guide for creating cards that help couples discover what they both enjoy — w
 ## ✅ Quality Checklist
 
 - [ ] Text is clear and immediately understandable
+- [ ] Description is 2 sentences max and explains what the topic is
 - [ ] Follows playful but mature voice
 - [ ] Intensity rating is appropriate
 - [ ] Labels are useful and specific

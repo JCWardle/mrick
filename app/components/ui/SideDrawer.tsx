@@ -62,17 +62,15 @@ export function SideDrawer({ visible, onClose, children }: SideDrawerProps) {
       }
     });
 
-  if (!visible && translateX.value === -DRAWER_WIDTH) {
-    return null;
-  }
-
   return (
     <>
-      <GestureDetector gesture={panGesture}>
-        <Animated.View style={[styles.drawer, drawerStyle]}>
-          {children}
-        </Animated.View>
-      </GestureDetector>
+      {visible && (
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.drawer, drawerStyle]}>
+            {children}
+          </Animated.View>
+        </GestureDetector>
+      )}
       <Animated.View style={[styles.backdrop, backdropStyle]} pointerEvents={visible ? 'auto' : 'none'}>
         <TouchableOpacity
           style={StyleSheet.absoluteFill}

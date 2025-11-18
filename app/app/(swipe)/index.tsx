@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -11,9 +11,11 @@ import { useCards } from '../../hooks/useCards';
 import { useCardStack } from '../../hooks/useCardStack';
 import { useAuth } from '../../hooks/useAuth';
 import { Colors } from '../../constants/colors';
+import { Spacing } from '../../constants/spacing';
 
 export default function SwipeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount } = useAuth();
   const { cards, isLoading: cardsLoading, error, refreshCards } = useCards();
   const [showError, setShowError] = useState(false);
@@ -96,35 +98,97 @@ export default function SwipeScreen() {
 
   if (cardsLoading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
+        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
+          <IconButton
+            icon="menu"
+            size={24}
+            onPress={() => setMenuVisible(true)}
+            iconColor={Colors.textPrimary}
+          />
+        </View>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" />
           <Text variant="bodyLarge" style={styles.loadingText}>
             Loading cards...
           </Text>
         </View>
+        <SwipeMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccountPress}
+        />
+        <DeleteAccountDialog
+          visible={deleteDialogVisible}
+          onDismiss={() => setDeleteDialogVisible(false)}
+          onConfirm={handleDeleteAccountConfirm}
+          isLoading={isDeleting}
+        />
+        <Snackbar
+          visible={showError}
+          onDismiss={() => setShowError(false)}
+          duration={4000}
+        >
+          {deleteError || 'An error occurred'}
+        </Snackbar>
       </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
+        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
+          <IconButton
+            icon="menu"
+            size={24}
+            onPress={() => setMenuVisible(true)}
+            iconColor={Colors.textPrimary}
+          />
+        </View>
         <View style={styles.errorContainer}>
           <Text variant="headlineSmall" style={styles.errorTitle}>
             Error loading cards
           </Text>
           <Text variant="bodyMedium" style={styles.errorText}>
-            {error.message}
+            {error instanceof Error ? error.message : String(error)}
           </Text>
         </View>
+        <SwipeMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccountPress}
+        />
+        <DeleteAccountDialog
+          visible={deleteDialogVisible}
+          onDismiss={() => setDeleteDialogVisible(false)}
+          onConfirm={handleDeleteAccountConfirm}
+          isLoading={isDeleting}
+        />
+        <Snackbar
+          visible={showError}
+          onDismiss={() => setShowError(false)}
+          duration={4000}
+        >
+          {deleteError || 'An error occurred'}
+        </Snackbar>
       </SafeAreaView>
     );
   }
 
   if (isComplete || cards.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['left', 'right']}>
+        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
+          <IconButton
+            icon="menu"
+            size={24}
+            onPress={() => setMenuVisible(true)}
+            iconColor={Colors.textPrimary}
+          />
+        </View>
         <View style={styles.emptyContainer}>
           <Text variant="headlineMedium" style={styles.emptyTitle}>
             You're all caught up!
@@ -133,13 +197,32 @@ export default function SwipeScreen() {
             Check back later for more cards.
           </Text>
         </View>
+        <SwipeMenu
+          visible={menuVisible}
+          onClose={() => setMenuVisible(false)}
+          onSignOut={handleSignOut}
+          onDeleteAccount={handleDeleteAccountPress}
+        />
+        <DeleteAccountDialog
+          visible={deleteDialogVisible}
+          onDismiss={() => setDeleteDialogVisible(false)}
+          onConfirm={handleDeleteAccountConfirm}
+          isLoading={isDeleting}
+        />
+        <Snackbar
+          visible={showError}
+          onDismiss={() => setShowError(false)}
+          duration={4000}
+        >
+          {deleteError || 'An error occurred'}
+        </Snackbar>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+      <View style={[styles.header, { top: insets.top, left: insets.left }]}>
         <IconButton
           icon="menu"
           size={24}
@@ -186,7 +269,7 @@ export default function SwipeScreen() {
         onDismiss={() => setShowError(false)}
         duration={4000}
       >
-        {error?.message || deleteError || 'An error occurred'}
+        {deleteError || 'An error occurred'}
       </Snackbar>
     </SafeAreaView>
   );
@@ -199,10 +282,9 @@ const styles = StyleSheet.create({
   },
   header: {
     position: 'absolute',
-    top: 0,
-    left: 0,
     zIndex: 100,
-    paddingTop: 8,
+    paddingTop: Spacing.xs,
+    paddingLeft: Spacing.xs,
   },
   content: {
     flex: 1,

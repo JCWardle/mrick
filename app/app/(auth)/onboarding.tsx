@@ -91,18 +91,31 @@ export default function OnboardingScreen() {
   const contentOpacity = useSharedValue(1);
   const contentTranslateX = useSharedValue(0);
 
+  // Helper function to determine initial step based on profile data
+  const getInitialStep = (profile: FormData): number => {
+    if (!profile.gender) return 1;
+    if (!profile.sexualPreference) return 2;
+    if (!profile.ageRange) return 3;
+    if (!profile.relationshipStatus) return 4;
+    return 1; // All complete, start from beginning (shouldn't happen as user would be redirected)
+  };
+
   // Load existing profile data
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const profile = await getProfile();
         if (profile) {
-          setFormData({
+          const loadedFormData = {
             gender: profile.gender,
             sexualPreference: profile.sexual_preference,
             ageRange: profile.age_range,
             relationshipStatus: profile.relationship_status,
-          });
+          };
+          setFormData(loadedFormData);
+          // Determine initial step based on what's already completed
+          const initialStep = getInitialStep(loadedFormData);
+          setCurrentStep(initialStep);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
@@ -155,7 +168,10 @@ export default function OnboardingScreen() {
   const currentStepConfig = stepConfigs[currentStep - 1];
   const canContinue = currentStepConfig.canContinue(formData);
 
-  const animateStepTransition = (direction: 'forward' | 'backward', callback: () => void) => {
+  const animateStepTransition = (direction: 'forward' | 'backward', newStep: number) => {
+    // Update step state immediately (before animation)
+    setCurrentStep(newStep);
+    
     // Animate out
     contentOpacity.value = withTiming(0, {
       duration: 200,
@@ -165,9 +181,7 @@ export default function OnboardingScreen() {
       duration: 200,
       easing: Easing.out(Easing.cubic),
     }, () => {
-      // Change step
-      callback();
-      
+      'worklet';
       // Reset position for opposite direction
       contentTranslateX.value = direction === 'forward' ? 30 : -30;
       
@@ -184,7 +198,7 @@ export default function OnboardingScreen() {
   };
 
   const handleContinue = async () => {
-    if (!canContinue) return;
+    if (!canContinue || isLoading) return;
 
     setIsLoading(true);
     try {
@@ -193,9 +207,9 @@ export default function OnboardingScreen() {
 
       if (currentStep < TOTAL_STEPS) {
         // Move to next step
-        animateStepTransition('forward', () => {
-          setCurrentStep(currentStep + 1);
-        });
+        const nextStep = currentStep + 1;
+        animateStepTransition('forward', nextStep);
+        setIsLoading(false);
       } else {
         // Final step - complete onboarding
         await refreshProfile();
@@ -203,17 +217,15 @@ export default function OnboardingScreen() {
       }
     } catch (error: any) {
       console.error('Error saving step:', error);
-      // TODO: Show error message to user
-    } finally {
       setIsLoading(false);
+      // TODO: Show error message to user
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      animateStepTransition('backward', () => {
-        setCurrentStep(currentStep - 1);
-      });
+      const prevStep = currentStep - 1;
+      animateStepTransition('backward', prevStep);
     } else {
       router.back();
     }
