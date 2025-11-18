@@ -1,17 +1,16 @@
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SwipeableCard } from './SwipeableCard';
 import { Card } from '../../hooks/useCards';
 import { SwipeAction } from '../../hooks/useSwipeGesture';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface CardStackProps {
   cards: Card[];
   onSwipe: (cardId: string, action: SwipeAction) => void;
   currentIndex: number;
+  onShowDetails?: () => void;
 }
 
-export function CardStack({ cards, onSwipe, currentIndex }: CardStackProps) {
+export function CardStack({ cards, onSwipe, currentIndex, onShowDetails }: CardStackProps) {
   // Show up to 3 cards in the stack
   const visibleCards = cards.slice(currentIndex, currentIndex + 3);
 
@@ -35,6 +34,7 @@ export function CardStack({ cards, onSwipe, currentIndex }: CardStackProps) {
           index={index}
           totalCards={visibleCards.length}
           enabled={index === 0}
+          onShowDetails={index === 0 ? onShowDetails : undefined}
         />
       ))}
     </View>
@@ -43,9 +43,8 @@ export function CardStack({ cards, onSwipe, currentIndex }: CardStackProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT * 0.7,
+    width: '100%',
+    flex: 1,
     position: 'relative',
-    marginHorizontal: 16,
   },
 });

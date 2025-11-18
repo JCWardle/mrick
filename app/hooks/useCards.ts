@@ -10,14 +10,23 @@ export interface Label {
   created_at: string;
 }
 
+export interface ConversationTemplate {
+  id: string;
+  text: string;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface Card {
   id: string;
   text: string;
+  description?: string | null;
   intensity: number; // 0-5 scale
   category?: string | null;
   display_order?: number | null;
   is_active: boolean;
   labels: Label[]; // Populated via join
+  conversationTemplates: ConversationTemplate[]; // Populated via join
   created_at: string;
   updated_at: string;
 }
@@ -59,6 +68,12 @@ export function useCards() {
             *,
             card_labels (
               label:labels (*)
+            ),
+            dirty_talk_templates (
+              id,
+              text,
+              is_active,
+              created_at
             )
           `)
           .eq('is_active', true)
@@ -70,6 +85,14 @@ export function useCards() {
         const transformedCards = (cardsDataFallback || []).map((card: any) => ({
           ...card,
           labels: (card.card_labels || []).map((cl: any) => cl.label).filter(Boolean),
+          conversationTemplates: (card.dirty_talk_templates || [])
+            .filter((t: any) => t.is_active)
+            .map((t: any) => ({
+              id: t.id,
+              text: t.text,
+              is_active: t.is_active,
+              created_at: t.created_at,
+            })),
         }));
 
         // Get user's swipes to filter out already swiped cards
@@ -85,10 +108,33 @@ export function useCards() {
         return;
       }
 
+      // Fetch conversation templates for all cards
+      const cardIds = (cardsData || []).map((card: any) => card.id);
+      const { data: templatesData } = await supabase
+        .from('dirty_talk_templates')
+        .select('id, card_id, text, is_active, created_at')
+        .in('card_id', cardIds)
+        .eq('is_active', true);
+
+      // Group templates by card_id
+      const templatesByCardId = new Map<string, ConversationTemplate[]>();
+      (templatesData || []).forEach((template: any) => {
+        if (!templatesByCardId.has(template.card_id)) {
+          templatesByCardId.set(template.card_id, []);
+        }
+        templatesByCardId.get(template.card_id)!.push({
+          id: template.id,
+          text: template.text,
+          is_active: template.is_active,
+          created_at: template.created_at,
+        });
+      });
+
       // Transform RPC result to match Card interface (labels already in JSONB format)
       const transformedCards = (cardsData || []).map((card: any) => ({
         ...card,
         labels: Array.isArray(card.labels) ? card.labels : [],
+        conversationTemplates: templatesByCardId.get(card.id) || [],
       }));
 
       // Get user's swipes to filter out already swiped cards

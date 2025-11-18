@@ -1,12 +1,14 @@
-import { View, StyleSheet } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { CardStack } from '../../components/swipe/CardStack';
 import { SwipeButtons } from '../../components/swipe/SwipeButtons';
-import { SwipeMenu } from '../../components/swipe/SwipeMenu';
+import { CardInfo } from '../../components/swipe/CardInfo';
 import { DeleteAccountDialog } from '../../components/swipe/DeleteAccountDialog';
+import { CardDetailsModal } from '../../components/swipe/CardDetailsModal';
+import { GradientBackground } from '../../components/ui/GradientBackground';
 import { useCards } from '../../hooks/useCards';
 import { useCardStack } from '../../hooks/useCardStack';
 import { useAuth } from '../../hooks/useAuth';
@@ -15,11 +17,9 @@ import { Spacing } from '../../constants/spacing';
 
 export default function SwipeScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount } = useAuth();
   const { cards, isLoading: cardsLoading, error, refreshCards } = useCards();
   const [showError, setShowError] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -33,11 +33,13 @@ export default function SwipeScreen() {
     }
   };
 
-  const { currentIndex, currentCard, isComplete, handleSwipe, isSaving, swipeCount } =
+  const { currentIndex, currentCard, isComplete, handleSwipe, handleUndo, canUndo, isSaving, swipeCount } =
     useCardStack({
       cards,
       onSwipeComplete: handleSwipeComplete,
     });
+
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
 
   // Refresh cards after swipe
   useEffect(() => {
@@ -98,27 +100,14 @@ export default function SwipeScreen() {
 
   if (cardsLoading) {
     return (
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
-          <IconButton
-            icon="menu"
-            size={24}
-            onPress={() => setMenuVisible(true)}
-            iconColor={Colors.textPrimary}
-          />
-        </View>
+      <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+        <GradientBackground gradientId="swipeGradient" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" />
           <Text variant="bodyLarge" style={styles.loadingText}>
             Loading cards...
           </Text>
         </View>
-        <SwipeMenu
-          visible={menuVisible}
-          onClose={() => setMenuVisible(false)}
-          onSignOut={handleSignOut}
-          onDeleteAccount={handleDeleteAccountPress}
-        />
         <DeleteAccountDialog
           visible={deleteDialogVisible}
           onDismiss={() => setDeleteDialogVisible(false)}
@@ -138,15 +127,8 @@ export default function SwipeScreen() {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
-          <IconButton
-            icon="menu"
-            size={24}
-            onPress={() => setMenuVisible(true)}
-            iconColor={Colors.textPrimary}
-          />
-        </View>
+      <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+        <GradientBackground gradientId="swipeGradient" />
         <View style={styles.errorContainer}>
           <Text variant="headlineSmall" style={styles.errorTitle}>
             Error loading cards
@@ -155,12 +137,6 @@ export default function SwipeScreen() {
             {error instanceof Error ? error.message : String(error)}
           </Text>
         </View>
-        <SwipeMenu
-          visible={menuVisible}
-          onClose={() => setMenuVisible(false)}
-          onSignOut={handleSignOut}
-          onDeleteAccount={handleDeleteAccountPress}
-        />
         <DeleteAccountDialog
           visible={deleteDialogVisible}
           onDismiss={() => setDeleteDialogVisible(false)}
@@ -180,15 +156,8 @@ export default function SwipeScreen() {
 
   if (isComplete || cards.length === 0) {
     return (
-      <SafeAreaView style={styles.container} edges={['left', 'right']}>
-        <View style={[styles.header, { top: insets.top, left: insets.left }]}>
-          <IconButton
-            icon="menu"
-            size={24}
-            onPress={() => setMenuVisible(true)}
-            iconColor={Colors.textPrimary}
-          />
-        </View>
+      <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+        <GradientBackground gradientId="swipeGradient" />
         <View style={styles.emptyContainer}>
           <Text variant="headlineMedium" style={styles.emptyTitle}>
             You're all caught up!
@@ -197,12 +166,6 @@ export default function SwipeScreen() {
             Check back later for more cards.
           </Text>
         </View>
-        <SwipeMenu
-          visible={menuVisible}
-          onClose={() => setMenuVisible(false)}
-          onSignOut={handleSignOut}
-          onDeleteAccount={handleDeleteAccountPress}
-        />
         <DeleteAccountDialog
           visible={deleteDialogVisible}
           onDismiss={() => setDeleteDialogVisible(false)}
@@ -221,40 +184,74 @@ export default function SwipeScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <View style={[styles.header, { top: insets.top, left: insets.left }]}>
-        <IconButton
-          icon="menu"
-          size={24}
-          onPress={() => setMenuVisible(true)}
-          iconColor={Colors.textPrimary}
-        />
-      </View>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
+      <GradientBackground gradientId="swipeGradient" />
       
       <View style={styles.content}>
         <CardStack
           cards={cards}
           onSwipe={handleSwipe}
           currentIndex={currentIndex}
+          onShowDetails={() => setDetailsModalVisible(true)}
         />
-        
-        <View style={styles.footer}>
-          <SwipeButtons
-            onSwipe={(action) => {
-              if (currentCard) {
-                handleSwipe(currentCard.id, action);
-              }
-            }}
-            disabled={isSaving || !currentCard}
-          />
-        </View>
       </View>
 
-      <SwipeMenu
-        visible={menuVisible}
-        onClose={() => setMenuVisible(false)}
-        onSignOut={handleSignOut}
-        onDeleteAccount={handleDeleteAccountPress}
+      <View style={styles.footer}>
+        <CardInfo card={currentCard} />
+        <SwipeButtons
+          onSwipe={(action) => {
+            if (currentCard) {
+              handleSwipe(currentCard.id, action);
+            }
+          }}
+          onInfo={() => setDetailsModalVisible(true)}
+          disabled={isSaving || !currentCard}
+        />
+      </View>
+
+      {/* Bottom Navigation Bar */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => {
+            // Already on swipe screen, no action needed
+          }}
+        >
+          <IconButton
+            icon="heart"
+            size={24}
+            iconColor={Colors.primary}
+            style={styles.navButton}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => router.push('/(swipe)/matching' as any)}
+        >
+          <IconButton
+            icon="account-multiple"
+            size={24}
+            iconColor={Colors.textTertiary}
+            style={styles.navButton}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.navItem}
+          onPress={() => router.push('/(swipe)/profile' as any)}
+        >
+          <IconButton
+            icon="account-outline"
+            size={24}
+            iconColor={Colors.textTertiary}
+            style={styles.navButton}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <CardDetailsModal
+        visible={detailsModalVisible}
+        card={currentCard}
+        onDismiss={() => setDetailsModalVisible(false)}
       />
 
       <DeleteAccountDialog
@@ -278,27 +275,17 @@ export default function SwipeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
-  },
-  header: {
-    position: 'absolute',
-    zIndex: 100,
-    paddingTop: Spacing.xs,
-    paddingLeft: Spacing.xs,
+    backgroundColor: 'transparent',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 20, // Reduced padding since info is now in footer
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: Colors.backgroundWhite,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    backgroundColor: 'transparent',
+    paddingBottom: Spacing.xs,
   },
   loadingContainer: {
     flex: 1,
@@ -336,5 +323,20 @@ const styles = StyleSheet.create({
   emptyText: {
     color: Colors.textSecondary,
     textAlign: 'center',
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    paddingVertical: Spacing.xs,
+  },
+  navItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navButton: {
+    margin: 0,
   },
 });

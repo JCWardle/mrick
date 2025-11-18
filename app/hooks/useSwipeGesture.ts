@@ -72,13 +72,30 @@ export function useSwipeGesture({
       
       // Determine swipe action
       if (absX > SWIPE_THRESHOLD_X) {
-        // Horizontal swipe
+        // Horizontal swipe - animate off screen first, then call onSwipe
         const action: SwipeAction = event.translationX > 0 ? 'yum' : 'ick';
         runOnJS(triggerHaptic)('heavy');
+        
+        // Animate off screen
+        const screenWidth = 400;
+        const targetX = event.translationX > 0 ? screenWidth * 1.5 : -screenWidth * 1.5;
+        translateX.value = withSpring(targetX, { damping: 20, stiffness: 300 });
+        translateY.value = withSpring(event.translationY, { damping: 20, stiffness: 300 });
+        opacity.value = withSpring(0, { damping: 20, stiffness: 300 });
+        
+        // Call onSwipe - animation will continue even after state update
         runOnJS(onSwipe)(action);
       } else if (absY > SWIPE_THRESHOLD_Y && event.translationY < 0) {
-        // Upward swipe (maybe)
+        // Upward swipe (maybe) - animate off screen first, then call onSwipe
         runOnJS(triggerHaptic)('heavy');
+        
+        // Animate off screen upward
+        const screenHeight = 800;
+        translateX.value = withSpring(event.translationX, { damping: 20, stiffness: 300 });
+        translateY.value = withSpring(-screenHeight * 1.5, { damping: 20, stiffness: 300 });
+        opacity.value = withSpring(0, { damping: 20, stiffness: 300 });
+        
+        // Call onSwipe - animation will continue even after state update
         runOnJS(onSwipe)('maybe');
       } else {
         // Snap back to center

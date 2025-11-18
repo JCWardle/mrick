@@ -1,11 +1,11 @@
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { Card } from '../../hooks/useCards';
 import { useSwipeGesture, SwipeAction } from '../../hooks/useSwipeGesture';
 import { Colors } from '../../constants/colors';
 import { SWIPE_THRESHOLD_X } from '../../constants/swipeThresholds';
+import { CardIllustration } from './CardIllustration';
 
 interface SwipeableCardProps {
   card: Card;
@@ -13,6 +13,7 @@ interface SwipeableCardProps {
   index: number;
   totalCards: number;
   enabled?: boolean;
+  onShowDetails?: () => void;
 }
 
 export function SwipeableCard({
@@ -21,6 +22,7 @@ export function SwipeableCard({
   index,
   totalCards,
   enabled = true,
+  onShowDetails,
 }: SwipeableCardProps) {
   const isTopCard = index === 0;
   const { gesture, animatedStyle, translateX } = useSwipeGesture({
@@ -34,14 +36,9 @@ export function SwipeableCard({
       return {};
     }
     
-    const depth = index;
-    const scale = 1 - depth * 0.05;
-    const opacity = 1 - depth * 0.3;
-    const translateY = depth * 8;
-    
+    // Hide cards behind the top card completely to prevent bleed-through
     return {
-      transform: [{ scale }, { translateY }],
-      opacity: Math.max(0.4, opacity),
+      opacity: 0,
       zIndex: totalCards - index,
     };
   });
@@ -86,13 +83,13 @@ export function SwipeableCard({
           styles.card,
           cardStyle,
           !isTopCard && styles.stackedCard,
+          // Ensure top card has solid background to prevent bleed-through
+          isTopCard && { backgroundColor: Colors.backgroundWhite },
         ]}
       >
-        <View style={styles.content}>
-          <Text variant="headlineMedium" style={styles.cardText}>
-            {card.text}
-          </Text>
-        </View>
+        {/* Card Illustration Background */}
+        <CardIllustration cardText={card.text} category={card.category} />
+
       </Animated.View>
     </GestureDetector>
   );
@@ -110,19 +107,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
+    overflow: 'hidden',
   },
   stackedCard: {
     marginHorizontal: 8,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 32,
-  },
-  cardText: {
-    textAlign: 'center',
-    color: Colors.textPrimary,
-    lineHeight: 32,
   },
 });
