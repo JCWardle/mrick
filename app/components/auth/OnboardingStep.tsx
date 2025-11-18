@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withTiming, 
+  Easing 
+} from 'react-native-reanimated';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
 import { Typography } from '../../constants/typography';
 import { BorderRadius } from '../../constants/borderRadius';
 import { ProgressBar } from '../ui/ProgressBar';
-import { GradientBackground } from '../ui/GradientBackground';
 
 export interface OnboardingStepProps {
   step: number;
@@ -33,10 +38,42 @@ export function OnboardingStep({
   isLoading = false,
 }: OnboardingStepProps) {
   const insets = useSafeAreaInsets();
+  
+  // Animation values - start hidden
+  const opacity = useSharedValue(0);
+  const translateY = useSharedValue(30);
+
+  useEffect(() => {
+    // Reset animation values when step changes
+    opacity.value = 0;
+    translateY.value = 30;
+
+    // Delay animation start to coordinate with navigation transition
+    // This allows the screen to slide in first, then content animates
+    const timer = setTimeout(() => {
+      opacity.value = withTiming(1, {
+        duration: 400,
+        easing: Easing.out(Easing.cubic),
+      });
+      translateY.value = withTiming(0, {
+        duration: 400,
+        easing: Easing.out(Easing.cubic),
+      });
+    }, 150); // Small delay to let navigation transition start
+
+    return () => clearTimeout(timer);
+  }, [step]); // Re-run when step changes
+
+  // Animated styles for content
+  const contentAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      transform: [{ translateY: translateY.value }],
+    };
+  });
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <GradientBackground gradientId="onboardingGradient" />
       {onBack && (
         <TouchableOpacity
           style={[
@@ -59,14 +96,14 @@ export function OnboardingStep({
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.textContainer}>
+        <Animated.View style={[styles.textContainer, contentAnimatedStyle]}>
           <Text style={[Typography.h1, styles.question]}>{question}</Text>
           <Text style={[Typography.caption, styles.instruction]}>{instruction}</Text>
-        </View>
+        </Animated.View>
 
-        <View style={styles.optionsContainer}>
+        <Animated.View style={[styles.optionsContainer, contentAnimatedStyle]}>
           {children}
-        </View>
+        </Animated.View>
       </ScrollView>
 
       <View style={styles.buttonContainer}>
@@ -93,7 +130,7 @@ export function OnboardingStep({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: 'transparent',
   },
   scrollView: {
     flex: 1,

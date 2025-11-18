@@ -1,10 +1,12 @@
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, ActivityIndicator, Snackbar } from 'react-native-paper';
+import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { CardStack } from '../../components/swipe/CardStack';
 import { SwipeButtons } from '../../components/swipe/SwipeButtons';
+import { SwipeMenu } from '../../components/swipe/SwipeMenu';
+import { DeleteAccountDialog } from '../../components/swipe/DeleteAccountDialog';
 import { useCards } from '../../hooks/useCards';
 import { useCardStack } from '../../hooks/useCardStack';
 import { useAuth } from '../../hooks/useAuth';
@@ -12,9 +14,13 @@ import { Colors } from '../../constants/colors';
 
 export default function SwipeScreen() {
   const router = useRouter();
-  const { isAuthenticated, isProfileComplete, isLoading } = useAuth();
+  const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount } = useAuth();
   const { cards, isLoading: cardsLoading, error, refreshCards } = useCards();
   const [showError, setShowError] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleSwipeComplete = (swipeCount: number) => {
     // Trigger partner invitation modal after 3rd swipe
@@ -37,6 +43,34 @@ export default function SwipeScreen() {
       refreshCards();
     }
   }, [swipeCount, refreshCards]);
+
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      router.replace('/(auth)/login');
+    } catch (err: any) {
+      setDeleteError(err.message || 'Failed to sign out');
+      setShowError(true);
+    }
+  };
+
+  const handleDeleteAccountPress = () => {
+    setDeleteDialogVisible(true);
+  };
+
+  const handleDeleteAccountConfirm = async () => {
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteAccount();
+      router.replace('/(auth)/login');
+    } catch (err: any) {
+      setDeleteError(err.message || 'Failed to delete account');
+      setShowError(true);
+      setIsDeleting(false);
+      setDeleteDialogVisible(false);
+    }
+  };
 
   // Show loading while checking auth state
   if (isLoading) {
@@ -105,6 +139,15 @@ export default function SwipeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <IconButton
+          icon="menu"
+          size={24}
+          onPress={() => setMenuVisible(true)}
+          iconColor={Colors.textPrimary}
+        />
+      </View>
+      
       <View style={styles.content}>
         <CardStack
           cards={cards}
@@ -124,12 +167,26 @@ export default function SwipeScreen() {
         </View>
       </View>
 
+      <SwipeMenu
+        visible={menuVisible}
+        onClose={() => setMenuVisible(false)}
+        onSignOut={handleSignOut}
+        onDeleteAccount={handleDeleteAccountPress}
+      />
+
+      <DeleteAccountDialog
+        visible={deleteDialogVisible}
+        onDismiss={() => setDeleteDialogVisible(false)}
+        onConfirm={handleDeleteAccountConfirm}
+        isLoading={isDeleting}
+      />
+
       <Snackbar
         visible={showError}
         onDismiss={() => setShowError(false)}
         duration={4000}
       >
-        {error?.message || 'An error occurred'}
+        {error?.message || deleteError || 'An error occurred'}
       </Snackbar>
     </SafeAreaView>
   );
@@ -139,6 +196,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 100,
+    paddingTop: 8,
   },
   content: {
     flex: 1,

@@ -20,7 +20,7 @@ export default function LoginScreen() {
       if (isProfileComplete) {
         router.replace('/(swipe)');
       } else {
-        router.replace('/(auth)/gender');
+        router.replace('/(auth)/onboarding');
       }
     }
   }, [isAuthenticated, isProfileComplete, isLoading, router]);

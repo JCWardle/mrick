@@ -117,15 +117,14 @@ export async function updateProfile(data: ProfileUpdate): Promise<Profile> {
 }
 
 /**
- * Check if profile is complete (has age_range, gender, sexual_preference, and relationship_status)
+ * Check if profile is complete (has age_range, gender, and sexual_preference)
  */
 export function isProfileComplete(profile: Profile | null): boolean {
   if (!profile) return false;
   return !!(
     profile.age_range &&
     profile.gender &&
-    profile.sexual_preference &&
-    profile.relationship_status
+    profile.sexual_preference
   );
 }
 

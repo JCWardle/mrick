@@ -1,6 +1,14 @@
+import { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import { Text } from '../../components/ui/Text';
 import { Button } from '../../components/ui/Button';
 import { GradientBackground } from '../../components/ui/GradientBackground';
@@ -9,6 +17,27 @@ import { Image } from 'expo-image';
 
 export default function AuthWelcomeScreen() {
   const router = useRouter();
+  
+  // Animation for pulsing logo
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    // Start pulsing animation - scale from 1.0 to 1.2 (20% bigger) and back
+    scale.value = withRepeat(
+      withTiming(1.2, {
+        duration: 1000,
+        easing: Easing.inOut(Easing.ease),
+      }),
+      -1, // Infinite repeat
+      true // Reverse animation (ping-pong)
+    );
+  }, []);
+
+  const logoAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -17,11 +46,13 @@ export default function AuthWelcomeScreen() {
       <View style={styles.content}>
         {/* Main Visual Area */}
         <View style={styles.visualArea}>
-          <Image
-            source={require('../../assets/images/icon.png')}
-            style={styles.logo}
-            contentFit="contain"
-          />
+          <Animated.View style={logoAnimatedStyle}>
+            <Image
+              source={require('../../assets/images/icon.png')}
+              style={styles.logo}
+              contentFit="contain"
+            />
+          </Animated.View>
         </View>
 
         {/* Brand Name */}

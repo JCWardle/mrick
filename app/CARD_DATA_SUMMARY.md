@@ -1,7 +1,7 @@
 # Card Data Architecture - Summary
 
 ## Overview
-Cards in Mr. Ick have four core attributes:
+Cards in Peek have four core attributes:
 - **Text**: Main description (e.g., "Bratty/Playful resistance")
 - **Intensity**: 0-5 scale rating
 - **Labels**: Multiple tags (e.g., "playful", "teasing")

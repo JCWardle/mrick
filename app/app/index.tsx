@@ -24,7 +24,7 @@ export default function Index() {
       router.replace('/(auth)');
     } else if (!isProfileComplete) {
       // User is authenticated but profile incomplete, redirect to onboarding
-      router.replace('/(auth)/gender');
+      router.replace('/(auth)/onboarding');
     } else {
       // User is authenticated and profile complete, redirect to swipe
       router.replace('/(swipe)');

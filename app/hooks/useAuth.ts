@@ -182,6 +182,34 @@ export function useAuth() {
     }
   };
 
+  const deleteAccount = async () => {
+    if (!state.user) {
+      throw new Error('No user logged in');
+    }
+
+    // Call RPC function to delete the user account
+    // The function uses SECURITY DEFINER to delete from auth.users
+    // which will cascade delete the profile due to ON DELETE CASCADE
+    const { error } = await supabase.rpc('delete_user_account');
+
+    if (error) {
+      throw error;
+    }
+
+    // Sign out the user after successful deletion
+    await supabase.auth.signOut();
+
+    // Clear auth state after successful deletion
+    setState({
+      user: null,
+      session: null,
+      isAuthenticated: false,
+      isProfileComplete: false,
+      profile: null,
+      isLoading: false,
+    });
+  };
+
   return {
     ...state,
     loginWithEmail,
@@ -190,5 +218,6 @@ export function useAuth() {
     loginWithApple,
     logout,
     refreshProfile,
+    deleteAccount,
   };
 }
