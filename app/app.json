@@ -8,7 +8,12 @@
     "scheme": "mrick",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "supabaseUrl": "https://dresvbfhcefwlujogzag.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRyZXN2YmZoY2Vmd2x1am9nemFnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzNjk5OTcsImV4cCI6MjA3ODk0NTk5N30.LBWg0QR_aM8a0bJXUOuLea_uMVn0CPYuFMmbLHTCtoM"
+    },
     "ios": {
+      "bundleIdentifier": "com.mrick.app",
       "supportsTablet": true
     },
     "android": {
@@ -26,6 +31,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "expo-dev-client",
       "expo-router",
       [
         "expo-splash-screen",

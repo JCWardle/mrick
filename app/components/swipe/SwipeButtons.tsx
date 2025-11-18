@@ -1,21 +1,52 @@
 import { View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-paper';
-
-type SwipeAction = 'yum' | 'ick' | 'maybe';
+import { Button, IconButton } from 'react-native-paper';
+import * as Haptics from 'expo-haptics';
+import { SwipeAction } from '../../hooks/useSwipeGesture';
+import { Colors } from '../../constants/colors';
 
 interface SwipeButtonsProps {
   onSwipe: (action: SwipeAction) => void;
+  disabled?: boolean;
 }
 
-export function SwipeButtons({ onSwipe }: SwipeButtonsProps) {
+export function SwipeButtons({ onSwipe, disabled = false }: SwipeButtonsProps) {
+  const handleSwipe = (action: SwipeAction) => {
+    if (disabled) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onSwipe(action);
+  };
+
   return (
     <View style={styles.container}>
-      <Button mode="contained" onPress={() => onSwipe('ick')}>
-        Ick
-      </Button>
-      <Button mode="contained" onPress={() => onSwipe('yum')}>
-        Yum
-      </Button>
+      <IconButton
+        icon="close"
+        iconColor={Colors.ick}
+        size={40}
+        onPress={() => handleSwipe('ick')}
+        disabled={disabled}
+        style={[styles.button, styles.ickButton]}
+        containerColor={Colors.ickLight}
+      />
+      
+      <IconButton
+        icon="help"
+        iconColor={Colors.maybe}
+        size={40}
+        onPress={() => handleSwipe('maybe')}
+        disabled={disabled}
+        style={[styles.button, styles.maybeButton]}
+        containerColor={Colors.maybeLight}
+      />
+      
+      <IconButton
+        icon="heart"
+        iconColor={Colors.yummy}
+        size={40}
+        onPress={() => handleSwipe('yum')}
+        disabled={disabled}
+        style={[styles.button, styles.yumButton]}
+        containerColor={Colors.yummyLight}
+      />
     </View>
   );
 }
@@ -24,7 +55,21 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20,
+    alignItems: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 32,
+    backgroundColor: 'transparent',
+  },
+  button: {
+    margin: 0,
+  },
+  ickButton: {
+    // Red/Ick button on left
+  },
+  maybeButton: {
+    // Yellow/Maybe button in center
+  },
+  yumButton: {
+    // Green/Yum button on right
   },
 });
-

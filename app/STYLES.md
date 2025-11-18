@@ -596,10 +596,11 @@ export const Spacing = {
 
 ### SafeAreaView Usage
 
-Always use SafeAreaView for full-screen layouts to respect device notches and home indicators:
+Always use SafeAreaView from `react-native-safe-area-context` for full-screen layouts to respect device notches and home indicators. Make sure SafeAreaProvider is set up in your root layout:
 
 ```typescript
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Spacing } from '../constants/spacing';
 
 export function Screen() {
@@ -936,7 +937,8 @@ const styles = StyleSheet.create({
 
 ```typescript
 // app/(auth)/login.tsx
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';

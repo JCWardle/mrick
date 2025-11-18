@@ -1,0 +1,4 @@
+# Product Summary
+
+Mr. Ick is a couple's app that helps partners explore their sexual preferences together through a Tinder-like swiping interface. Users independently swipe through text-based cards, responding with "Yum" (right swipe, emerald green #10B981) or "Ick" (left swipe, soft red #EF4444), then discover where their preferences align. The app features a sophisticated deep purple (#6B46C1) brand palette with lavender accents (#C4B5FD, #E9D5FF) and warm coral highlights (#FF6B6B), creating an intimate yet playful aesthetic that stands out from typical dating apps. After the third swipe, users are prompted to invite their partner via QR code or shareable link, enabling both partners to complete their profiles (age range, gender, sexual preference) and begin exploring together in a safe, respectful environment.
+
