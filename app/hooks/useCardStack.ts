@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Card } from './useCards';
 import { SwipeAction } from './useSwipeGesture';
 import { saveSwipe } from '../lib/swipes';
@@ -13,17 +13,57 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [swipeCount, setSwipeCount] = useState(0);
   const [swipeHistory, setSwipeHistory] = useState<Array<{ cardId: string; action: SwipeAction }>>([]);
+  const [swipeError, setSwipeError] = useState<string | null>(null);
+  
+  // Track if component is mounted to prevent state updates after unmount
+  const isMountedRef = useRef(true);
+  // Track in-flight swipe to prevent race conditions
+  const inFlightSwipeRef = useRef<{ cardId: string; action: SwipeAction } | null>(null);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleSwipe = useCallback(
     async (cardId: string, action: SwipeAction) => {
-      if (isSaving) return;
+      // Prevent concurrent swipes - check both isSaving state and in-flight ref
+      if (isSaving || inFlightSwipeRef.current !== null) {
+        return;
+      }
 
+      // Mark swipe as in-flight
+      inFlightSwipeRef.current = { cardId, action };
       setIsSaving(true);
+      setSwipeError(null);
       const newSwipeCount = swipeCount + 1;
 
       try {
+        console.log('[useCardStack] Starting swipe save:', {
+          cardId,
+          action,
+          currentIndex,
+          swipeCount: newSwipeCount,
+          timestamp: new Date().toISOString(),
+        });
+
         // Save swipe to Supabase
         await saveSwipe(cardId, action);
+
+        console.log('[useCardStack] Swipe save successful:', {
+          cardId,
+          action,
+          isMounted: isMountedRef.current,
+        });
+
+        // Only update state if component is still mounted
+        if (!isMountedRef.current) {
+          console.warn('[useCardStack] Component unmounted, skipping state update');
+          return;
+        }
 
         // Update state
         setSwipeCount(newSwipeCount);
@@ -34,31 +74,75 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
         if (onSwipeComplete) {
           onSwipeComplete(newSwipeCount);
         }
-      } catch (error) {
-        console.error('Error saving swipe:', error);
-        // Don't advance if save failed
+      } catch (error: any) {
+        console.error('[useCardStack] Error saving swipe:', {
+          error,
+          errorType: error?.constructor?.name,
+          errorMessage: error?.message,
+          errorStack: error?.stack,
+          cardId,
+          action,
+          isMounted: isMountedRef.current,
+          timestamp: new Date().toISOString(),
+        });
+        
+        // Only update state if component is still mounted
+        if (!isMountedRef.current) {
+          console.warn('[useCardStack] Component unmounted during error, skipping state update');
+          return;
+        }
+
+        // Set user-friendly error message
+        let errorMessage = 'Failed to save swipe. Please try again.';
+        if (error?.message) {
+          if (error.message.includes('network') || error.message.includes('fetch')) {
+            errorMessage = 'Network error. Please check your connection and try again.';
+          } else if (error.message.includes('auth') || error.message.includes('authenticated')) {
+            errorMessage = 'Authentication error. Please sign in again.';
+          } else {
+            errorMessage = error.message;
+          }
+        }
+        setSwipeError(errorMessage);
+        
+        // Don't advance if save failed - card should remain visible
       } finally {
-        setIsSaving(false);
+        // Only update state if component is still mounted
+        if (isMountedRef.current) {
+          setIsSaving(false);
+        }
+        // Clear in-flight swipe
+        inFlightSwipeRef.current = null;
       }
     },
     [isSaving, swipeCount, onSwipeComplete]
   );
 
   const handleUndo = useCallback(async () => {
-    if (swipeHistory.length === 0 || currentIndex === 0 || isSaving) return;
+    if (swipeHistory.length === 0 || currentIndex === 0 || isSaving || !isMountedRef.current) return;
 
     setIsSaving(true);
     try {
       const lastSwipe = swipeHistory[swipeHistory.length - 1];
       // TODO: Implement undo in API (delete or mark swipe as undone)
       // For now, just revert the UI state
-      setSwipeHistory((prev) => prev.slice(0, -1));
-      setCurrentIndex((prev) => Math.max(0, prev - 1));
-      setSwipeCount((prev) => Math.max(0, prev - 1));
+      
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setSwipeHistory((prev) => prev.slice(0, -1));
+        setCurrentIndex((prev) => Math.max(0, prev - 1));
+        setSwipeCount((prev) => Math.max(0, prev - 1));
+        setSwipeError(null);
+      }
     } catch (error) {
       console.error('Error undoing swipe:', error);
+      if (isMountedRef.current) {
+        setSwipeError('Failed to undo swipe. Please try again.');
+      }
     } finally {
-      setIsSaving(false);
+      if (isMountedRef.current) {
+        setIsSaving(false);
+      }
     }
   }, [swipeHistory, currentIndex, isSaving]);
 
@@ -77,5 +161,11 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
     canUndo,
     isSaving,
     swipeCount,
+    swipeError,
+    clearSwipeError: () => {
+      if (isMountedRef.current) {
+        setSwipeError(null);
+      }
+    },
   };
 }

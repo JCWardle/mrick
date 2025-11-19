@@ -4,6 +4,7 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import { Card } from '../../hooks/useCards';
 import { useSwipeGesture, SwipeAction } from '../../hooks/useSwipeGesture';
 import { Colors } from '../../constants/colors';
+import { Spacing } from '../../constants/spacing';
 import { SWIPE_THRESHOLD_X } from '../../constants/swipeThresholds';
 import { CardIllustration } from './CardIllustration';
 
@@ -24,6 +25,11 @@ export function SwipeableCard({
   enabled = true,
   onShowDetails,
 }: SwipeableCardProps) {
+  // Safety check: if card is invalid, don't render
+  if (!card || !card.id || !card.text) {
+    return null;
+  }
+
   const isTopCard = index === 0;
   const { gesture, animatedStyle, translateX } = useSwipeGesture({
     onSwipe,
@@ -87,9 +93,15 @@ export function SwipeableCard({
           isTopCard && { backgroundColor: Colors.backgroundWhite },
         ]}
       >
-        {/* Card Illustration Background */}
-        <CardIllustration cardText={card.text} category={card.category} />
-
+        {/* Bottom border that follows the radius */}
+        <View style={styles.bottomBorder} />
+        
+        <View style={styles.cardContent}>
+          {/* Card Illustration Background */}
+          {card.text && (
+            <CardIllustration cardText={card.text} category={card.category} />
+          )}
+        </View>
       </Animated.View>
     </GestureDetector>
   );
@@ -102,12 +114,30 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.backgroundWhite,
     borderRadius: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
     overflow: 'hidden',
+  },
+  cardContent: {
+    flex: 1,
+    padding: Spacing.sm * 2, // 2 spacing units
+  },
+  bottomBorder: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 12,
+    backgroundColor: '#000',
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   stackedCard: {
     marginHorizontal: 8,

@@ -33,13 +33,37 @@ export default function SwipeScreen() {
     }
   };
 
-  const { currentIndex, currentCard, isComplete, handleSwipe, handleUndo, canUndo, isSaving, swipeCount } =
+  console.log('[SwipeScreen] Render', {
+    cardsLength: cards.length,
+    cardsLoading,
+    hasError: !!error,
+    timestamp: new Date().toISOString(),
+  });
+
+  const { currentIndex, currentCard, isComplete, handleSwipe, handleUndo, canUndo, isSaving, swipeCount, swipeError, clearSwipeError } =
     useCardStack({
       cards,
       onSwipeComplete: handleSwipeComplete,
     });
 
+  console.log('[SwipeScreen] useCardStack result', {
+    currentIndex,
+    hasCurrentCard: !!currentCard,
+    isComplete,
+    isSaving,
+    swipeCount,
+    hasSwipeError: !!swipeError,
+  });
+
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  const [showSwipeError, setShowSwipeError] = useState(false);
+
+  // Show swipe error when it occurs
+  useEffect(() => {
+    if (swipeError) {
+      setShowSwipeError(true);
+    }
+  }, [swipeError]);
 
   // Refresh cards after swipe
   useEffect(() => {
@@ -267,6 +291,24 @@ export default function SwipeScreen() {
         duration={4000}
       >
         {deleteError || 'An error occurred'}
+      </Snackbar>
+
+      <Snackbar
+        visible={showSwipeError}
+        onDismiss={() => {
+          setShowSwipeError(false);
+          clearSwipeError();
+        }}
+        duration={5000}
+        action={{
+          label: 'Dismiss',
+          onPress: () => {
+            setShowSwipeError(false);
+            clearSwipeError();
+          },
+        }}
+      >
+        {swipeError || 'Failed to save swipe'}
       </Snackbar>
     </SafeAreaView>
   );

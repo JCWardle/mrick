@@ -26,19 +26,36 @@ export function useSwipeGesture({
   const thresholdCrossed = useSharedValue(false);
 
   const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'medium') => {
-    if (type === 'light') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } else if (type === 'medium') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    } else {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    try {
+      console.log('[useSwipeGesture] triggerHaptic called', { type });
+      if (type === 'light') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch((err) => {
+          console.warn('[useSwipeGesture] Haptic error (light):', err);
+        });
+      } else if (type === 'medium') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch((err) => {
+          console.warn('[useSwipeGesture] Haptic error (medium):', err);
+        });
+      } else {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy).catch((err) => {
+          console.warn('[useSwipeGesture] Haptic error (heavy):', err);
+        });
+      }
+    } catch (error) {
+      console.error('[useSwipeGesture] Error in triggerHaptic:', error);
+      // Don't throw - haptics failure shouldn't crash the app
     }
   };
 
   const handleThresholdCross = () => {
+    'worklet';
     if (!thresholdCrossed.value) {
       thresholdCrossed.value = true;
-      runOnJS(triggerHaptic)('medium');
+      // Temporarily disable haptics to test if it's causing the crash
+      const ENABLE_HAPTICS = false;
+      if (ENABLE_HAPTICS) {
+        runOnJS(triggerHaptic)('medium');
+      }
       if (onThresholdCross) {
         runOnJS(onThresholdCross)();
       }
@@ -48,8 +65,8 @@ export function useSwipeGesture({
   const panGesture = Gesture.Pan()
     .enabled(enabled)
     .onStart(() => {
+      'worklet';
       thresholdCrossed.value = false;
-      runOnJS(triggerHaptic)('light');
     })
     .onUpdate((event) => {
       translateX.value = event.translationX;
@@ -67,35 +84,33 @@ export function useSwipeGesture({
       }
     })
     .onEnd((event) => {
-      const absX = Math.abs(event.translationX);
-      const absY = Math.abs(event.translationY);
+      'worklet';
+      const translationX = event.translationX;
+      const translationY = event.translationY;
+      const absX = Math.abs(translationX);
+      const absY = Math.abs(translationY);
       
       // Determine swipe action
       if (absX > SWIPE_THRESHOLD_X) {
-        // Horizontal swipe - animate off screen first, then call onSwipe
-        const action: SwipeAction = event.translationX > 0 ? 'yum' : 'ick';
-        runOnJS(triggerHaptic)('heavy');
+        // Horizontal swipe
+        const action: SwipeAction = translationX > 0 ? 'yum' : 'ick';
         
         // Animate off screen
         const screenWidth = 400;
-        const targetX = event.translationX > 0 ? screenWidth * 1.5 : -screenWidth * 1.5;
+        const targetX = translationX > 0 ? screenWidth * 1.5 : -screenWidth * 1.5;
         translateX.value = withSpring(targetX, { damping: 20, stiffness: 300 });
-        translateY.value = withSpring(event.translationY, { damping: 20, stiffness: 300 });
+        translateY.value = withSpring(translationY, { damping: 20, stiffness: 300 });
         opacity.value = withSpring(0, { damping: 20, stiffness: 300 });
         
-        // Call onSwipe - animation will continue even after state update
+        // Call onSwipe
         runOnJS(onSwipe)(action);
-      } else if (absY > SWIPE_THRESHOLD_Y && event.translationY < 0) {
-        // Upward swipe (maybe) - animate off screen first, then call onSwipe
-        runOnJS(triggerHaptic)('heavy');
-        
-        // Animate off screen upward
+      } else if (absY > SWIPE_THRESHOLD_Y && translationY < 0) {
+        // Upward swipe (maybe)
         const screenHeight = 800;
-        translateX.value = withSpring(event.translationX, { damping: 20, stiffness: 300 });
+        translateX.value = withSpring(translationX, { damping: 20, stiffness: 300 });
         translateY.value = withSpring(-screenHeight * 1.5, { damping: 20, stiffness: 300 });
         opacity.value = withSpring(0, { damping: 20, stiffness: 300 });
         
-        // Call onSwipe - animation will continue even after state update
         runOnJS(onSwipe)('maybe');
       } else {
         // Snap back to center

@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundWhite,
     margin: Spacing.lg,
     borderRadius: 16,
-    maxHeight: '80%',
     paddingBottom: Spacing.md,
   },
   header: {

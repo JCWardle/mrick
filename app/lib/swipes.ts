@@ -20,9 +20,35 @@ export async function saveSwipe(
   cardId: string,
   response: SwipeResponse
 ): Promise<Swipe> {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('Not authenticated');
+  // Validate inputs
+  if (!cardId || typeof cardId !== 'string') {
+    throw new Error('Invalid card ID provided');
+  }
+  
+  if (!response || !['yum', 'ick', 'maybe'].includes(response)) {
+    throw new Error('Invalid swipe response provided');
+  }
 
+  // Check authentication
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError) {
+    console.error('Auth error in saveSwipe:', authError);
+    throw new Error('Authentication error. Please sign in again.');
+  }
+  
+  if (!user) {
+    throw new Error('Not authenticated. Please sign in to save swipes.');
+  }
+
+  // Log before attempting save
+  console.log('[saveSwipe] Attempting to save swipe:', {
+    cardId,
+    response,
+    userId: user.id,
+    timestamp: new Date().toISOString(),
+  });
+
+  // Attempt to save swipe
   const { data, error } = await supabase
     .from('swipes')
     .upsert(
@@ -37,8 +63,59 @@ export async function saveSwipe(
     )
     .select()
     .single();
+  
+  // Log after attempt
+  console.log('[saveSwipe] Save attempt completed:', {
+    success: !error,
+    hasData: !!data,
+    error: error ? {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    } : null,
+  });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Database error in saveSwipe:', {
+      error,
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      cardId,
+      response,
+    });
+
+    // Handle specific error cases
+    if (error.code === 'PGRST301' || error.message?.includes('network') || error.message?.includes('fetch')) {
+      throw new Error('Network error. Please check your connection and try again.');
+    }
+    
+    if (error.code === '23503') {
+      // Foreign key violation - card doesn't exist
+      throw new Error('Card not found. Please refresh and try again.');
+    }
+    
+    if (error.code === '23505') {
+      // Unique constraint violation (shouldn't happen with upsert, but just in case)
+      throw new Error('Swipe already exists. Please refresh and try again.');
+    }
+    
+    if (error.code === 'PGRST116') {
+      // No rows returned (shouldn't happen with upsert, but handle it)
+      throw new Error('Failed to save swipe. Please try again.');
+    }
+
+    // Generic error with more context
+    const errorMessage = error.message || 'Failed to save swipe. Please try again.';
+    throw new Error(errorMessage);
+  }
+
+  if (!data) {
+    throw new Error('Failed to save swipe. No data returned from server.');
+  }
+
   return data;
 }
 
