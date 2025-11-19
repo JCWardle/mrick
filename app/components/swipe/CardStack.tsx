@@ -11,48 +11,19 @@ interface CardStackProps {
 }
 
 export function CardStack({ cards, onSwipe, currentIndex, onShowDetails }: CardStackProps) {
-  console.log('[CardStack] Render', {
-    cardsLength: cards.length,
-    currentIndex,
-    hasOnSwipe: !!onSwipe,
-    timestamp: new Date().toISOString(),
-  });
-
   // Show up to 3 cards in the stack
   const visibleCards = cards.slice(currentIndex, currentIndex + 3);
 
   const handleSwipe = (action: SwipeAction) => {
-    console.log('[CardStack] handleSwipe called:', {
-      action,
-      currentIndex,
-      cardsLength: cards.length,
-      hasCards: cards.length > 0,
-      indexValid: currentIndex >= 0 && currentIndex < cards.length,
-    });
-
     // Ensure we have cards, currentIndex is valid, and the card exists
     if (cards.length === 0 || currentIndex < 0 || currentIndex >= cards.length) {
-      console.warn('[CardStack] Invalid swipe attempt - bounds check failed:', {
-        cardsLength: cards.length,
-        currentIndex,
-        action,
-      });
       return;
     }
     
     const currentCard = cards[currentIndex];
     if (!currentCard) {
-      console.warn('[CardStack] Invalid swipe attempt - card is null/undefined:', {
-        currentIndex,
-        action,
-      });
       return;
     }
-    
-    console.log('[CardStack] Calling onSwipe with:', {
-      cardId: currentCard.id,
-      action,
-    });
     
     onSwipe(currentCard.id, action);
   };

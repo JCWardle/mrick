@@ -17,17 +17,19 @@ A guide for creating cards that help couples discover what they both enjoy — w
     "How do you feel about playful resistance?",
     "What if I said 'no' but meant 'yes'?",
     "Tell me about times you've enjoyed being teased."
-  ]
+  ],
+  "image_title": "Playful teasing"
 }
 ```
 
 **Fields:**
-- `text` (required): Main card content, 2-5 words. Clear and descriptive.
-- `description` (required): Brief explanation, 2 sentences max. Displayed in mobile dialog. Explains what the topic is in approachable, non-clinical language.
+- `text` (required): 2-5 words. Name the specific activity directly (e.g., "Bratty/Playful resistance" not "Exploring kinks together"). Avoid using "together" in titles—it's unnecessary and narrows the scope.
+- `description` (required): 2 sentences max. Explain what the topic is in approachable, non-clinical language.
 - `intensity` (required): 0-5 scale (see below). Most cards should be 1-3.
 - `category` (optional): High-level organization (e.g., "playful", "kink", "romantic", "toys").
 - `labels` (required): 3-5 tags for filtering (e.g., ["playful", "teasing", "consent"]).
 - `dirty_talk_templates` (required): 3-5 open-ended conversation prompts.
+- `image_title` (optional): Safe alternative title for image generation. Use when the main `text` contains words that might trigger content filters (e.g., "bondage" → "decorative wrapping"). If not provided, `text` will be used for images.
 
 ---
 
@@ -49,52 +51,36 @@ A guide for creating cards that help couples discover what they both enjoy — w
 **Voice:** Playful but mature, approachable, shame-free, couples-first.
 
 **✅ DO:**
-- Clear, conversational language ("Roleplay scenarios", "Using toys together")
-- Normalize exploration ("Trying new things", "Exploring kinks together")
-- Focus on couples ("Trying new positions together", "Discussing boundaries together")
-- Be specific but not explicit ("BDSM exploration" not "Hardcore BDSM")
-
-**Descriptions:**
-- 2 sentences maximum (mobile-friendly)
-- Briefly explain what the topic is
-- Use approachable, non-clinical language
-- Keep it informative but concise
-- Example: "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries."
+- Specific activity names ("Bratty/Playful resistance", "Doctor/Patient roleplay")
+- Couples-focused language ("Trying new positions")
+- Clear, conversational tone
+- Avoid "together" in titles—it's unnecessary and limiting
 
 **❌ DON'T:**
-- Clinical language ("Sexual compatibility assessment")
-- Explicit language ("Fucking in public")
-- Porn-like language ("Hot sex acts", "Kinky stuff")
-- Judgmental language ("Normal sex", "Weird kinks")
-- Singles-focused language ("What turns you on")
+- Generic titles ("Exploring kinks together", "Roleplay scenarios", "Exploring fetishes together")
+- Using "together" in titles—it's unnecessary and narrows the scope
+- Dangerous activities ("Exploring knife play", "Edge play", "Breath play")
+- Clinical, explicit, porn-like, or judgmental language
+- Singles-focused language
 
 ---
 
-## 🎨 Baseline Principles
+## 🎨 Principles
 
-1. **Clarity Over Cleverness** - Immediately understandable
-2. **Inclusive Language** - Works for all couples
-3. **Positive Framing** - Opportunities, not problems
-4. **Respect Boundaries** - Invitations, not pressure
-5. **Couples-First** - Shared exploration context
-6. **Appropriate Intensity** - Match rating to content
-7. **Meaningful Labels** - Specific and useful for filtering
-8. **Helpful Templates** - Open-ended conversation starters, not scripts
+1. **Specificity** - Name the activity directly, not "Exploring X together". Avoid "together" in titles—it's unnecessary.
+2. **Safety First** - Avoid dangerous activities requiring specialized knowledge
+3. **Couples-First** - Shared exploration context
+4. **Clarity** - Immediately understandable
+5. **Appropriate Intensity** - Match rating to content
 
 ---
 
 ## 📝 Dirty Talk Templates
 
-**Principles:**
-- Open-ended questions ("How do you feel about exploring this together?")
-- Non-judgmental ("What would make this comfortable for you?")
-- Couples-focused ("How could we explore this together?")
-- Respectful of boundaries ("What are your thoughts on this?")
-
-**Example for "Roleplay scenarios":**
-- "Have you ever thought about trying roleplay together?"
-- "What kind of scenarios interest you?"
-- "How could we make roleplay fun and comfortable?"
+Open-ended, couples-focused questions. Example:
+- "How do you feel about playful resistance?"
+- "What if I said 'no' but meant 'yes'?"
+- "How could we explore this in a way that feels safe?"
 
 ---
 
@@ -112,37 +98,33 @@ A guide for creating cards that help couples discover what they both enjoy — w
 
 ---
 
+## 🖼️ Image Title Guidelines
+
+For cards with titles that might trigger content filters in image generation services, include an `image_title` field with a safe alternative:
+
+**Words that need safe alternatives:**
+- "bondage" → "decorative wrapping", "playful tying"
+- "BDSM" → "power play", "role dynamics" (or omit if too explicit)
+
+**Examples:**
+- `"text": "Light bondage with scarves"` → `"image_title": "Decorative scarf wrapping"`
+- `"text": "Sensual massage"` → (no `image_title` needed, already safe)
+
+**Guidelines:**
+- Only add `image_title` when the main title contains potentially problematic words
+- The safe title should still clearly relate to the original activity
+- Focus on craft-like, playful, or decorative language
+- Keep it 2-5 words, same as the main title
+
+---
+
 ## ✅ Quality Checklist
 
-- [ ] Text is clear and immediately understandable
-- [ ] Description is 2 sentences max and explains what the topic is
-- [ ] Follows playful but mature voice
+- [ ] Text is specific (not "Exploring X together" or "X together")
+- [ ] Description is 2 sentences max, approachable language
 - [ ] Intensity rating is appropriate
-- [ ] Labels are useful and specific
-- [ ] Templates are open-ended and natural
-- [ ] Couples-focused (not singles-focused)
-- [ ] Avoids clinical or explicit language
-- [ ] Would feel comfortable showing to partner
+- [ ] Avoids dangerous activities
+- [ ] Couples-focused, would feel comfortable showing to partner
+- [ ] `image_title` included if main title contains words that might trigger content filters
 
 ---
-
-## 📚 Example Card
-
-```json
-{
-  "text": "Bratty/Playful resistance",
-  "description": "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries and communication.",
-  "intensity": 2,
-  "category": "playful",
-  "labels": ["playful", "teasing", "consent", "communication"],
-  "dirty_talk_templates": [
-    "How do you feel about playful resistance?",
-    "What if I said 'no' but meant 'yes'?",
-    "How could we explore this in a way that feels safe?"
-  ]
-}
-```
-
----
-
-*For more details, see [Branding Guidelines](../prompting/BRANDING.md) and [Card Data Summary](../app/CARD_DATA_SUMMARY.md).*

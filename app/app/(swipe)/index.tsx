@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ import { Spacing } from '../../constants/spacing';
 
 export default function SwipeScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount } = useAuth();
   const { cards, isLoading: cardsLoading, error, refreshCards } = useCards();
   const [showError, setShowError] = useState(false);
@@ -211,7 +212,7 @@ export default function SwipeScreen() {
     <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <GradientBackground gradientId="swipeGradient" />
       
-      <View style={styles.content}>
+      <View style={[styles.content, { paddingTop: insets.top }]}>
         <CardStack
           cards={cards}
           onSwipe={handleSwipe}

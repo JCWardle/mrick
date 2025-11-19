@@ -92,10 +92,7 @@ export function SwipeableCard({
           // Ensure top card has solid background to prevent bleed-through
           isTopCard && { backgroundColor: Colors.backgroundWhite },
         ]}
-      >
-        {/* Bottom border that follows the radius */}
-        <View style={styles.bottomBorder} />
-        
+      >        
         <View style={styles.cardContent}>
           {/* Card Illustration Background */}
           {card.text && (
@@ -124,20 +121,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     overflow: 'hidden',
+    borderColor: 'purple',
+    borderWidth: 5,
   },
   cardContent: {
     flex: 1,
     padding: Spacing.sm * 2, // 2 spacing units
-  },
-  bottomBorder: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 12,
-    backgroundColor: '#000',
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
   },
   stackedCard: {
     marginHorizontal: 8,

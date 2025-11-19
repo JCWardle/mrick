@@ -2,16 +2,15 @@
 
 ## Card Title
 
-**Using Toys Together**
-
-*(Replace the title above when generating images for different cards)*
+**Learning scarf knots**
 
 ## Image Specifications
 
-- **Aspect Ratio**: Phone portrait format (9:16 ratio)
-- **Vertical Padding**: 20% margin on top and bottom (content area uses 60% of vertical space)
-- **Dimensions**: Optimized for mobile display
+- **Aspect Ratio**: 3:4 ratio
+- **Dimensions**: 642px wide × 856px high
 - **Border**: No border on the image
+- **Top Padding**: Leave 20% padding at the top of the image (no visual elements should appear in the top 20% of the image height)
+- **Content Position**: Position all illustration content (characters, objects, elements) towards the bottom portion of the image to leave room for a title to be added later at the top
 
 ## Style Guidelines
 
@@ -21,7 +20,7 @@
 - **Shapes**: Soft, rounded shapes
 - **Color Palette**: Warm coral and mint tones (used for characters/objects, not background). When illustrating 2 characters, assign contrasting colors (one coral, one mint) for clear visual distinction.
 - **Elements**: Stylized, cartoony elements that directly represent the card title's meaning (not abstract or unrelated)
-- **Layout**: Minimal, modern layout
+- **Layout**: Minimal, modern layout with content positioned towards the bottom of the image to allow space for a title at the top
 
 ## Content Requirements
 
@@ -43,7 +42,4 @@
 
 ## Text Requirements
 
-- **Include**: Only the card title (as specified in the "Card Title" section above)
-- **Position**: Centered and clearly readable
-- **Text Color**: The title text must be a single, solid color (no gradients, multiple colors, or color variations)
-- **No other text**: Do not include any additional text or labels
+- **No text**: Do not include any text, labels, or the card title in the image. The illustration should be purely visual with no text elements.
