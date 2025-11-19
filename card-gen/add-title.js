@@ -114,25 +114,52 @@ async function getSecondMostProminentColor(imagePath) {
 }
 
 /**
- * Calculate optimal font size for text to fit in width
+ * Split text into lines based on word count
+ * Returns array of lines
  */
-function calculateFontSize(text, maxWidth, maxHeight, fontFamily = 'Arial') {
-  // Start with a reasonable base size
-  let fontSize = Math.floor(maxHeight * 0.4);
-  let textWidth = 0;
+function splitTextIntoLines(text) {
+  const words = text.trim().split(/\s+/);
   
-  // Approximate text width (rough estimation)
-  // This is a simplified calculation - in production you might want to use canvas measureText
+  if (words.length <= 2) {
+    // 1-2 words: single line
+    return [words.join(' ')];
+  } else if (words.length === 3) {
+    // 3 words: 2 on top, 1 on bottom
+    return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+  } else if (words.length === 4) {
+    // 4 words: 2 on top, 2 on bottom
+    return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+  } else {
+    // 5+ words: 3 on top, rest on bottom
+    return [words.slice(0, 3).join(' '), words.slice(3).join(' ')];
+  }
+}
+
+/**
+ * Calculate optimal font size for text to fit in width
+ * Handles both single line and multi-line text
+ */
+function calculateFontSize(lines, maxWidth, maxHeight, lineSpacing = 1.2) {
+  // Account for line spacing when calculating height
+  const numLines = lines.length;
+  const availableHeight = maxHeight / numLines / lineSpacing;
+  
+  // Start with a reasonable base size based on available height
+  let fontSize = Math.floor(availableHeight * 0.8);
+  
+  // Check each line to ensure it fits in width
   const avgCharWidth = fontSize * 0.6; // Rough average character width
-  textWidth = text.length * avgCharWidth;
   
-  // Scale down if too wide
-  if (textWidth > maxWidth * 0.9) {
-    fontSize = Math.floor((maxWidth * 0.9) / (text.length * 0.6));
+  for (const line of lines) {
+    const lineWidth = line.length * avgCharWidth;
+    if (lineWidth > maxWidth * 0.9) {
+      // Scale down to fit the longest line
+      fontSize = Math.floor((maxWidth * 0.9) / (line.length * 0.6));
+    }
   }
   
   // Ensure minimum and maximum sizes
-  fontSize = Math.max(20, Math.min(fontSize, maxHeight * 0.5));
+  fontSize = Math.max(20, Math.min(fontSize, availableHeight * 0.9));
   
   return fontSize;
 }
@@ -162,28 +189,50 @@ async function addTitleToImage(imagePath, titleText) {
   const textAreaWidth = width;
   const padding = Math.floor(textAreaHeight * 0.1);
   
-  // Calculate optimal font size
-  const fontSize = calculateFontSize(
-    titleText,
+  // Split text into lines
+  const lines = splitTextIntoLines(titleText);
+  const numLines = lines.length;
+  console.log(`📝 Text split into ${numLines} line(s):`, lines);
+  
+  // Calculate optimal font size for multi-line text
+  let fontSize = calculateFontSize(
+    lines,
     textAreaWidth - (padding * 2),
     textAreaHeight - (padding * 2)
   );
   
+  // Increase font size by 40% + 20% + 20% = 101.6% total
+  fontSize = Math.floor(fontSize * 2.016);
+  
   console.log(`📏 Calculated font size: ${fontSize}px`);
   
-  // Create SVG text overlay
-  const svgText = `
-    <svg width="${width}" height="${height}">
+  // Calculate line spacing and vertical positioning
+  const lineSpacing = fontSize * 1.2;
+  const totalTextHeight = (numLines - 1) * lineSpacing;
+  const startY = (textAreaHeight - totalTextHeight) / 2 + fontSize;
+  
+  // Create SVG text elements for each line
+  const textElements = lines.map((line, index) => {
+    const y = startY + (index * lineSpacing);
+    const escapedLine = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return `
       <text
         x="${width / 2}"
-        y="${textAreaHeight / 2}"
-        font-family="Arial, sans-serif"
+        y="${y}"
+        font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
         font-size="${fontSize}"
         font-weight="bold"
         fill="${textColor}"
         text-anchor="middle"
         dominant-baseline="central"
-      >${titleText.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</text>
+      >${escapedLine}</text>
+    `;
+  }).join('');
+  
+  // Create SVG text overlay
+  const svgText = `
+    <svg width="${width}" height="${height}">
+      ${textElements}
     </svg>
   `;
   

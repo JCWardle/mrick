@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { CardStack } from '../../components/swipe/CardStack';
 import { SwipeButtons } from '../../components/swipe/SwipeButtons';
-import { CardInfo } from '../../components/swipe/CardInfo';
 import { DeleteAccountDialog } from '../../components/swipe/DeleteAccountDialog';
 import { CardDetailsModal } from '../../components/swipe/CardDetailsModal';
 import { GradientBackground } from '../../components/ui/GradientBackground';
@@ -222,7 +221,6 @@ export default function SwipeScreen() {
       </View>
 
       <View style={styles.footer}>
-        <CardInfo card={currentCard} />
         <SwipeButtons
           onSwipe={(action) => {
             if (currentCard) {
