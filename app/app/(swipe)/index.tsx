@@ -17,7 +17,7 @@ import { Spacing } from '../../constants/spacing';
 export default function SwipeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount } = useAuth();
+  const { isAuthenticated, isProfileComplete, isLoading, logout, deleteAccount, profile } = useAuth();
   const { cards, isLoading: cardsLoading, error, refreshCards } = useCards();
   const [showError, setShowError] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
@@ -249,7 +249,21 @@ export default function SwipeScreen() {
         </TouchableOpacity>
         <TouchableOpacity 
           style={styles.navItem}
-          onPress={() => router.push('/(swipe)/matching' as any)}
+          onPress={() => {
+            // If user has no partner, show invite modal, otherwise navigate to matching screen
+            // Check if profile exists and has no partner_id (null or undefined)
+            console.log('[SwipeScreen] Partner button clicked', { 
+              hasProfile: !!profile, 
+              partnerId: profile?.partner_id 
+            });
+            if (!profile || !profile.partner_id) {
+              console.log('[SwipeScreen] Navigating to invite screen');
+              router.push('/(swipe)/invite' as any);
+            } else {
+              console.log('[SwipeScreen] Navigating to matching screen');
+              router.push('/(swipe)/matching' as any);
+            }
+          }}
         >
           <IconButton
             icon="account-multiple"
@@ -323,6 +337,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 20, // Reduced padding since info is now in footer
+    paddingHorizontal: '2%', // 2% margin on each side
   },
   footer: {
     backgroundColor: 'transparent',

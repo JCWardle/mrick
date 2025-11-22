@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SignUpForm } from '../../components/auth/SignUpForm';
 import { useAuth } from '../../hooks/useAuth';
+import { usePendingInvitation } from '../../hooks/usePendingInvitation';
 import { ActivityIndicator } from 'react-native-paper';
 import { SafeScreen } from '../../components/ui/SafeScreen';
 import { Colors } from '../../constants/colors';
@@ -11,6 +12,7 @@ import { Colors } from '../../constants/colors';
 export default function SignUpScreen() {
   const router = useRouter();
   const { isAuthenticated, isProfileComplete, isLoading } = useAuth();
+  usePendingInvitation(); // Handle pending invitations after signup
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {

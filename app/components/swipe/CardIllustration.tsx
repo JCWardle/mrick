@@ -5,7 +5,7 @@ interface CardIllustrationProps {
   category?: string | null;
 }
 
-const cardPlaceholderImage = require('../../assets/images/unnamed.jpg');
+const cardPlaceholderImage = require('../../assets/images/verticle_test.png');
 
 export function CardIllustration({ cardText, category }: CardIllustrationProps) {
   return (
