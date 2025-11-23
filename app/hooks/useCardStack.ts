@@ -37,12 +37,24 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
 
       // Mark swipe as in-flight
       inFlightSwipeRef.current = { cardId, action };
-      setIsSaving(true);
       setSwipeError(null);
       const newSwipeCount = swipeCount + 1;
 
+      // OPTIMISTIC UPDATE: Immediately update UI state before server request
+      // This makes the card disappear right away for instant feedback
+      setSwipeCount(newSwipeCount);
+      setSwipeHistory((prev) => [...prev, { cardId, action }]);
+      setCurrentIndex((prev) => prev + 1);
+
+      // Notify parent of swipe completion (optimistic)
+      if (onSwipeComplete) {
+        onSwipeComplete(newSwipeCount);
+      }
+
+      // Now save to server in the background (non-blocking)
+      setIsSaving(true);
       try {
-        console.log('[useCardStack] Starting swipe save:', {
+        console.log('[useCardStack] Starting swipe save (background):', {
           cardId,
           action,
           currentIndex,
@@ -58,22 +70,6 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
           action,
           isMounted: isMountedRef.current,
         });
-
-        // Only update state if component is still mounted
-        if (!isMountedRef.current) {
-          console.warn('[useCardStack] Component unmounted, skipping state update');
-          return;
-        }
-
-        // Update state
-        setSwipeCount(newSwipeCount);
-        setSwipeHistory((prev) => [...prev, { cardId, action }]);
-        setCurrentIndex((prev) => prev + 1);
-
-        // Notify parent of swipe completion
-        if (onSwipeComplete) {
-          onSwipeComplete(newSwipeCount);
-        }
       } catch (error: any) {
         console.error('[useCardStack] Error saving swipe:', {
           error,
@@ -93,6 +89,8 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
         }
 
         // Set user-friendly error message
+        // Note: We don't revert the UI state since the card has already moved
+        // This is the optimistic update pattern - show error but keep the UI state
         let errorMessage = 'Failed to save swipe. Please try again.';
         if (error?.message) {
           if (error.message.includes('network') || error.message.includes('fetch')) {
@@ -104,8 +102,6 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
           }
         }
         setSwipeError(errorMessage);
-        
-        // Don't advance if save failed - card should remain visible
       } finally {
         // Only update state if component is still mounted
         if (isMountedRef.current) {
@@ -115,7 +111,7 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
         inFlightSwipeRef.current = null;
       }
     },
-    [isSaving, swipeCount, onSwipeComplete]
+    [isSaving, swipeCount, onSwipeComplete, currentIndex]
   );
 
   const handleUndo = useCallback(async () => {

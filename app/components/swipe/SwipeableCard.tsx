@@ -7,6 +7,7 @@ import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
 import { SWIPE_THRESHOLD_X } from '../../constants/swipeThresholds';
 import { CardIllustration } from './CardIllustration';
+import { useImperativeHandle, forwardRef } from 'react';
 
 interface SwipeableCardProps {
   card: Card;
@@ -19,7 +20,11 @@ interface SwipeableCardProps {
   isTopCardMoving?: SharedValue<number>;
 }
 
-export function SwipeableCard({
+export interface SwipeableCardRef {
+  animateOffScreen: (direction: 'left' | 'right' | 'up') => void;
+}
+
+export const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(({
   card,
   onSwipe,
   index,
@@ -28,7 +33,7 @@ export function SwipeableCard({
   onShowDetails,
   topCardTranslateX,
   isTopCardMoving,
-}: SwipeableCardProps) {
+}, ref) => {
   // Safety check: if card is invalid, don't render
   if (!card || !card.id || !card.text) {
     return null;
@@ -36,10 +41,19 @@ export function SwipeableCard({
 
   const isTopCard = index === 0;
   const isSecondCard = index === 1;
-  const { gesture, animatedStyle, translateX } = useSwipeGesture({
+  const { gesture, animatedStyle, translateX, animateOffScreen } = useSwipeGesture({
     onSwipe,
     enabled: isTopCard && enabled,
   });
+
+  // Expose animateOffScreen function via ref so parent can trigger animation
+  useImperativeHandle(ref, () => ({
+    animateOffScreen: (direction: 'left' | 'right' | 'up') => {
+      if (isTopCard) {
+        animateOffScreen(direction);
+      }
+    },
+  }), [isTopCard, animateOffScreen]);
 
   // Calculate depth styling for stacked cards
   const depthStyle = useAnimatedStyle(() => {
@@ -136,7 +150,9 @@ export function SwipeableCard({
       </Animated.View>
     </GestureDetector>
   );
-}
+});
+
+SwipeableCard.displayName = 'SwipeableCard';
 
 const styles = StyleSheet.create({
   card: {
@@ -155,8 +171,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     overflow: 'hidden',
-    borderColor: 'purple',
-    borderWidth: 5,
   },
   cardContent: {
     flex: 1,

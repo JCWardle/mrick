@@ -145,9 +145,12 @@ async function processCardPostGeneration(card, imageData, imagesDir) {
   const imagePath = path.join(imagesDir, `${sanitizedTitle}.png`);
   fs.writeFileSync(imagePath, imageData);
   
-  // Add title to image
+  // Add title to image and get bytes
+  const titledImageBuffer = await addTitleToImage(imagePath, card.text);
+  
+  // Save titled image
   const titledImagePath = path.join(imagesDir, `${sanitizedTitle}-titled.png`);
-  await addTitleToImage(imagePath, card.text, titledImagePath);
+  fs.writeFileSync(titledImagePath, titledImageBuffer);
   
   return { imagePath, titledImagePath };
 }

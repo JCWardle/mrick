@@ -1,8 +1,9 @@
 import { View, StyleSheet } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
-import { SwipeableCard } from './SwipeableCard';
+import { SwipeableCard, SwipeableCardRef } from './SwipeableCard';
 import { Card } from '../../hooks/useCards';
 import { SwipeAction } from '../../hooks/useSwipeGesture';
+import { useRef, useImperativeHandle, forwardRef } from 'react';
 
 interface CardStackProps {
   cards: Card[];
@@ -11,12 +12,26 @@ interface CardStackProps {
   onShowDetails?: () => void;
 }
 
-export function CardStack({ cards, onSwipe, currentIndex, onShowDetails }: CardStackProps) {
+export interface CardStackRef {
+  animateTopCard: (direction: 'left' | 'right' | 'up') => void;
+}
+
+export const CardStack = forwardRef<CardStackRef, CardStackProps>(({ cards, onSwipe, currentIndex, onShowDetails }, ref) => {
   // Show up to 3 cards in the stack
   const visibleCards = cards.slice(currentIndex, currentIndex + 3);
   
   // Shared value to track top card's translateX for showing cards behind
   const topCardTranslateX = useSharedValue(0);
+  
+  // Ref to the top card (index 0 in visibleCards)
+  const topCardRef = useRef<SwipeableCardRef>(null);
+
+  // Expose animation function via ref
+  useImperativeHandle(ref, () => ({
+    animateTopCard: (direction: 'left' | 'right' | 'up') => {
+      topCardRef.current?.animateOffScreen(direction);
+    },
+  }), []);
 
   const handleSwipe = (action: SwipeAction) => {
     // Ensure we have cards, currentIndex is valid, and the card exists
@@ -41,23 +56,27 @@ export function CardStack({ cards, onSwipe, currentIndex, onShowDetails }: CardS
       {/* Render cards in reverse order so top card (index 0) renders last and stays on top */}
       {visibleCards.slice().reverse().map((card, reverseIndex) => {
         const index = visibleCards.length - 1 - reverseIndex;
+        const isTopCard = index === 0;
         return (
           <SwipeableCard
             key={card.id}
+            ref={isTopCard ? topCardRef : null}
             card={card}
             onSwipe={handleSwipe}
             index={index}
             totalCards={visibleCards.length}
-            enabled={index === 0}
-            onShowDetails={index === 0 ? onShowDetails : undefined}
-            topCardTranslateX={index === 0 ? topCardTranslateX : undefined}
+            enabled={isTopCard}
+            onShowDetails={isTopCard ? onShowDetails : undefined}
+            topCardTranslateX={isTopCard ? topCardTranslateX : undefined}
             isTopCardMoving={topCardTranslateX}
           />
         );
       })}
     </View>
   );
-}
+});
+
+CardStack.displayName = 'CardStack';
 
 const styles = StyleSheet.create({
   container: {

@@ -2,8 +2,8 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { CardStack } from '../../components/swipe/CardStack';
+import { useEffect, useState, useRef } from 'react';
+import { CardStack, CardStackRef } from '../../components/swipe/CardStack';
 import { SwipeButtons } from '../../components/swipe/SwipeButtons';
 import { DeleteAccountDialog } from '../../components/swipe/DeleteAccountDialog';
 import { CardDetailsModal } from '../../components/swipe/CardDetailsModal';
@@ -13,6 +13,7 @@ import { useCardStack } from '../../hooks/useCardStack';
 import { useAuth } from '../../hooks/useAuth';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
+import { SwipeAction } from '../../hooks/useSwipeGesture';
 
 export default function SwipeScreen() {
   const router = useRouter();
@@ -46,6 +47,9 @@ export default function SwipeScreen() {
       onSwipeComplete: handleSwipeComplete,
     });
 
+  // Ref to CardStack to trigger animations programmatically
+  const cardStackRef = useRef<CardStackRef>(null);
+
   console.log('[SwipeScreen] useCardStack result', {
     currentIndex,
     hasCurrentCard: !!currentCard,
@@ -65,10 +69,12 @@ export default function SwipeScreen() {
     }
   }, [swipeError]);
 
-  // Refresh cards after swipe
+  // Refresh cards after swipe (every 5 swipes) - do it in the background without showing loading
+  const lastRefreshSwipeCount = useRef(0);
   useEffect(() => {
-    if (swipeCount > 0 && swipeCount % 5 === 0) {
-      refreshCards();
+    if (swipeCount > 0 && swipeCount % 5 === 0 && swipeCount !== lastRefreshSwipeCount.current) {
+      lastRefreshSwipeCount.current = swipeCount;
+      refreshCards(false); // Pass false to refresh in background without showing loading
     }
   }, [swipeCount, refreshCards]);
 
@@ -213,6 +219,7 @@ export default function SwipeScreen() {
       
       <View style={[styles.content, { paddingTop: insets.top }]}>
         <CardStack
+          ref={cardStackRef}
           cards={cards}
           onSwipe={handleSwipe}
           currentIndex={currentIndex}
@@ -223,7 +230,12 @@ export default function SwipeScreen() {
       <View style={styles.footer}>
         <SwipeButtons
           onSwipe={(action) => {
-            if (currentCard) {
+            if (currentCard && cardStackRef.current) {
+              // Trigger animation immediately for optimistic UI
+              const direction = action === 'yum' ? 'right' : action === 'ick' ? 'left' : 'up';
+              cardStackRef.current.animateTopCard(direction);
+              
+              // Then handle the swipe (which will do optimistic state update)
               handleSwipe(currentCard.id, action);
             }
           }}

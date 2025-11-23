@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { getUserSwipes } from '../lib/swipes';
 
@@ -38,17 +38,17 @@ export function useCards() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    loadCards();
-  }, []);
-
-  const loadCards = async () => {
-    setIsLoading(true);
+  const loadCards = useCallback(async (showLoading = true) => {
+    if (showLoading) {
+      setIsLoading(true);
+    }
     setError(null);
 
     if (!isSupabaseConfigured()) {
       setError(new Error('Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY'));
-      setIsLoading(false);
+      if (showLoading) {
+        setIsLoading(false);
+      }
       return;
     }
 
@@ -166,13 +166,19 @@ export function useCards() {
       setError(error);
       console.error('Error loading cards:', error);
     } finally {
-      setIsLoading(false);
+      if (showLoading) {
+        setIsLoading(false);
+      }
     }
-  };
+  }, []); // Empty deps - loadCards doesn't depend on any props/state
 
-  const refreshCards = () => {
-    loadCards();
-  };
+  useEffect(() => {
+    loadCards(true); // Initial load should show loading
+  }, [loadCards]);
+
+  const refreshCards = useCallback((showLoading = false) => {
+    loadCards(showLoading);
+  }, [loadCards]);
 
   return {
     cards,
