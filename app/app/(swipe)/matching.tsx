@@ -94,44 +94,6 @@ export default function MatchingScreen() {
         {snackbarMessage}
       </Snackbar>
 
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => router.push('/(swipe)/index' as any)}
-        >
-          <IconButton
-            icon="heart-outline"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => {
-            // Already on matching screen, no action needed
-          }}
-        >
-          <IconButton
-            icon="account-multiple"
-            size={24}
-            iconColor={Colors.primary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => router.push('/(swipe)/profile' as any)}
-        >
-          <IconButton
-            icon="account-outline"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -163,21 +125,6 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: Colors.backgroundWhite,
     textAlign: 'center',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    paddingVertical: Spacing.xs,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navButton: {
-    margin: 0,
   },
   snackbar: {
     marginBottom: Spacing.xl,

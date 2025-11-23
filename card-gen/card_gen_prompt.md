@@ -13,11 +13,6 @@ A guide for creating cards that help couples discover what they both enjoy — w
   "intensity": 2,
   "category": "playful",
   "labels": ["playful", "teasing", "consent"],
-  "dirty_talk_templates": [
-    "How do you feel about playful resistance?",
-    "What if I said 'no' but meant 'yes'?",
-    "Tell me about times you've enjoyed being teased."
-  ],
   "image_title": "Playful teasing"
 }
 ```
@@ -28,7 +23,6 @@ A guide for creating cards that help couples discover what they both enjoy — w
 - `intensity` (required): 0-5 scale (see below). Most cards should be 1-3.
 - `category` (optional): High-level organization (e.g., "playful", "kink", "romantic", "toys").
 - `labels` (required): 3-5 tags for filtering (e.g., ["playful", "teasing", "consent"]).
-- `dirty_talk_templates` (required): 3-5 open-ended conversation prompts.
 - `image_title` (optional): Safe alternative title for image generation. Use when the main `text` contains words that might trigger content filters (e.g., "bondage" → "decorative wrapping"). If not provided, `text` will be used for images.
 
 ---
@@ -59,7 +53,7 @@ A guide for creating cards that help couples discover what they both enjoy — w
 **❌ DON'T:**
 - Generic titles ("Exploring kinks together", "Roleplay scenarios", "Exploring fetishes together")
 - Using "together" in titles—it's unnecessary and narrows the scope
-- Dangerous activities ("Exploring knife play", "Edge play", "Breath play")
+- Dangerous activities ("Exploring knife play", "Breath play", "Choking", "Consent not consent (CNC)")
 - Clinical, explicit, porn-like, or judgmental language
 - Singles-focused language
 
@@ -68,19 +62,10 @@ A guide for creating cards that help couples discover what they both enjoy — w
 ## 🎨 Principles
 
 1. **Specificity** - Name the activity directly, not "Exploring X together". Avoid "together" in titles—it's unnecessary.
-2. **Safety First** - Avoid dangerous activities requiring specialized knowledge
+2. **Safety First** - Avoid dangerous activities requiring specialized knowledge. Never include choking, consent not consent (CNC), or other high-risk activities.
 3. **Couples-First** - Shared exploration context
 4. **Clarity** - Immediately understandable
 5. **Appropriate Intensity** - Match rating to content
-
----
-
-## 📝 Dirty Talk Templates
-
-Open-ended, couples-focused questions. Example:
-- "How do you feel about playful resistance?"
-- "What if I said 'no' but meant 'yes'?"
-- "How could we explore this in a way that feels safe?"
 
 ---
 
@@ -123,7 +108,7 @@ For cards with titles that might trigger content filters in image generation ser
 - [ ] Text is specific (not "Exploring X together" or "X together")
 - [ ] Description is 2 sentences max, approachable language
 - [ ] Intensity rating is appropriate
-- [ ] Avoids dangerous activities
+- [ ] Avoids dangerous activities (especially choking, CNC/consent not consent, breath play, knife play, edge play)
 - [ ] Couples-focused, would feel comfortable showing to partner
 - [ ] `image_title` included if main title contains words that might trigger content filters
 

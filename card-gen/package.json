@@ -2,13 +2,16 @@
   "name": "card-gen",
   "version": "1.0.0",
   "description": "Card import script for mrick",
-  "main": "import-cards.js",
+  "main": "index.js",
   "scripts": {
     "import": "node import-cards.js",
-    "add-title": "node add-title.js"
+    "add-title": "node add-title.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
     "sharp": "^0.33.0"
   }
 }

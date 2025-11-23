@@ -6,11 +6,9 @@
 
 ## Image Specifications
 
-- **Aspect Ratio**: 3:4 ratio
-- **Dimensions**: 642px wide × 856px high
 - **Border**: No border on the image
 - **Top Padding**: Leave 20% padding at the top of the image (no visual elements should appear in the top 20% of the image height)
-- **Content Position**: Position all illustration content (characters, objects, elements) towards the bottom portion of the image to leave room for a title to be added later at the top
+- **Content Position**: Distribute illustration content across the middle and bottom portions of the image. Characters should be positioned in the lower portion, while decorative elements, objects, or contextual items related to the activity should fill the middle section (between 20% and 60% of image height) to create visual balance and reduce empty space
 
 ## Style Guidelines
 
@@ -20,11 +18,12 @@
 - **Shapes**: Soft, rounded shapes
 - **Color Palette**: Warm coral and mint tones (used for characters/objects, not background). When illustrating 2 characters, assign contrasting colors (one coral, one mint) for clear visual distinction.
 - **Elements**: Stylized, cartoony elements that directly represent the card title's meaning (not abstract or unrelated)
-- **Layout**: Minimal, modern layout with content positioned towards the bottom of the image to allow space for a title at the top
+- **Layout**: Minimal, modern layout with characters in the lower portion and supporting visual elements (decorative objects, props, or contextual items related to the activity) distributed in the middle section to fill the space between the title area and characters
 
 ## Content Requirements
 
 - **Characters/Objects**: Humanoid characters shaped like rounded eggs with little arms and legs (not human figures). These simple, cute egg-shaped characters perform activities that **directly and clearly relate** to the card title. The activity must be an obvious, recognizable representation of the title's meaning — not abstract or loosely connected. The viewer should immediately understand how the action connects to the card title.
+- **Middle Section Elements**: Include decorative or contextual visual elements in the middle portion of the image (between 20% and 60% of image height) to fill the space. These can be props, objects, or stylized elements related to the activity (e.g., scarves floating, tools, decorative shapes, or activity-related items). These elements should be smaller and more decorative than the main characters, helping to visually connect the title area with the character action below.
 - **Activity-Title Connection**: The characters' actions must be the primary visual representation of the card title. Every element of the illustration should reinforce this connection. If the title is about a specific activity, the characters must be shown doing that activity (or a clear, safe, symbolic version of it).
 - **Sensitive Topics Guidance**: For themes that could be interpreted as adult-oriented (e.g., bondage, ropes, restraints), represent them in a **playful, innocent, craft-like manner**. Examples:
   - Ropes: Show characters playfully holding, wrapping, or learning to tie decorative knots together — like a fun craft activity or game

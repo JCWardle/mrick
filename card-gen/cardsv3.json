@@ -1,0 +1,622 @@
+[
+  {
+    "text": "Sensual massage",
+    "description": "Slow, intentional touch that focuses on connection and relaxation rather than just physical pleasure. It's about being present with each other and exploring different pressures and techniques.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "sensual", "beginner-friendly", "relaxation"],
+    "dirty_talk_templates": [
+      "What kind of touch feels best to you?",
+      "How could we make massage more intimate?",
+      "Tell me about your favorite way to be touched."
+    ]
+  },
+  {
+    "text": "Bratty/Playful resistance",
+    "description": "Playful resistance involves saying 'no' when you mean 'yes' in a teasing, consensual way. It's about creating tension and playfulness while maintaining clear boundaries and communication.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "teasing", "consent"],
+    "dirty_talk_templates": [
+      "How do you feel about playful resistance?",
+      "What if I said 'no' but meant 'yes'?",
+      "Tell me about times you've enjoyed being teased."
+    ],
+    "image_title": "Playful teasing"
+  },
+  {
+    "text": "Candlelit dinner",
+    "description": "Creating an intimate atmosphere with soft lighting and focused attention on each other. It's about setting the mood for connection and conversation.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "date-night"],
+    "dirty_talk_templates": [
+      "What makes you feel most connected to me?",
+      "How could we make our evenings more special?",
+      "What kind of atmosphere helps you relax?"
+    ]
+  },
+  {
+    "text": "Blindfolded exploration",
+    "description": "Using a blindfold to heighten other senses and create anticipation. It's about trust and discovering new ways to experience touch and connection.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "exploration", "trust", "kink", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "How do you feel about trying a blindfold?",
+      "What senses would you want to heighten?",
+      "How could we make this feel safe and exciting?"
+    ],
+    "image_title": "Sensory exploration"
+  },
+  {
+    "text": "Doctor/Patient roleplay",
+    "description": "Playing with power dynamics through a familiar scenario that feels safe and contained. It's about exploring different roles and seeing where the playfulness leads.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "kink", "power-dynamics", "playful"],
+    "dirty_talk_templates": [
+      "What roleplay scenarios interest you?",
+      "How could we make roleplay fun and comfortable?",
+      "What characters or situations turn you on?"
+    ]
+  },
+  {
+    "text": "Vibrator play",
+    "description": "Using toys to enhance pleasure and explore new sensations together. It's about adding variety and discovering what feels good for both partners.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "exploration", "sensual", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "How do you feel about using toys?",
+      "What kind of sensations interest you?",
+      "How could we incorporate toys into our time?"
+    ]
+  },
+  {
+    "text": "Slow morning cuddles",
+    "description": "Taking time in the morning to connect physically without any pressure or expectations. It's about starting the day with intimacy and presence.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "comfort"],
+    "dirty_talk_templates": [
+      "What's your favorite way to wake up together?",
+      "How could we make our mornings more connected?",
+      "What makes you feel most loved in the morning?"
+    ]
+  },
+  {
+    "text": "Light decorative wrapping",
+    "description": "Using soft materials like scarves or silk to create gentle restraint and sensory play. It's about the feeling of being wrapped and cared for, not about restriction.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "trust", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about gentle restraint?",
+      "What materials would feel best against your skin?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Decorative wrapping"
+  },
+  {
+    "text": "Shower intimacy",
+    "description": "Using the shower as a space for connection, playfulness, and sensual touch. It's about the intimacy of being close while water creates a private, focused environment.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "sensual", "playful"],
+    "dirty_talk_templates": [
+      "What do you enjoy about shower time?",
+      "How could we make showering more intimate?",
+      "What kind of touch feels best in the water?"
+    ]
+  },
+  {
+    "text": "Dirty talk",
+    "description": "Using words to express desire, build anticipation, and communicate what you want. It's about verbal connection and sharing fantasies in a way that feels authentic to you.",
+    "intensity": 2,
+    "category": "communication",
+    "labels": ["communication", "exploration", "intimate", "playful"],
+    "dirty_talk_templates": [
+      "What words or phrases turn you on?",
+      "How do you feel about talking during intimacy?",
+      "What would you want to hear from me?"
+    ]
+  },
+  {
+    "text": "Boss/Employee roleplay",
+    "description": "Exploring power dynamics through a workplace scenario that feels playful and contained. It's about the thrill of role reversal and seeing where the scenario takes you.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "kink", "power-dynamics", "playful"],
+    "dirty_talk_templates": [
+      "What power dynamics interest you?",
+      "How could we make roleplay feel natural?",
+      "What scenarios would you want to try?"
+    ]
+  },
+  {
+    "text": "Sensual food play",
+    "description": "Using food as a way to explore taste, texture, and playful feeding. It's about the intimacy of sharing and the sensory experience of different flavors and temperatures.",
+    "intensity": 1,
+    "category": "playful",
+    "labels": ["playful", "sensual", "exploration", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "What foods would you want to explore?",
+      "How do you feel about playful feeding?",
+      "What textures or temperatures interest you?"
+    ]
+  },
+  {
+    "text": "Mirror play",
+    "description": "Using mirrors to watch each other and see yourselves from new angles. It's about visual connection and the excitement of seeing your partner's reactions in real-time.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "exploration", "intimate", "visual"],
+    "dirty_talk_templates": [
+      "How do you feel about watching ourselves?",
+      "What would you want to see in the mirror?",
+      "How could mirrors add to our connection?"
+    ]
+  },
+  {
+    "text": "Temperature play",
+    "description": "Using warm and cool sensations to create contrast and heighten awareness. It's about exploring how different temperatures feel against the skin and discovering new sensations.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "exploration", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "How do you feel about temperature play?",
+      "What temperatures would you want to try?",
+      "How could we explore this safely?"
+    ]
+  },
+  {
+    "text": "Dancing in the living room",
+    "description": "Moving together to music without any agenda beyond connection and playfulness. It's about the intimacy of being close, feeling the rhythm, and letting your bodies communicate.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "playful", "intimate", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "What kind of music makes you want to move?",
+      "How do you feel about dancing together?",
+      "What would make dancing more intimate?"
+    ]
+  },
+  {
+    "text": "Sensory deprivation",
+    "description": "Reducing one sense to heighten others, creating intense focus on touch, sound, or taste. It's about trust and discovering how your body responds when one sense is removed.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "sensual", "trust", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about sensory play?",
+      "What senses would you want to heighten?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Sensory exploration"
+  },
+  {
+    "text": "Couples' communication games",
+    "description": "Using games or prompts to facilitate deeper conversations about desires and boundaries. It's about making important talks feel playful and less intimidating.",
+    "intensity": 0,
+    "category": "communication",
+    "labels": ["communication", "exploration", "beginner-friendly", "intimate"],
+    "dirty_talk_templates": [
+      "What would you want to talk about more?",
+      "How could we make conversations about desires easier?",
+      "What questions would you want to explore?"
+    ]
+  },
+  {
+    "text": "Sensual oil massage",
+    "description": "Using warm oil to create smooth, gliding touch that feels luxurious and intimate. It's about the sensation of skin against skin with the added element of warmth and texture.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "What kind of oils or lotions interest you?",
+      "How do you feel about full-body massage?",
+      "What would make massage more intimate?"
+    ]
+  },
+  {
+    "text": "Public teasing",
+    "description": "Creating subtle, private moments of connection in public spaces where others don't notice. It's about the thrill of secret intimacy and maintaining composure while feeling turned on.",
+    "intensity": 3,
+    "category": "public",
+    "labels": ["public", "playful", "kink", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about public play?",
+      "What kind of subtle touches interest you?",
+      "Where would you want to try this?"
+    ]
+  },
+  {
+    "text": "Feather tickling",
+    "description": "Using soft feathers to create light, unpredictable sensations that make you laugh and squirm. It's about playfulness and the contrast between gentle touch and anticipation.",
+    "intensity": 1,
+    "category": "playful",
+    "labels": ["playful", "sensual", "beginner-friendly", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about tickling?",
+      "What kind of light touch feels best?",
+      "How could we make this playful and fun?"
+    ]
+  },
+  {
+    "text": "Power exchange dynamics",
+    "description": "Exploring giving and receiving control in a consensual, negotiated way. It's about trust, communication, and discovering what roles feel exciting for both partners.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "trust", "communication"],
+    "dirty_talk_templates": [
+      "How do you feel about power dynamics?",
+      "What roles would you want to explore?",
+      "How could we negotiate this safely?"
+    ],
+    "image_title": "Role dynamics"
+  },
+  {
+    "text": "Sensual photography",
+    "description": "Taking intimate photos of each other to celebrate your connection and bodies. It's about seeing yourselves through each other's eyes and creating something private and personal.",
+    "intensity": 2,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "exploration", "visual"],
+    "dirty_talk_templates": [
+      "How do you feel about intimate photos?",
+      "What would you want to capture?",
+      "How could we make this feel safe and exciting?"
+    ]
+  },
+  {
+    "text": "Ice cube play",
+    "description": "Using ice to create cool, surprising sensations that contrast with body heat. It's about the shock of temperature and how it makes everything else feel more intense.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "exploration", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "How do you feel about temperature play?",
+      "What temperatures would you want to try?",
+      "How could we explore this safely?"
+    ]
+  },
+  {
+    "text": "Reading erotica aloud",
+    "description": "Sharing stories or fantasies by reading them to each other, letting words create mental images and build anticipation. It's about verbal intimacy and discovering what narratives turn you both on.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "romantic", "intimate", "exploration"],
+    "dirty_talk_templates": [
+      "What kind of stories interest you?",
+      "How do you feel about sharing fantasies?",
+      "What would you want to read or hear?"
+    ]
+  },
+  {
+    "text": "Sensual restraints",
+    "description": "Using soft cuffs or ties to create gentle restraint that focuses on trust and sensory experience. It's about the feeling of being held and cared for, not about being trapped.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about gentle restraint?",
+      "What would make this feel safe?",
+      "How could we explore this step by step?"
+    ],
+    "image_title": "Decorative ties"
+  },
+  {
+    "text": "Bath time intimacy",
+    "description": "Using a warm bath as a space for connection, conversation, and gentle touch. It's about the intimacy of being close in water and the relaxation that comes with it.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "sensual", "relaxation"],
+    "dirty_talk_templates": [
+      "What do you enjoy about bath time?",
+      "How could we make bathing more intimate?",
+      "What would make this feel more special?"
+    ]
+  },
+  {
+    "text": "Sensual spanking",
+    "description": "Using light to moderate impact play to create sensation and build intensity. It's about communication, starting gentle, and discovering what feels good for both partners.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "sensual", "communication", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about impact play?",
+      "What intensity would you want to try?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Playful touch"
+  },
+  {
+    "text": "Striptease for each other",
+    "description": "Taking turns slowly removing clothes in a way that builds anticipation and celebrates your bodies. It's about the performance, the attention, and the excitement of being watched.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "intimate", "visual", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about performing?",
+      "What would make you feel confident?",
+      "How could we make this fun and exciting?"
+    ]
+  },
+  {
+    "text": "Sensual wax play",
+    "description": "Using special candles to create warm, drippy sensations that contrast with body temperature. It's about the visual and tactile experience of wax and the trust required to explore safely.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "sensual", "trust", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about wax play?",
+      "What temperatures would you want to try?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Warm candle play"
+  },
+  {
+    "text": "Writing love letters",
+    "description": "Putting desires, fantasies, and feelings into words that you can share with each other. It's about the intimacy of written communication and the anticipation of reading what your partner wrote.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "communication", "intimate", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "What would you want to write about?",
+      "How do you feel about sharing written thoughts?",
+      "What kind of letters would turn you on?"
+    ]
+  },
+  {
+    "text": "Sensual edging",
+    "description": "Building arousal to high levels and then backing off, creating intense anticipation and longer, more intense experiences. It's about control, communication, and the pleasure of delayed gratification.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "sensual", "communication", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about edging?",
+      "What would make this feel good?",
+      "How could we explore this together?"
+    ]
+  },
+  {
+    "text": "Sensual hair pulling",
+    "description": "Using gentle to moderate hair pulling to create sensation and express desire. It's about communication, starting light, and discovering what intensity feels good for both partners.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "communication", "playful"],
+    "dirty_talk_templates": [
+      "How do you feel about hair play?",
+      "What intensity would you want to try?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Hair play"
+  },
+  {
+    "text": "Sensual biting",
+    "description": "Using gentle to moderate biting to create sensation and mark territory in a playful way. It's about communication, starting light, and discovering what feels good for both partners.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "communication", "playful"],
+    "dirty_talk_templates": [
+      "How do you feel about biting?",
+      "What intensity would you want to try?",
+      "Where would you want to be bitten?"
+    ]
+  },
+  {
+    "text": "Sensual scratching",
+    "description": "Using fingernails to create light marks and sensations that feel intense in the moment. It's about communication, starting gentle, and discovering what intensity feels good for both partners.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "communication", "playful"],
+    "dirty_talk_templates": [
+      "How do you feel about scratching?",
+      "What intensity would you want to try?",
+      "How could we explore this safely?"
+    ]
+  },
+  {
+    "text": "Sensual neck kissing",
+    "description": "Focusing attention on the neck with kisses, nibbles, and gentle touch to create intense sensation. It's about finding sensitive spots and building arousal through focused attention.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "beginner-friendly"],
+    "dirty_talk_templates": [
+      "What spots on your neck feel best?",
+      "How do you like to be kissed?",
+      "What kind of touch on your neck turns you on?"
+    ]
+  },
+  {
+    "text": "Sensual face sitting",
+    "description": "Exploring oral pleasure with one partner on top, creating a different angle and dynamic. It's about the power shift, the visual connection, and discovering new ways to give and receive pleasure.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "power-dynamics", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about this position?",
+      "What would make you feel comfortable?",
+      "How could we explore this together?"
+    ]
+  },
+  {
+    "text": "Sensual 69 position",
+    "description": "Giving and receiving oral pleasure simultaneously, creating mutual satisfaction and connection. It's about the challenge of focusing on both giving and receiving at the same time.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "playful"],
+    "dirty_talk_templates": [
+      "How do you feel about mutual oral?",
+      "What would make this position work?",
+      "How could we explore this together?"
+    ]
+  },
+  {
+    "text": "Sensual anal play",
+    "description": "Exploring anal stimulation with fingers, toys, or penetration, starting slowly and using plenty of lubrication. It's about communication, patience, and discovering new sensations together.",
+    "intensity": 3,
+    "category": "exploration",
+    "labels": ["exploration", "sensual", "communication", "toys"],
+    "dirty_talk_templates": [
+      "How do you feel about anal play?",
+      "What would make this feel safe?",
+      "How could we explore this step by step?"
+    ]
+  },
+  {
+    "text": "Sensual pegging",
+    "description": "Exploring role reversal through anal play using a strap-on, creating new dynamics and sensations. It's about communication, trust, and discovering how power exchange feels for both partners.",
+    "intensity": 4,
+    "category": "kink",
+    "labels": ["kink", "roleplay", "power-dynamics", "toys"],
+    "dirty_talk_templates": [
+      "How do you feel about pegging?",
+      "What would make this feel safe?",
+      "How could we explore this together?"
+    ],
+    "image_title": "Role reversal play"
+  },
+  {
+    "text": "Sensual threesome fantasy",
+    "description": "Talking about or roleplaying a scenario with a third person, exploring what that dynamic might feel like. It's about fantasy, communication, and discovering boundaries around sharing and desire.",
+    "intensity": 4,
+    "category": "exploration",
+    "labels": ["exploration", "communication", "fantasy", "advanced"],
+    "dirty_talk_templates": [
+      "How do you feel about threesome fantasies?",
+      "What would make this feel safe?",
+      "How could we explore this through conversation first?"
+    ]
+  },
+  {
+    "text": "Sensual cuckolding fantasy",
+    "description": "Exploring fantasies about one partner being with someone else, focusing on the emotional and psychological aspects. It's about communication, boundaries, and understanding what turns you both on about the dynamic.",
+    "intensity": 5,
+    "category": "kink",
+    "labels": ["kink", "fantasy", "communication", "advanced"],
+    "dirty_talk_templates": [
+      "How do you feel about cuckolding fantasies?",
+      "What would make this feel safe?",
+      "How could we explore this through conversation first?"
+    ],
+    "image_title": "Power dynamics fantasy"
+  },
+  {
+    "text": "Sensual orgasm control",
+    "description": "One partner controlling when and how the other orgasms, creating intense anticipation and power dynamics. It's about trust, communication, and the pleasure of giving up or taking control.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "trust", "communication"],
+    "dirty_talk_templates": [
+      "How do you feel about orgasm control?",
+      "What would make this feel good?",
+      "How could we explore this together?"
+    ],
+    "image_title": "Control play"
+  },
+  {
+    "text": "Sensual denial play",
+    "description": "Building arousal without allowing orgasm, creating intense anticipation and longer experiences. It's about control, communication, and the pleasure of delayed gratification.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "communication", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about denial play?",
+      "What would make this feel good?",
+      "How could we explore this together?"
+    ],
+    "image_title": "Anticipation play"
+  },
+  {
+    "text": "Sensual forced orgasm",
+    "description": "Using toys or techniques to create orgasm even when the receiving partner might resist, within negotiated boundaries. It's about power dynamics, trust, and intense sensation play.",
+    "intensity": 4,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "toys", "trust"],
+    "dirty_talk_templates": [
+      "How do you feel about forced orgasm play?",
+      "What would make this feel safe?",
+      "How could we explore this together?"
+    ],
+    "image_title": "Intense sensation play"
+  },
+  {
+    "text": "Sensual CNC play",
+    "description": "Consensual non-consent involves roleplaying scenarios where one partner resists within pre-negotiated boundaries. It requires extensive communication, trust, and clear safewords.",
+    "intensity": 5,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "trust", "communication", "advanced"],
+    "dirty_talk_templates": [
+      "How do you feel about CNC play?",
+      "What safety measures would we need?",
+      "How could we explore this very carefully?"
+    ],
+    "image_title": "Roleplay dynamics"
+  },
+  {
+    "text": "Sensual pet play",
+    "description": "Exploring animal roleplay where one partner takes on pet-like behaviors, creating playful power dynamics and caregiving roles. It's about the dynamic of owner and pet, not actual animals.",
+    "intensity": 3,
+    "category": "roleplay",
+    "labels": ["roleplay", "kink", "power-dynamics", "playful"],
+    "dirty_talk_templates": [
+      "How do you feel about pet play?",
+      "What roles would you want to explore?",
+      "How could we make this fun and safe?"
+    ],
+    "image_title": "Caregiving roleplay"
+  },
+  {
+    "text": "Sensual watersports",
+    "description": "Exploring urination play, which can involve watching, being watched, or incorporating it into other activities. It requires clear communication, hygiene considerations, and mutual interest.",
+    "intensity": 4,
+    "category": "kink",
+    "labels": ["kink", "exploration", "communication", "advanced"],
+    "dirty_talk_templates": [
+      "How do you feel about watersports?",
+      "What would make this feel safe?",
+      "How could we explore this together?"
+    ],
+    "image_title": "Bathroom play"
+  },
+  {
+    "text": "Sensual fisting",
+    "description": "Exploring the sensation of a full hand inside, requiring patience, communication, and plenty of lubrication. It's about the intense sensation and the trust required to explore safely.",
+    "intensity": 4,
+    "category": "kink",
+    "labels": ["kink", "exploration", "communication", "advanced"],
+    "dirty_talk_templates": [
+      "How do you feel about fisting?",
+      "What would make this feel safe?",
+      "How could we explore this step by step?"
+    ],
+    "image_title": "Intense sensation play"
+  },
+  {
+    "text": "Sensual rope art",
+    "description": "Using decorative rope techniques to create beautiful patterns and gentle restraint. It's about the aesthetic, the process, and the intimacy of being tied with care and attention.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "sensual", "trust", "exploration"],
+    "dirty_talk_templates": [
+      "How do you feel about rope play?",
+      "What patterns or styles interest you?",
+      "How could we explore this safely?"
+    ],
+    "image_title": "Decorative rope art"
+  },
+  {
+    "text": "Sensual praise and degradation",
+    "description": "Using words to build up or playfully tease, exploring how different verbal dynamics affect arousal. It's about communication, boundaries, and discovering what language turns you both on.",
+    "intensity": 3,
+    "category": "communication",
+    "labels": ["communication", "kink", "exploration", "power-dynamics"],
+    "dirty_talk_templates": [
+      "How do you feel about verbal play?",
+      "What words make you feel good?",
+      "How could we explore praise or teasing?"
+    ]
+  }
+]
+

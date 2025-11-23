@@ -25,6 +25,8 @@ export interface Card {
   category?: string | null;
   display_order?: number | null;
   is_active: boolean;
+  image_path?: string | null; // Path to titled image in Supabase storage
+  image_path_untitled?: string | null; // Path to untitled image in Supabase storage
   labels: Label[]; // Populated via join
   conversationTemplates: ConversationTemplate[]; // Populated via join
   created_at: string;

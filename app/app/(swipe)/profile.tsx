@@ -97,45 +97,6 @@ export default function ProfileScreen() {
       >
         {deleteError || 'An error occurred'}
       </Snackbar>
-
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => router.push('/(swipe)/index' as any)}
-        >
-          <IconButton
-            icon="heart-outline"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => router.push('/(swipe)/matching' as any)}
-        >
-          <IconButton
-            icon="account-multiple"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => {
-            // Already on profile screen, no action needed
-          }}
-        >
-          <IconButton
-            icon="account"
-            size={24}
-            iconColor={Colors.primary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
@@ -200,26 +161,6 @@ const styles = StyleSheet.create({
   itemDivider: {
     marginVertical: Spacing.xs,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-  },
-  bottomNav: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    paddingVertical: Spacing.xs,
-    paddingBottom: Spacing.md,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navButton: {
-    margin: 0,
   },
 });
 

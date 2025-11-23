@@ -48,11 +48,7 @@ export default function RootLayout() {
               <Stack.Screen name="(auth)/login" />
               <Stack.Screen name="(auth)/signup" />
               <Stack.Screen name="(auth)/onboarding" />
-              <Stack.Screen name="(swipe)/index" />
-              <Stack.Screen name="(swipe)/invite" />
-              <Stack.Screen name="(swipe)/matching" />
-              <Stack.Screen name="(swipe)/profile" />
-              <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="(swipe)" />
             </Stack>
           </View>
           <StatusBar style="auto" />

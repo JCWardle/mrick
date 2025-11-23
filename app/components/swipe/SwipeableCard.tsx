@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, SharedValue } from 'react-native-reanimated';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { Card } from '../../hooks/useCards';
 import { useSwipeGesture, SwipeAction } from '../../hooks/useSwipeGesture';
@@ -15,6 +15,8 @@ interface SwipeableCardProps {
   totalCards: number;
   enabled?: boolean;
   onShowDetails?: () => void;
+  topCardTranslateX?: SharedValue<number>;
+  isTopCardMoving?: SharedValue<number>;
 }
 
 export function SwipeableCard({
@@ -24,6 +26,8 @@ export function SwipeableCard({
   totalCards,
   enabled = true,
   onShowDetails,
+  topCardTranslateX,
+  isTopCardMoving,
 }: SwipeableCardProps) {
   // Safety check: if card is invalid, don't render
   if (!card || !card.id || !card.text) {
@@ -31,6 +35,7 @@ export function SwipeableCard({
   }
 
   const isTopCard = index === 0;
+  const isSecondCard = index === 1;
   const { gesture, animatedStyle, translateX } = useSwipeGesture({
     onSwipe,
     enabled: isTopCard && enabled,
@@ -39,14 +44,33 @@ export function SwipeableCard({
   // Calculate depth styling for stacked cards
   const depthStyle = useAnimatedStyle(() => {
     if (isTopCard) {
+      // Update shared value to track top card movement
+      if (topCardTranslateX) {
+        topCardTranslateX.value = translateX.value;
+      }
       return {};
     }
     
-    // Hide cards behind the top card completely to prevent bleed-through
-    return {
-      opacity: 0,
-      zIndex: totalCards - index,
-    };
+    // Only show the card directly behind (index 1) when top card is being swiped
+    const topCardX = isTopCardMoving?.value ?? 0;
+    const isTopCardSwiping = Math.abs(topCardX) > 5; // Show when moved more than 5px
+    
+    if (isSecondCard) {
+      // Second card: show with full opacity when top card is swiping, hide otherwise
+      // Lower z-index and elevation than top card to ensure it stays behind
+      return {
+        opacity: isTopCardSwiping ? 1 : 0,
+        zIndex: 1, // Lower than top card's z-index
+        elevation: 1, // Lower elevation for Android
+      };
+    } else {
+      // Third card and beyond: always hidden
+      return {
+        opacity: 0,
+        zIndex: 0, // Lowest z-index
+        elevation: 0, // Lowest elevation
+      };
+    }
   });
 
   // Background color hint based on swipe direction (only for top card)
@@ -78,8 +102,14 @@ export function SwipeableCard({
   });
 
   // Combine styles - use depth for stacked cards, animated + background for top card
+  // Top card always has highest z-index and full opacity
+  const topCardZIndexStyle = useAnimatedStyle(() => ({
+    zIndex: 999, // Very high z-index to ensure top card always stays on top
+    elevation: 999, // High elevation for Android
+  }));
+
   const cardStyle = isTopCard
-    ? [animatedStyle, backgroundStyle]
+    ? [animatedStyle, backgroundStyle, topCardZIndexStyle]
     : depthStyle;
 
   return (
@@ -96,7 +126,11 @@ export function SwipeableCard({
         <View style={styles.cardContent}>
           {/* Card Illustration Background */}
           {card.text && (
-            <CardIllustration cardText={card.text} category={card.category} />
+            <CardIllustration 
+              cardText={card.text} 
+              category={card.category}
+              imagePath={card.image_path}
+            />
           )}
         </View>
       </Animated.View>

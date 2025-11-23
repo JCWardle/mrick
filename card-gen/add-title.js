@@ -129,27 +129,165 @@ function splitTextIntoLines(text) {
   } else if (words.length === 4) {
     // 4 words: 2 on top, 2 on bottom
     return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+  } else if (words.length === 5) {
+    // 5 words: 3 on top, 2 on bottom
+    return [words.slice(0, 3).join(' '), words.slice(3).join(' ')];
   } else {
-    // 5+ words: 3 on top, rest on bottom
+    // 6+ words: 3 on top, rest on bottom
     return [words.slice(0, 3).join(' '), words.slice(3).join(' ')];
   }
 }
 
 /**
- * Calculate optimal font size for text to fit in width
- * Handles both single line and multi-line text
+ * Handle oversized words that don't fit even at minimum font size
+ * Returns object with adjusted fontSize, letterSpacing, and potentially modified lines
  */
-function calculateFontSize(lines, maxWidth, maxHeight, lineSpacing = 1.2) {
-  // Account for line spacing when calculating height
+function handleOversizedWords(lines, fontSize, availableWidth, availableHeight, wordCount) {
+  const HARD_FLOOR = 28;
+  const MIN_SIZE = 32;
+  const avgCharWidth = fontSize * 0.6;
+  let adjustedFontSize = fontSize;
+  let letterSpacing = 1.05; // Default letter spacing multiplier
+  let adjustedLines = [...lines];
+  
+  // Check if any line is too long
+  // Letter spacing is treated as a multiplier: 1.05 = 5% more spacing
+  // Approximate: char width + spacing = charWidth * spacing
+  const checkLineWidth = (line, size, spacingMultiplier) => {
+    const charWidth = size * 0.6;
+    // For spacing multiplier > 1, add extra space; for < 1, reduce space
+    const spacingAdjustment = (spacingMultiplier - 1) * size * 0.1; // Small adjustment factor
+    return line.length * (charWidth + spacingAdjustment);
+  };
+  
+  // Find the longest line
+  let maxLineWidth = 0;
+  let longestLine = '';
+  for (const line of adjustedLines) {
+    const width = checkLineWidth(line, adjustedFontSize, letterSpacing);
+    if (width > maxLineWidth) {
+      maxLineWidth = width;
+      longestLine = line;
+    }
+  }
+  
+  // If longest line fits, return early
+  if (maxLineWidth <= availableWidth * 0.9) {
+    return { fontSize: adjustedFontSize, letterSpacing, lines: adjustedLines };
+  }
+  
+  // Step 1: Try reducing font size (hard floor 28px)
+  adjustedFontSize = Math.max(HARD_FLOOR, Math.floor((availableWidth * 0.9) / (longestLine.length * 0.6)));
+  maxLineWidth = checkLineWidth(longestLine, adjustedFontSize, letterSpacing);
+  
+  if (maxLineWidth <= availableWidth * 0.9) {
+    return { fontSize: adjustedFontSize, letterSpacing, lines: adjustedLines };
+  }
+  
+  // Step 2: Reduce letter spacing to 0.95x
+  letterSpacing = 0.95;
+  maxLineWidth = checkLineWidth(longestLine, adjustedFontSize, letterSpacing);
+  
+  if (maxLineWidth <= availableWidth * 0.9) {
+    return { fontSize: adjustedFontSize, letterSpacing, lines: adjustedLines };
+  }
+  
+  // Step 3: Further reduce letter spacing to 0.9x
+  letterSpacing = 0.9;
+  maxLineWidth = checkLineWidth(longestLine, adjustedFontSize, letterSpacing);
+  
+  if (maxLineWidth <= availableWidth * 0.9) {
+    return { fontSize: adjustedFontSize, letterSpacing, lines: adjustedLines };
+  }
+  
+  // Step 4: For multi-word titles, try word redistribution
+  if (wordCount > 1) {
+    const words = adjustedLines.join(' ').split(/\s+/);
+    
+    // Try different line break strategies based on word count
+    if (wordCount === 2) {
+      // Split to two lines (one word per line)
+      adjustedLines = [words[0], words[1]];
+      // Recalculate with new line structure
+      const numLines = adjustedLines.length;
+      const availableHeightPerLine = availableHeight / numLines / 1.2;
+      adjustedFontSize = Math.floor(availableHeightPerLine * 0.8);
+      
+      // Check width again
+      maxLineWidth = 0;
+      for (const line of adjustedLines) {
+        const width = checkLineWidth(line, adjustedFontSize, 1.05);
+        if (width > maxLineWidth) maxLineWidth = width;
+      }
+      
+      if (maxLineWidth <= availableWidth * 0.9) {
+        return { fontSize: Math.max(HARD_FLOOR, adjustedFontSize), letterSpacing: 1.05, lines: adjustedLines };
+      }
+    } else if (wordCount === 4) {
+      // Try 3 words top, 1 word bottom
+      adjustedLines = [words.slice(0, 3).join(' '), words.slice(3).join(' ')];
+      const numLines = adjustedLines.length;
+      const availableHeightPerLine = availableHeight / numLines / 1.2;
+      adjustedFontSize = Math.floor(availableHeightPerLine * 0.8);
+      
+      maxLineWidth = 0;
+      for (const line of adjustedLines) {
+        const width = checkLineWidth(line, adjustedFontSize, 1.05);
+        if (width > maxLineWidth) maxLineWidth = width;
+      }
+      
+      if (maxLineWidth <= availableWidth * 0.9) {
+        return { fontSize: Math.max(HARD_FLOOR, adjustedFontSize), letterSpacing: 1.05, lines: adjustedLines };
+      }
+    } else if (wordCount === 5) {
+      // Try 2-2-1 or 2-1-2
+      adjustedLines = [words.slice(0, 2).join(' '), words.slice(2, 4).join(' '), words.slice(4).join(' ')];
+      const numLines = adjustedLines.length;
+      const availableHeightPerLine = availableHeight / numLines / 1.2;
+      adjustedFontSize = Math.floor(availableHeightPerLine * 0.8);
+      
+      maxLineWidth = 0;
+      for (const line of adjustedLines) {
+        const width = checkLineWidth(line, adjustedFontSize, 1.05);
+        if (width > maxLineWidth) maxLineWidth = width;
+      }
+      
+      if (maxLineWidth <= availableWidth * 0.9) {
+        return { fontSize: Math.max(HARD_FLOOR, adjustedFontSize), letterSpacing: 1.05, lines: adjustedLines };
+      }
+    }
+  }
+  
+  // Step 5: Last resort - truncate longest word with ellipsis
+  const maxChars = Math.floor((availableWidth * 0.95) / (adjustedFontSize * 0.6 * letterSpacing));
+  const truncatedLines = adjustedLines.map(line => {
+    if (line.length > maxChars && line === longestLine) {
+      // Ensure at least 3-4 characters remain visible
+      const minVisible = Math.max(3, maxChars - 3);
+      return line.substring(0, minVisible) + '...';
+    }
+    return line;
+  });
+  
+  return { fontSize: adjustedFontSize, letterSpacing, lines: truncatedLines };
+}
+
+/**
+ * Calculate optimal font size for text to fit in width and height
+ * Implements the full specification from title-design.md
+ */
+function calculateFontSize(lines, maxWidth, maxHeight, wordCount, lineSpacing = 1.2) {
+  const MIN_SIZE = 32;
+  const HARD_FLOOR = 28;
   const numLines = lines.length;
-  const availableHeight = maxHeight / numLines / lineSpacing;
   
-  // Start with a reasonable base size based on available height
-  let fontSize = Math.floor(availableHeight * 0.8);
+  // Step 1: Height-based initial size
+  // Available height per line, accounting for line spacing
+  const availableHeightPerLine = maxHeight / numLines / lineSpacing;
+  let fontSize = Math.floor(availableHeightPerLine * 0.8);
   
-  // Check each line to ensure it fits in width
-  const avgCharWidth = fontSize * 0.6; // Rough average character width
-  
+  // Step 2: Width constraint check
+  const avgCharWidth = fontSize * 0.6;
   for (const line of lines) {
     const lineWidth = line.length * avgCharWidth;
     if (lineWidth > maxWidth * 0.9) {
@@ -158,10 +296,50 @@ function calculateFontSize(lines, maxWidth, maxHeight, lineSpacing = 1.2) {
     }
   }
   
-  // Ensure minimum and maximum sizes
-  fontSize = Math.max(20, Math.min(fontSize, availableHeight * 0.9));
+  // Step 2a: Handle oversized words if needed
+  let letterSpacing = 1.05;
+  let finalLines = lines;
+  // Check if any line is too long even at current font size
+  // Use same calculation as handleOversizedWords
+  const spacingAdjustment = (letterSpacing - 1) * fontSize * 0.1;
+  const maxLineWidth = Math.max(...lines.map(line => line.length * (fontSize * 0.6 + spacingAdjustment)));
+  if (maxLineWidth > maxWidth * 0.9) {
+    const result = handleOversizedWords(lines, fontSize, maxWidth, maxHeight, wordCount);
+    fontSize = result.fontSize;
+    letterSpacing = result.letterSpacing;
+    finalLines = result.lines;
+  }
   
-  return fontSize;
+  // Step 3: Apply minimum and maximum bounds
+  const maxSize = Math.floor(availableHeightPerLine * 0.9);
+  fontSize = Math.max(MIN_SIZE, Math.min(fontSize, maxSize));
+  
+  // Step 4: Apply word-count-based multipliers
+  let multiplier = 1.0;
+  if (wordCount === 1) {
+    multiplier = 1.4;
+  } else if (wordCount === 2) {
+    multiplier = 1.25;
+  } else if (wordCount === 3 || wordCount === 4) {
+    multiplier = 1.1;
+  } else if (wordCount === 5) {
+    multiplier = 1.0;
+  }
+  
+  fontSize = Math.floor(fontSize * multiplier);
+  
+  // Ensure we don't go below hard floor after multiplier
+  fontSize = Math.max(HARD_FLOOR, fontSize);
+  
+  // Re-check width after multiplier (might need to reduce)
+  const finalSpacingAdjustment = (letterSpacing - 1) * fontSize * 0.1;
+  const finalMaxLineWidth = Math.max(...finalLines.map(line => line.length * (fontSize * 0.6 + finalSpacingAdjustment)));
+  if (finalMaxLineWidth > maxWidth * 0.9) {
+    const longestLineLength = Math.max(...finalLines.map(l => l.length));
+    fontSize = Math.max(HARD_FLOOR, Math.floor((maxWidth * 0.9) / (longestLineLength * (0.6 + (letterSpacing - 1) * 0.1))));
+  }
+  
+  return { fontSize, letterSpacing, lines: finalLines };
 }
 
 /**
@@ -187,24 +365,33 @@ async function addTitleToImage(imagePath, titleText) {
   // Calculate text area (top 20% of image as per image-prompt.md)
   const textAreaHeight = Math.floor(height * 0.2);
   const textAreaWidth = width;
-  const padding = Math.floor(textAreaHeight * 0.1);
+  const padding = Math.floor(textAreaHeight * 0.12);
   
   // Split text into lines
-  const lines = splitTextIntoLines(titleText);
-  const numLines = lines.length;
-  console.log(`📝 Text split into ${numLines} line(s):`, lines);
+  const initialLines = splitTextIntoLines(titleText);
+  const wordCount = titleText.trim().split(/\s+/).length;
+  console.log(`📝 Initial text split into ${initialLines.length} line(s):`, initialLines);
   
   // Calculate optimal font size for multi-line text
-  let fontSize = calculateFontSize(
-    lines,
-    textAreaWidth - (padding * 2),
-    textAreaHeight - (padding * 2)
+  const availableWidth = textAreaWidth - (padding * 2);
+  const availableHeight = textAreaHeight - (padding * 2);
+  const sizeResult = calculateFontSize(
+    initialLines,
+    availableWidth,
+    availableHeight,
+    wordCount
   );
   
-  // Increase font size by 40% + 20% + 20% = 101.6% total
-  fontSize = Math.floor(fontSize * 2.016);
+  const fontSize = sizeResult.fontSize;
+  const letterSpacing = sizeResult.letterSpacing;
+  const lines = sizeResult.lines;
+  const numLines = lines.length;
   
   console.log(`📏 Calculated font size: ${fontSize}px`);
+  console.log(`📏 Letter spacing: ${letterSpacing}x`);
+  if (lines.length !== initialLines.length || lines.some((l, i) => l !== initialLines[i])) {
+    console.log(`📝 Lines adjusted to:`, lines);
+  }
   
   // Calculate line spacing and vertical positioning
   const lineSpacing = fontSize * 1.2;
@@ -215,6 +402,9 @@ async function addTitleToImage(imagePath, titleText) {
   const textElements = lines.map((line, index) => {
     const y = startY + (index * lineSpacing);
     const escapedLine = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Calculate letter spacing in pixels
+    // Use a factor to convert multiplier to pixel spacing (0.2 gives subtle but noticeable spacing)
+    const letterSpacingPx = Math.max(0, (letterSpacing - 1) * fontSize * 0.2);
     return `
       <text
         x="${width / 2}"
@@ -225,6 +415,7 @@ async function addTitleToImage(imagePath, titleText) {
         fill="${textColor}"
         text-anchor="middle"
         dominant-baseline="central"
+        letter-spacing="${letterSpacingPx}"
       >${escapedLine}</text>
     `;
   }).join('');

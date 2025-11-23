@@ -232,58 +232,6 @@ export default function SwipeScreen() {
         />
       </View>
 
-      {/* Bottom Navigation Bar */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => {
-            // Already on swipe screen, no action needed
-          }}
-        >
-          <IconButton
-            icon="heart"
-            size={24}
-            iconColor={Colors.primary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => {
-            // If user has no partner, show invite modal, otherwise navigate to matching screen
-            // Check if profile exists and has no partner_id (null or undefined)
-            console.log('[SwipeScreen] Partner button clicked', { 
-              hasProfile: !!profile, 
-              partnerId: profile?.partner_id 
-            });
-            if (!profile || !profile.partner_id) {
-              console.log('[SwipeScreen] Navigating to invite screen');
-              router.push('/(swipe)/invite' as any);
-            } else {
-              console.log('[SwipeScreen] Navigating to matching screen');
-              router.push('/(swipe)/matching' as any);
-            }
-          }}
-        >
-          <IconButton
-            icon="account-multiple"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => router.push('/(swipe)/profile' as any)}
-        >
-          <IconButton
-            icon="account-outline"
-            size={24}
-            iconColor={Colors.textTertiary}
-            style={styles.navButton}
-          />
-        </TouchableOpacity>
-      </View>
 
       <CardDetailsModal
         visible={detailsModalVisible}
@@ -375,24 +323,10 @@ const styles = StyleSheet.create({
   emptyTitle: {
     marginBottom: 16,
     textAlign: 'center',
+    color: Colors.backgroundWhite,
   },
   emptyText: {
-    color: Colors.textSecondary,
+    color: Colors.backgroundWhite,
     textAlign: 'center',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    paddingVertical: Spacing.xs,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navButton: {
-    margin: 0,
   },
 });

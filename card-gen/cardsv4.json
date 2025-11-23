@@ -1,0 +1,718 @@
+[
+  {
+    "text": "Morning kisses",
+    "description": "Starting the day with slow, intentional kisses that build connection without pressure. It's about presence and the intimacy of greeting each other with affection.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "connection"]
+  },
+  {
+    "text": "Back rubs",
+    "description": "Giving focused attention to your partner's back with slow, intentional touch. It's about care, relaxation, and the intimacy of being touched with purpose.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "relaxation"]
+  },
+  {
+    "text": "Holding hands",
+    "description": "Simple physical connection that creates intimacy through touch. It's about presence and the comfort of being physically connected.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "connection"]
+  },
+  {
+    "text": "Cooking together",
+    "description": "Sharing the kitchen as a space for connection, playfulness, and collaboration. It's about working side by side and the intimacy of creating something together.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "playful", "beginner-friendly", "connection"]
+  },
+  {
+    "text": "Forehead kisses",
+    "description": "Gentle, caring kisses that express affection and tenderness. It's about the sweetness of non-sexual intimacy and feeling cared for.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "tender"]
+  },
+  {
+    "text": "Spooning",
+    "description": "Lying close together in a comfortable position that creates physical and emotional closeness. It's about the comfort of being held and feeling safe.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "comfort"]
+  },
+  {
+    "text": "Foot massages",
+    "description": "Giving attention to tired feet with gentle pressure and care. It's about service, relaxation, and the intimacy of caring for your partner's body.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "relaxation"]
+  },
+  {
+    "text": "Eye contact",
+    "description": "Holding each other's gaze to create deep connection and presence. It's about vulnerability and seeing each other without words.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "connection"]
+  },
+  {
+    "text": "Sharing fantasies",
+    "description": "Talking about desires and scenarios that turn you on, creating intimacy through verbal connection. It's about vulnerability and discovering what excites you both.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Kissing different body parts",
+    "description": "Exploring your partner's body with your lips, discovering sensitive spots and creating varied sensations. It's about attention, discovery, and the intimacy of focused touch.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "exploration"]
+  },
+  {
+    "text": "Slow dancing",
+    "description": "Moving together to music in a way that creates physical closeness and connection. It's about the intimacy of being held and feeling your bodies move as one.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "playful", "beginner-friendly"]
+  },
+  {
+    "text": "Reading to each other",
+    "description": "Sharing stories or articles aloud, creating connection through voice and shared attention. It's about the intimacy of listening and being heard.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "communication", "beginner-friendly"]
+  },
+  {
+    "text": "Watching each other undress",
+    "description": "Taking time to appreciate your partner's body as they remove their clothes, creating anticipation and visual connection. It's about the excitement of being seen and seeing.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "visual", "exploration"]
+  },
+  {
+    "text": "Naked cuddling",
+    "description": "Being close without clothes, feeling skin against skin in a non-sexual way. It's about the intimacy of physical closeness and the comfort of being fully present.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "sensual", "beginner-friendly"]
+  },
+  {
+    "text": "Talking about turn-ons",
+    "description": "Having open conversations about what excites you, creating understanding and connection. It's about vulnerability and discovering how to please each other.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Playing with hair",
+    "description": "Running fingers through your partner's hair, creating soothing sensations and physical connection. It's about care, relaxation, and the intimacy of gentle touch.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "sensual", "beginner-friendly"]
+  },
+  {
+    "text": "Ear nibbling",
+    "description": "Gently using your lips and teeth on your partner's ears, creating ticklish and arousing sensations. It's about discovering sensitive spots and building anticipation.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "playful", "exploration"]
+  },
+  {
+    "text": "Shoulder massages",
+    "description": "Working out tension in your partner's shoulders with focused pressure and care. It's about service, relaxation, and the intimacy of caring touch.",
+    "intensity": 0,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "relaxation", "beginner-friendly"]
+  },
+  {
+    "text": "Whispering secrets",
+    "description": "Sharing private thoughts or desires in close whispers, creating intimacy through proximity and vulnerability. It's about the thrill of being close and sharing something personal.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "intimate", "romantic", "exploration"]
+  },
+  {
+    "text": "Bathroom door open",
+    "description": "Being comfortable with each other in vulnerable moments, creating intimacy through normalcy and acceptance. It's about removing barriers and feeling completely at ease.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "vulnerability", "comfort"]
+  },
+  {
+    "text": "Lingerie shopping",
+    "description": "Choosing intimate clothing together, creating anticipation and visual excitement. It's about the fun of selection and the excitement of seeing your partner in something special.",
+    "intensity": 1,
+    "category": "playful",
+    "labels": ["playful", "romantic", "visual", "exploration"]
+  },
+  {
+    "text": "Wearing matching underwear",
+    "description": "Coordinating your intimate clothing to create a sense of connection and playfulness. It's about the fun of having a secret that only you two know about.",
+    "intensity": 1,
+    "category": "playful",
+    "labels": ["playful", "romantic", "intimate", "exploration"]
+  },
+  {
+    "text": "Sexting",
+    "description": "Sending suggestive messages throughout the day to build anticipation and connection. It's about maintaining intimacy when apart and creating excitement for when you're together.",
+    "intensity": 2,
+    "category": "communication",
+    "labels": ["communication", "playful", "romantic", "exploration"]
+  },
+  {
+    "text": "Sending nudes",
+    "description": "Sharing intimate photos to create visual connection and build anticipation. It's about vulnerability, trust, and the excitement of being seen by your partner.",
+    "intensity": 2,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "visual", "trust"]
+  },
+  {
+    "text": "Phone sex",
+    "description": "Talking each other through arousal over the phone, creating intimacy through voice and imagination. It's about connection when apart and the excitement of verbal play.",
+    "intensity": 2,
+    "category": "communication",
+    "labels": ["communication", "intimate", "playful", "exploration"]
+  },
+  {
+    "text": "Mutual masturbation",
+    "description": "Touching yourselves while watching each other, creating visual connection and shared pleasure. It's about the intimacy of being seen and the excitement of mutual arousal.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "visual", "exploration"]
+  },
+  {
+    "text": "Watching porn together",
+    "description": "Viewing adult content together to discover what turns you both on and spark conversation. It's about exploration, communication, and finding shared interests.",
+    "intensity": 2,
+    "category": "exploration",
+    "labels": ["exploration", "communication", "visual", "playful"]
+  },
+  {
+    "text": "Trying new positions",
+    "description": "Experimenting with different ways to connect physically, discovering what feels good and creates variety. It's about exploration, communication, and keeping things fresh.",
+    "intensity": 2,
+    "category": "exploration",
+    "labels": ["exploration", "sensual", "playful", "communication"]
+  },
+  {
+    "text": "Extended foreplay",
+    "description": "Taking time to build arousal slowly through touch, kisses, and attention before moving to intercourse. It's about patience, connection, and making the experience last longer.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "beginner-friendly"]
+  },
+  {
+    "text": "Focusing on one body part",
+    "description": "Giving dedicated attention to a single area like the neck, inner thighs, or chest, creating intense sensation through focus. It's about the power of concentrated touch and anticipation.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Using your hands",
+    "description": "Exploring your partner's body with your hands, discovering what touch feels good and where. It's about communication, attention, and the intimacy of manual connection.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Oral pleasure",
+    "description": "Using your mouth to give pleasure, focusing on technique, communication, and your partner's responses. It's about service, connection, and the intimacy of giving focused attention.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "communication"]
+  },
+  {
+    "text": "Receiving oral pleasure",
+    "description": "Allowing your partner to use their mouth on you, focusing on receiving and communicating what feels good. It's about vulnerability, trust, and the pleasure of being the focus of attention.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "trust"]
+  },
+  {
+    "text": "Fingering",
+    "description": "Using fingers to explore and stimulate, creating varied sensations and building arousal. It's about communication, technique, and discovering what feels good for your partner.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "communication"]
+  },
+  {
+    "text": "Hand jobs",
+    "description": "Using your hands to give pleasure through stroking and varied techniques. It's about communication, attention to your partner's responses, and the intimacy of manual connection.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "exploration", "communication"]
+  },
+  {
+    "text": "Using lube",
+    "description": "Incorporating lubrication to enhance sensation, reduce friction, and make everything feel smoother. It's about comfort, exploration, and making touch feel better for both partners.",
+    "intensity": 1,
+    "category": "exploration",
+    "labels": ["exploration", "sensual", "beginner-friendly", "comfort"]
+  },
+  {
+    "text": "Trying different speeds",
+    "description": "Varying the pace of touch and movement, creating contrast between slow and fast sensations. It's about building anticipation and discovering what rhythms feel best.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "exploration", "playful", "beginner-friendly"]
+  },
+  {
+    "text": "Changing positions mid-act",
+    "description": "Switching positions during intimacy to create variety and discover new angles and sensations. It's about playfulness, communication, and keeping things dynamic.",
+    "intensity": 2,
+    "category": "exploration",
+    "labels": ["exploration", "sensual", "playful", "communication"]
+  },
+  {
+    "text": "Taking turns being in charge",
+    "description": "Alternating who leads and who follows, creating variety in power dynamics and responsibility. It's about balance, communication, and discovering what roles feel exciting for each of you.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "power-dynamics", "exploration", "communication"]
+  },
+  {
+    "text": "Making out",
+    "description": "Extended kissing with passion and intensity, using lips, tongue, and breath to create connection. It's about the intimacy of mouth-to-mouth contact and building arousal through kissing.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "beginner-friendly"]
+  },
+  {
+    "text": "French kissing",
+    "description": "Deep, passionate kissing with tongues, creating intense mouth-to-mouth connection. It's about the intimacy of sharing breath and the excitement of passionate contact.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "sensual", "intimate", "beginner-friendly"]
+  },
+  {
+    "text": "Necking",
+    "description": "Focusing passionate kisses and attention on the neck and collarbone area, creating intense sensation. It's about discovering sensitive spots and building arousal through focused touch.",
+    "intensity": 1,
+    "category": "sensual",
+    "labels": ["sensual", "intimate", "romantic", "exploration"]
+  },
+  {
+    "text": "Hickey giving",
+    "description": "Creating visible marks through passionate kissing and gentle suction, leaving temporary evidence of your connection. It's about marking territory in a playful way and the excitement of visible passion.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "romantic", "kink", "exploration"]
+  },
+  {
+    "text": "Body worship",
+    "description": "Giving focused attention and praise to your partner's body, celebrating their physical form with words and touch. It's about appreciation, confidence building, and the intimacy of being adored.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "communication", "exploration"]
+  },
+  {
+    "text": "Praise during intimacy",
+    "description": "Using words to tell your partner what you love about them and how they make you feel, building confidence and connection. It's about verbal intimacy and making your partner feel desired and appreciated.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "romantic", "intimate", "exploration"]
+  },
+  {
+    "text": "Talking during sex",
+    "description": "Using words to express what feels good, what you want, and how you're feeling in the moment. It's about communication, presence, and making the experience better through verbal connection.",
+    "intensity": 2,
+    "category": "communication",
+    "labels": ["communication", "intimate", "exploration", "playful"]
+  },
+  {
+    "text": "Moaning and vocalizing",
+    "description": "Letting yourself make sounds that express pleasure, creating audio feedback and building arousal. It's about authenticity, communication through sound, and the excitement of hearing your partner's pleasure.",
+    "intensity": 2,
+    "category": "communication",
+    "labels": ["communication", "sensual", "intimate", "exploration"]
+  },
+  {
+    "text": "Asking what feels good",
+    "description": "Checking in verbally to understand what your partner enjoys and wants more of, creating better experiences through communication. It's about care, attention, and making sure you're both having a good time.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Giving feedback",
+    "description": "Telling your partner what you like and what you'd like more of, creating better experiences through honest communication. It's about vulnerability, care, and making sure both partners feel good.",
+    "intensity": 1,
+    "category": "communication",
+    "labels": ["communication", "intimate", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Using a vibrator on your partner",
+    "description": "Incorporating a toy to enhance your partner's pleasure, adding variety and intensity to touch. It's about service, exploration, and discovering new ways to create sensation together.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "sensual", "exploration", "playful"]
+  },
+  {
+    "text": "Using a vibrator on yourself",
+    "description": "Touching yourself with a toy while your partner watches or participates, creating visual connection and shared pleasure. It's about vulnerability, exploration, and the excitement of being seen.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "sensual", "visual", "exploration"]
+  },
+  {
+    "text": "Using a cock ring",
+    "description": "Wearing a ring at the base to enhance sensation and maintain erection, creating more intense experiences. It's about exploration, variety, and discovering new ways to enhance pleasure.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "sensual", "exploration", "playful"]
+  },
+  {
+    "text": "Using a butt plug",
+    "description": "Wearing a plug to create sensation and fullness, exploring anal play in a contained way. It's about communication, patience, and discovering new sensations together.",
+    "intensity": 3,
+    "category": "toys",
+    "labels": ["toys", "exploration", "sensual", "communication"]
+  },
+  {
+    "text": "Using nipple clamps",
+    "description": "Applying gentle pressure to nipples to create sensation and visual interest, exploring different intensities. It's about communication, starting gentle, and discovering what feels good.",
+    "intensity": 3,
+    "category": "toys",
+    "labels": ["toys", "kink", "sensual", "exploration"]
+  },
+  {
+    "text": "Using a wand massager",
+    "description": "Applying powerful vibrations to create intense sensation, exploring different speeds and pressures. It's about variety, communication, and discovering what intensities feel best.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "sensual", "exploration", "playful"]
+  },
+  {
+    "text": "Using a dildo",
+    "description": "Incorporating a toy for penetration, creating variety in size, shape, and sensation. It's about exploration, communication, and discovering new ways to experience pleasure together.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "sensual", "exploration", "playful"]
+  },
+  {
+    "text": "Using a strap-on",
+    "description": "Exploring penetration with a harness and toy, creating new dynamics and sensations. It's about role reversal, communication, and discovering how different power dynamics feel.",
+    "intensity": 3,
+    "category": "toys",
+    "labels": ["toys", "roleplay", "power-dynamics", "exploration"]
+  },
+  {
+    "text": "Shopping for toys together",
+    "description": "Browsing and selecting intimate toys as a couple, creating anticipation and shared excitement. It's about communication, exploration, and the fun of choosing something new to try.",
+    "intensity": 1,
+    "category": "toys",
+    "labels": ["toys", "playful", "exploration", "communication"]
+  },
+  {
+    "text": "Trying a new toy",
+    "description": "Experimenting with a toy you haven't used before, creating novelty and discovery. It's about exploration, communication, and the excitement of trying something new together.",
+    "intensity": 2,
+    "category": "toys",
+    "labels": ["toys", "exploration", "playful", "communication"]
+  },
+  {
+    "text": "Teacher/Student roleplay",
+    "description": "Playing with power dynamics through an educational scenario, exploring authority and submission in a contained way. It's about roleplay, communication, and discovering what dynamics feel exciting.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "power-dynamics", "playful", "kink"]
+  },
+  {
+    "text": "Stranger roleplay",
+    "description": "Pretending to meet for the first time, creating the excitement of new attraction and discovery. It's about fantasy, playfulness, and the thrill of acting out a scenario.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "playful", "fantasy", "exploration"]
+  },
+  {
+    "text": "Celebrity fantasy",
+    "description": "Talking about or roleplaying scenarios with famous people, exploring fantasies in a safe, contained way. It's about imagination, communication, and the fun of sharing fantasies.",
+    "intensity": 1,
+    "category": "roleplay",
+    "labels": ["roleplay", "fantasy", "communication", "playful"]
+  },
+  {
+    "text": "First time roleplay",
+    "description": "Acting out your first sexual experience together, recreating the excitement and nervousness of new discovery. It's about nostalgia, playfulness, and the fun of reliving special moments.",
+    "intensity": 1,
+    "category": "roleplay",
+    "labels": ["roleplay", "romantic", "playful", "exploration"]
+  },
+  {
+    "text": "Hotel room fantasy",
+    "description": "Creating a scenario where you're meeting in a hotel, adding the excitement of a new environment and secret rendezvous. It's about fantasy, playfulness, and the thrill of acting out a scenario.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "fantasy", "playful", "exploration"]
+  },
+  {
+    "text": "Pirate/Captive roleplay",
+    "description": "Exploring power dynamics through a historical scenario, playing with capture and rescue themes. It's about roleplay, communication, and discovering what dynamics feel exciting.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "power-dynamics", "playful", "kink"]
+  },
+  {
+    "text": "Nurse/Patient roleplay",
+    "description": "Playing with caregiving and vulnerability through a medical scenario, exploring trust and service. It's about roleplay, communication, and the intimacy of caregiving dynamics.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "power-dynamics", "playful", "kink"]
+  },
+  {
+    "text": "Cop/Criminal roleplay",
+    "description": "Exploring authority and power through a law enforcement scenario, playing with control and submission. It's about roleplay, communication, and discovering what power dynamics feel exciting.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "power-dynamics", "kink", "playful"]
+  },
+  {
+    "text": "Master/Servant roleplay",
+    "description": "Playing with service and power dynamics through a historical scenario, exploring giving and receiving control. It's about roleplay, communication, and discovering what roles feel exciting.",
+    "intensity": 3,
+    "category": "roleplay",
+    "labels": ["roleplay", "power-dynamics", "kink", "communication"]
+  },
+  {
+    "text": "Using costumes",
+    "description": "Dressing up in outfits that match a roleplay scenario, adding visual excitement and helping get into character. It's about playfulness, exploration, and the fun of transformation.",
+    "intensity": 2,
+    "category": "roleplay",
+    "labels": ["roleplay", "playful", "visual", "exploration"]
+  },
+  {
+    "text": "Light spanking",
+    "description": "Using gentle to moderate hand strikes to create sensation and playfulness, starting light and communicating about intensity. It's about impact play, communication, and discovering what feels good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "playful", "communication", "exploration"],
+    "image_title": "Playful touch"
+  },
+  {
+    "text": "Hair pulling",
+    "description": "Gently gripping and pulling hair to create sensation and express desire, starting light and communicating about intensity. It's about communication, starting gentle, and discovering what feels good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "playful", "communication", "exploration"],
+    "image_title": "Hair play"
+  },
+  {
+    "text": "Gentle biting",
+    "description": "Using teeth to create sensation and mark territory in a playful way, starting light and communicating about intensity. It's about communication, starting gentle, and discovering what feels good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "playful", "communication", "exploration"]
+  },
+  {
+    "text": "Light scratching",
+    "description": "Using fingernails to create marks and sensations, starting gentle and communicating about intensity. It's about communication, starting light, and discovering what feels good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "playful", "communication", "exploration"]
+  },
+  {
+    "text": "Choking play",
+    "description": "Applying gentle pressure to the sides of the neck for sensation and power dynamics, requiring clear communication and safety knowledge. It's about trust, communication, and understanding proper technique.",
+    "intensity": 4,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "trust", "advanced"]
+  },
+  {
+    "text": "Using a collar",
+    "description": "Wearing a collar to symbolize ownership and power dynamics, creating visual and psychological connection. It's about roleplay, communication, and exploring what power exchange means to you both.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "power-dynamics", "roleplay", "communication"],
+    "image_title": "Decorative accessory"
+  },
+  {
+    "text": "Being tied up",
+    "description": "Allowing your partner to use soft materials to create gentle restraint, focusing on trust and sensory experience. It's about vulnerability, communication, and the feeling of being cared for.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "communication"],
+    "image_title": "Decorative wrapping"
+  },
+  {
+    "text": "Tying your partner up",
+    "description": "Using soft materials to create gentle restraint, focusing on care, communication, and sensory experience. It's about responsibility, trust, and the intimacy of being in control.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "communication"],
+    "image_title": "Decorative wrapping"
+  },
+  {
+    "text": "Using handcuffs",
+    "description": "Creating restraint with cuffs, focusing on trust, communication, and the feeling of being held. It's about exploration, starting gentle, and discovering what restraint feels like.",
+    "intensity": 3,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "exploration"],
+    "image_title": "Decorative accessories"
+  },
+  {
+    "text": "Sensory play",
+    "description": "Using different textures, temperatures, and sensations to create varied experiences and heighten awareness. It's about exploration, communication, and discovering what sensations feel good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Using feathers",
+    "description": "Creating light, ticklish sensations with soft feathers, exploring different pressures and speeds. It's about playfulness, exploration, and the contrast between gentle and intense touch.",
+    "intensity": 1,
+    "category": "kink",
+    "labels": ["kink", "playful", "sensual", "beginner-friendly"]
+  },
+  {
+    "text": "Using ice",
+    "description": "Creating cool sensations that contrast with body heat, exploring temperature play in a safe way. It's about communication, starting gentle, and discovering what temperatures feel good.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "sensual", "exploration", "beginner-friendly"]
+  },
+  {
+    "text": "Using warm oil",
+    "description": "Applying heated oil to create smooth, warm sensations that feel luxurious and intimate. It's about the combination of temperature and texture, communication, and making touch feel special.",
+    "intensity": 1,
+    "category": "kink",
+    "labels": ["kink", "sensual", "romantic", "beginner-friendly"]
+  },
+  {
+    "text": "Using a blindfold",
+    "description": "Covering eyes to heighten other senses and create anticipation, focusing on trust and sensory experience. It's about vulnerability, exploration, and discovering how your body responds when sight is removed.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "exploration"],
+    "image_title": "Sensory exploration"
+  },
+  {
+    "text": "Using earplugs",
+    "description": "Reducing sound to heighten other senses, creating intense focus on touch and visual connection. It's about exploration, trust, and discovering how your body responds when hearing is reduced.",
+    "intensity": 2,
+    "category": "kink",
+    "labels": ["kink", "trust", "sensual", "exploration"],
+    "image_title": "Sensory exploration"
+  },
+  {
+    "text": "Public hand holding",
+    "description": "Maintaining physical connection in public spaces, creating subtle intimacy that others might notice. It's about the thrill of public connection and the comfort of being physically linked.",
+    "intensity": 1,
+    "category": "public",
+    "labels": ["public", "romantic", "playful", "beginner-friendly"]
+  },
+  {
+    "text": "Sneaky touches in public",
+    "description": "Creating subtle, private moments of connection in public where others don't notice, building anticipation. It's about the thrill of secret intimacy and maintaining composure while feeling turned on.",
+    "intensity": 3,
+    "category": "public",
+    "labels": ["public", "playful", "kink", "exploration"]
+  },
+  {
+    "text": "Car makeout sessions",
+    "description": "Using the privacy of a car to create intimate moments in semi-public spaces, adding the excitement of potential discovery. It's about the thrill of public play and the intimacy of contained spaces.",
+    "intensity": 2,
+    "category": "public",
+    "labels": ["public", "playful", "romantic", "exploration"]
+  },
+  {
+    "text": "Sex in a car",
+    "description": "Using the privacy of a vehicle to create intimate moments in semi-public spaces, adding excitement and novelty. It's about the thrill of public play, communication, and the fun of trying something new.",
+    "intensity": 3,
+    "category": "public",
+    "labels": ["public", "playful", "exploration", "kink"]
+  },
+  {
+    "text": "Sex in nature",
+    "description": "Connecting outdoors in a private natural setting, adding the excitement of being outside and potential discovery. It's about adventure, communication, and the thrill of public play in a contained way.",
+    "intensity": 3,
+    "category": "public",
+    "labels": ["public", "playful", "exploration", "romantic"]
+  },
+  {
+    "text": "Quickies",
+    "description": "Having fast, intense intimate moments when time is limited, creating excitement through urgency. It's about spontaneity, playfulness, and the fun of fitting connection into busy schedules.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "romantic", "exploration", "spontaneous"]
+  },
+  {
+    "text": "Morning sex",
+    "description": "Starting the day with intimate connection, using morning energy and the privacy of early hours. It's about spontaneity, playfulness, and the intimacy of connecting before the day begins.",
+    "intensity": 2,
+    "category": "romantic",
+    "labels": ["romantic", "playful", "intimate", "spontaneous"]
+  },
+  {
+    "text": "Afternoon delight",
+    "description": "Taking time in the middle of the day to connect intimately, using daylight and natural energy. It's about spontaneity, playfulness, and the fun of breaking routine.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "romantic", "spontaneous", "exploration"]
+  },
+  {
+    "text": "Shower sex",
+    "description": "Connecting in the shower, using water and steam to create a private, intimate environment. It's about playfulness, communication about safety, and the fun of trying something new.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "romantic", "exploration", "spontaneous"]
+  },
+  {
+    "text": "Kitchen counter sex",
+    "description": "Using kitchen surfaces to create intimate moments in unexpected spaces, adding novelty and playfulness. It's about spontaneity, exploration, and the fun of breaking routine.",
+    "intensity": 2,
+    "category": "playful",
+    "labels": ["playful", "exploration", "spontaneous", "romantic"]
+  },
+  {
+    "text": "Against the wall",
+    "description": "Using a wall for support to create standing intimate moments, adding variety and physical challenge. It's about exploration, playfulness, and discovering new angles and positions.",
+    "intensity": 2,
+    "category": "exploration",
+    "labels": ["exploration", "playful", "sensual", "spontaneous"]
+  },
+  {
+    "text": "On the floor",
+    "description": "Moving intimacy to the floor to create different angles and sensations, adding variety and playfulness. It's about exploration, spontaneity, and the fun of trying something different.",
+    "intensity": 2,
+    "category": "exploration",
+    "labels": ["exploration", "playful", "sensual", "spontaneous"]
+  },
+  {
+    "text": "In front of a mirror",
+    "description": "Using mirrors to watch yourselves connect, creating visual excitement and new perspectives. It's about exploration, visual connection, and the excitement of seeing yourselves together.",
+    "intensity": 2,
+    "category": "sensual",
+    "labels": ["sensual", "visual", "exploration", "playful"]
+  },
+  {
+    "text": "With music playing",
+    "description": "Using music to set the mood and create rhythm for movement, adding atmosphere and connection. It's about creating ambiance, playfulness, and the intimacy of shared sound.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "playful", "intimate", "beginner-friendly"]
+  },
+  {
+    "text": "With candles lit",
+    "description": "Using candlelight to create soft, intimate atmosphere that focuses attention on each other. It's about setting the mood, romance, and the intimacy of low lighting.",
+    "intensity": 1,
+    "category": "romantic",
+    "labels": ["romantic", "intimate", "beginner-friendly", "atmosphere"]
+  },
+  {
+    "text": "Recording yourselves",
+    "description": "Capturing intimate moments on video to watch later, creating visual memories and excitement. It's about trust, communication about privacy, and the fun of creating something private together.",
+    "intensity": 3,
+    "category": "exploration",
+    "labels": ["exploration", "visual", "trust", "communication"]
+  },
+  {
+    "text": "Taking photos",
+    "description": "Capturing intimate moments in still images to celebrate your connection and bodies. It's about trust, communication about privacy, and the fun of creating visual memories together.",
+    "intensity": 2,
+    "category": "romantic",
+    "labels": ["romantic", "visual", "trust", "exploration"]
+  }
+]
+
