@@ -31,8 +31,34 @@ export function useAuth() {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
-      // Load profile when initial session is loaded
+      // Validate session by checking if user is still valid
       if (session) {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        // If getUser fails or returns no user, session is invalid - clear it
+        if (userError || !user) {
+          console.log('[useAuth] Session invalid, clearing:', {
+            userError: userError?.message,
+            hasUser: !!user,
+          });
+          // Clear local session storage without calling signOut (which would fail)
+          try {
+            await supabase.auth.signOut();
+          } catch (signOutError) {
+            // Ignore signOut errors - we're clearing state anyway
+            console.log('[useAuth] signOut failed (expected for invalid session):', signOutError);
+          }
+          setState((prev) => ({
+            ...prev,
+            session: null,
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+          }));
+          return;
+        }
+        
+        // Session is valid, load profile
         try {
           const profile = await getProfile();
           const profileComplete = isProfileComplete(profile);
@@ -49,8 +75,8 @@ export function useAuth() {
           setState((prev) => ({
             ...prev,
             session,
-            user: session?.user ?? null,
-            isAuthenticated: !!session,
+            user: user,
+            isAuthenticated: true,
             profile,
             isProfileComplete: profileComplete,
             isLoading: false,
@@ -64,15 +90,15 @@ export function useAuth() {
           setState((prev) => ({
             ...prev,
             session,
-            user: session?.user ?? null,
-            isAuthenticated: !!session,
+            user: user,
+            isAuthenticated: true,
             isLoading: false,
           }));
         }
       } else {
         setState((prev) => ({
           ...prev,
-          session,
+          session: null,
           user: null,
           isAuthenticated: false,
           isLoading: false,
@@ -84,17 +110,44 @@ export function useAuth() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      // Set loading to true while we fetch the profile
-      setState((prev) => ({
-        ...prev,
-        session,
-        user: session?.user ?? null,
-        isAuthenticated: !!session,
-        isLoading: !!session, // Set loading to true if we have a session (need to load profile)
-      }));
-
-      // Load profile when session changes
+      // Validate session if it exists
       if (session) {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        // If getUser fails or returns no user, session is invalid - clear it
+        if (userError || !user) {
+          console.log('[useAuth] Auth state changed - Session invalid, clearing:', {
+            userError: userError?.message,
+            hasUser: !!user,
+          });
+          // Clear local session storage without calling signOut (which would fail)
+          try {
+            await supabase.auth.signOut();
+          } catch (signOutError) {
+            // Ignore signOut errors - we're clearing state anyway
+            console.log('[useAuth] signOut failed (expected for invalid session):', signOutError);
+          }
+          setState((prev) => ({
+            ...prev,
+            session: null,
+            user: null,
+            isAuthenticated: false,
+            profile: null,
+            isProfileComplete: false,
+            isLoading: false,
+          }));
+          return;
+        }
+        
+        // Session is valid, load profile
+        setState((prev) => ({
+          ...prev,
+          session,
+          user: user,
+          isAuthenticated: true,
+          isLoading: true, // Set loading to true while we fetch the profile
+        }));
+
         try {
           const profile = await getProfile();
           const profileComplete = isProfileComplete(profile);
@@ -128,6 +181,9 @@ export function useAuth() {
       } else {
         setState((prev) => ({
           ...prev,
+          session: null,
+          user: null,
+          isAuthenticated: false,
           profile: null,
           isProfileComplete: false,
           isLoading: false,
@@ -214,8 +270,19 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    // Try to sign out, but always clear local state even if it fails
+    // (e.g., if session is already invalid/expired)
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.warn('Error during signOut (clearing local state anyway):', error);
+      }
+    } catch (error) {
+      // Handle cases where signOut fails with JSON parse errors or other issues
+      console.warn('SignOut failed (clearing local state anyway):', error);
+    }
+    
+    // Always clear local state regardless of signOut success/failure
     setState({
       user: null,
       session: null,

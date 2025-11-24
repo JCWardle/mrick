@@ -83,7 +83,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         autoCapitalize="none"
         autoComplete="email"
         disabled={isLoading}
-        containerStyle={styles.input}
+        containerStyle={styles.emailInput}
         labelStyle={styles.inputLabel}
       />
 
@@ -158,6 +158,9 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 0,
+  },
+  emailInput: {
+    marginBottom: Spacing.md,
   },
   inputLabel: {
     color: Colors.lavenderLight,

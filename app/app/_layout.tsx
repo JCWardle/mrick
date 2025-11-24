@@ -1,20 +1,27 @@
 import { useEffect } from 'react';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { View, StyleSheet } from 'react-native';
 import * as Linking from 'expo-linking';
-import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
 import 'react-native-reanimated';
 import { theme } from '../constants/theme';
 import { GradientBackground } from '../components/ui/GradientBackground';
 import { handleDeepLink } from '../lib/deepLinkHandler';
+import { setupNotificationHandlers, initializeNotifications } from '../lib/notifications';
+import { useAuth } from '../hooks/useAuth';
 
 export default function RootLayout() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
   useEffect(() => {
     // Handle initial URL (when app is opened via deep link)
+    // Note: Expo Router will also handle routing, and we have a route file
+    // at app/partner/invite/[code].tsx that will match partner invite links
     Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink(url);
@@ -30,6 +37,35 @@ export default function RootLayout() {
       subscription.remove();
     };
   }, []);
+
+  // Set up notification handlers
+  useEffect(() => {
+    const cleanup = setupNotificationHandlers(
+      // Notification received handler
+      (notification) => {
+        console.log('Notification received in foreground:', notification);
+      },
+      // Notification opened/tapped handler
+      (response) => {
+        console.log('Notification opened:', response);
+        const data = response.notification.request.content.data;
+        
+        // Navigate to matching screen if it's a swipe completion notification
+        if (data?.type === 'swipe_completion' || data?.screen === 'matching') {
+          router.push('/(swipe)/matching' as any);
+        }
+      }
+    );
+
+    return cleanup;
+  }, [router]);
+
+  // Initialize notifications when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      initializeNotifications();
+    }
+  }, [isAuthenticated]);
 
   return (
     <GestureHandlerRootView style={styles.gestureRoot}>

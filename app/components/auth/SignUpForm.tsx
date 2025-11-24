@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../../hooks/useAuth';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -17,7 +18,6 @@ type SignUpFormProps = {
 };
 
 export function SignUpForm({ onSuccess }: SignUpFormProps) {
-  const router = useRouter();
   const { signUpWithEmail, loginWithGoogle, loginWithApple } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,21 +59,46 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
     setIsLoading(true);
 
     try {
-      await signUpWithEmail(email, password);
-      Alert.alert(
-        'Account Created',
-        'Please check your email to verify your account. You can sign in after verification.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              onSuccess?.();
+      const result = await signUpWithEmail(email, password);
+      
+      // If signup succeeded but user needs email confirmation, show message
+      if (result.user && !result.session) {
+        Alert.alert(
+          'Account Created',
+          'Please check your email to verify your account. You can sign in after verification.',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                onSuccess?.();
+              },
             },
-          },
-        ]
-      );
+          ]
+        );
+      } else {
+        // User is automatically signed in (email confirmation disabled or already verified)
+        onSuccess?.();
+      }
     } catch (err: any) {
-      setError(err.message || 'Sign up failed');
+      console.error('Signup error:', err);
+      let errorMessage = 'Sign up failed';
+      
+      // Provide more specific error messages
+      if (err.message) {
+        if (err.message.includes('already registered') || err.message.includes('already exists')) {
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else if (err.message.includes('email')) {
+          errorMessage = 'Invalid email address. Please check and try again.';
+        } else if (err.message.includes('password')) {
+          errorMessage = 'Password does not meet requirements.';
+        } else if (err.message.includes('Database error') || err.message.includes('profile')) {
+          errorMessage = 'Account created but profile setup failed. Please try signing in.';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +132,9 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Create an Account</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Create an Account</Text>
+      </View>
 
       <Input
         label="Email"
@@ -122,7 +149,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
         autoComplete="email"
         error={emailError || undefined}
         disabled={isLoading}
-        containerStyle={styles.input}
+        containerStyle={styles.emailInput}
         labelStyle={styles.inputLabel}
       />
 
@@ -203,13 +230,21 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: Spacing.md,
+  },
   title: {
     ...Typography.h1,
     color: Colors.backgroundWhite,
-    marginBottom: Spacing.lg,
+    textAlign: 'center',
   },
   input: {
     marginBottom: 0,
+  },
+  emailInput: {
+    marginBottom: Spacing.md,
   },
   inputLabel: {
     color: Colors.lavenderLight,

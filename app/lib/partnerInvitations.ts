@@ -53,7 +53,35 @@ export async function createInvitation(): Promise<PartnerInvitation> {
   // Check if user has an active invitation
   const activeInvitation = await getActiveInvitation();
   if (activeInvitation) {
-    return activeInvitation;
+    // Extend the expiry to 24 hours from now
+    const newExpiresAt = new Date();
+    newExpiresAt.setHours(newExpiresAt.getHours() + 24);
+
+    const { data, error } = await supabase
+      .from('partner_invitations')
+      .update({
+        expires_at: newExpiresAt.toISOString(),
+      })
+      .eq('id', activeInvitation.id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      throw new InvitationError(
+        `Failed to extend invitation: ${error.message}`,
+        'NETWORK_ERROR'
+      );
+    }
+
+    if (!data) {
+      // This shouldn't happen, but handle gracefully
+      throw new InvitationError(
+        'Failed to extend invitation: invitation not found',
+        'NETWORK_ERROR'
+      );
+    }
+
+    return data;
   }
 
   // Generate unique code (retry if collision)
@@ -138,12 +166,18 @@ export async function getInvitationByCode(code: string): Promise<PartnerInvitati
     );
   }
 
-  if (!data || data.length === 0) {
+  // RPC function returns TABLE, which Supabase returns as an array
+  // Handle both array and single object responses
+  if (!data) {
     return null;
   }
 
-  // RPC function returns array, get first result
-  return Array.isArray(data) ? data[0] : data;
+  if (Array.isArray(data)) {
+    return data.length > 0 ? data[0] : null;
+  }
+
+  // If it's already a single object, return it
+  return data;
 }
 
 /**
@@ -234,12 +268,20 @@ export async function acceptInvitation(code: string): Promise<PartnerInvitation>
     })
     .eq('id', invitation.id)
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) {
     throw new InvitationError(
       `Failed to accept invitation: ${error.message}`,
       'NETWORK_ERROR'
+    );
+  }
+
+  if (!data) {
+    // This shouldn't happen, but handle gracefully
+    throw new InvitationError(
+      'Invitation was not found or has already been accepted',
+      'NOT_FOUND'
     );
   }
 

@@ -7,6 +7,14 @@ const PENDING_INVITATION_KEY = 'pending_partner_invitation';
 const INVITATION_ACCEPTED_KEY = 'invitation_accepted_flag';
 
 /**
+ * Check if a URL is a deep link we handle (not a route)
+ * This prevents Expo Router from trying to route these URLs
+ */
+export function isHandledDeepLink(url: string): boolean {
+  return extractInvitationCode(url) !== null;
+}
+
+/**
  * Extract invitation code from deep link URL
  * Format: mrick://partner/invite/{code}
  */

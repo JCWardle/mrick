@@ -28,6 +28,25 @@ export function useCardStack({ cards, onSwipeComplete }: UseCardStackProps) {
     };
   }, []);
 
+  // Reset currentIndex when cards array changes (e.g., after refresh)
+  // This prevents "all caught up" from showing incorrectly when cards are refreshed
+  // The cards array already filters out swiped cards, so when it refreshes,
+  // we need to ensure currentIndex is within bounds
+  const prevCardsLengthRef = useRef(cards.length);
+  useEffect(() => {
+    if (!isMountedRef.current) return;
+    
+    // If currentIndex is out of bounds, reset it
+    // This can happen when cards refresh and the array changes
+    if (currentIndex >= cards.length && cards.length > 0) {
+      // Reset to 0 since cards array already contains only unswiped cards
+      setCurrentIndex(0);
+    }
+    
+    // Update the ref to track cards length for next comparison
+    prevCardsLengthRef.current = cards.length;
+  }, [cards.length, currentIndex]);
+
   const handleSwipe = useCallback(
     async (cardId: string, action: SwipeAction) => {
       // Prevent concurrent swipes - check both isSaving state and in-flight ref

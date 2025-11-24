@@ -52,13 +52,6 @@ export default function ProfileScreen() {
       
       <View style={styles.content}>
         <View style={styles.header}>
-          <IconButton
-            icon="arrow-left"
-            size={24}
-            iconColor={Colors.backgroundWhite}
-            onPress={() => router.back()}
-            style={styles.backButton}
-          />
           <Text variant="headlineSmall" style={styles.title}>
             Profile
           </Text>
@@ -132,15 +125,12 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: Spacing.md,
-    paddingHorizontal: Spacing.md,
-  },
-  backButton: {
-    margin: 0,
+    justifyContent: 'center',
+    paddingTop: Spacing.xs,
   },
   title: {
     color: Colors.backgroundWhite,
-    marginLeft: Spacing.xs,
+    textAlign: 'center',
   },
   divider: {
     marginTop: Spacing.sm,

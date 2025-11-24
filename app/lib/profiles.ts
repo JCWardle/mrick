@@ -12,6 +12,7 @@ export interface Profile {
   sexual_preference: SexualPreference | null;
   relationship_status: RelationshipStatus | null;
   partner_id: string | null;
+  expo_push_token: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -71,7 +72,7 @@ export async function getProfile(): Promise<Profile | null> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { data, error } = await supabase
+const { data, error } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)

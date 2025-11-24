@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { checkAndNotifyCompletion } from './notifications';
 
 export type SwipeResponse = 'yum' | 'ick' | 'maybe';
 
@@ -115,6 +116,12 @@ export async function saveSwipe(
   if (!data) {
     throw new Error('Failed to save swipe. No data returned from server.');
   }
+
+  // Check if both partners have completed swiping (non-blocking)
+  // This runs in the background and won't affect the swipe save
+  checkAndNotifyCompletion().catch((error) => {
+    console.error('Error checking completion status (non-blocking):', error);
+  });
 
   return data;
 }

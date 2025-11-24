@@ -37,7 +37,7 @@ export default function SignUpScreen() {
   }
 
   return (
-    <SafeScreen showBackButton gradientId="signupGradient">
+    <SafeScreen gradientId="signupGradient" showBackButton={true}>
       <SignUpForm
         onSuccess={() => {
           // Navigation handled by useEffect

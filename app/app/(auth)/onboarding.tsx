@@ -74,7 +74,7 @@ interface FormData {
 
 export default function OnboardingScreen() {
   const router = useRouter();
-  const { refreshProfile } = useAuth();
+  const { refreshProfile, logout } = useAuth();
   const insets = useSafeAreaInsets();
   
   const [currentStep, setCurrentStep] = useState(1);
@@ -218,7 +218,21 @@ export default function OnboardingScreen() {
     } catch (error: any) {
       console.error('Error saving step:', error);
       setIsLoading(false);
-      // TODO: Show error message to user
+      
+      // If user is not authenticated, sign them out and redirect to welcome page
+      if (error?.message === 'Not authenticated') {
+        try {
+          await logout();
+          router.replace('/(auth)');
+        } catch (logoutError) {
+          console.error('Error during logout:', logoutError);
+          // Still redirect even if logout fails
+          router.replace('/(auth)');
+        }
+        return;
+      }
+      
+      // TODO: Show error message to user for other errors
     }
   };
 
