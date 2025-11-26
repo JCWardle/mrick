@@ -11,12 +11,12 @@ interface MatchedCardGridProps {
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const NUM_COLUMNS = 3;
-const GRID_PADDING = Spacing.xl * 2; // Total horizontal padding (left + right)
-const GAP = Spacing.sm;
+const NUM_COLUMNS = 2;
+const GRID_PADDING = 0; // No padding on sides
+const GAP = Spacing.xs; // Smaller gap between cards
 // Calculate item width accounting for gaps between items
 const ITEM_WIDTH = (SCREEN_WIDTH - GRID_PADDING - (GAP * (NUM_COLUMNS - 1))) / NUM_COLUMNS;
-const ITEM_HEIGHT = ITEM_WIDTH * 1.2; // Slightly taller than wide for card aspect ratio
+const ITEM_HEIGHT = ITEM_WIDTH * (4 / 3); // 4:3 aspect ratio (width:height = 4:3)
 
 export function MatchedCardGrid({ cards, onCardPress }: MatchedCardGridProps) {
   const renderCard = ({ item }: { item: MatchedCard }) => {
@@ -52,8 +52,8 @@ export function MatchedCardGrid({ cards, onCardPress }: MatchedCardGridProps) {
 
 const styles = StyleSheet.create({
   gridContainer: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
+    paddingHorizontal: 0,
+    paddingVertical: Spacing.sm,
   },
   row: {
     flexDirection: 'row',

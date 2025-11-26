@@ -13,8 +13,12 @@ interface MatchedCardModalProps {
   onDismiss: () => void;
 }
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const IMAGE_HEIGHT = SCREEN_HEIGHT * 0.6; // 60% of screen height for image
+// Calculate image height to maintain 4:3 aspect ratio (width:height = 4:3)
+// Use screen width minus some padding, then calculate height
+const MODAL_IMAGE_WIDTH = SCREEN_WIDTH * 0.9; // 90% of screen width with some padding
+const IMAGE_HEIGHT = MODAL_IMAGE_WIDTH * (3 / 4); // 4:3 aspect ratio
 
 export function MatchedCardModal({ visible, card, onDismiss }: MatchedCardModalProps) {
   if (!card) return null;
@@ -79,8 +83,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundWhite,
   },
   imageContainer: {
-    width: '100%',
+    width: MODAL_IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
+    alignSelf: 'center',
     backgroundColor: Colors.backgroundGray,
   },
   content: {

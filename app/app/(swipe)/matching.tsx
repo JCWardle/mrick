@@ -203,7 +203,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: Spacing.xl,
+    paddingHorizontal: 0,
+    paddingTop: Spacing.xl,
+    paddingBottom: 0,
   },
   placeholderText: {
     color: Colors.backgroundWhite,
