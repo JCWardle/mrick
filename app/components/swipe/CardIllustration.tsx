@@ -9,7 +9,7 @@ interface CardIllustrationProps {
   onLoadingChange?: (isLoading: boolean) => void;
 }
 
-const cardPlaceholderImage = require('../../assets/images/verticle_test.png');
+const cardPlaceholderImage = require('../../assets/images/icon.png');
 
 /**
  * Construct Supabase storage URL from image path using Supabase client

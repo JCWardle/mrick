@@ -166,6 +166,9 @@ export async function getSwipeForCard(cardId: string): Promise<Swipe | null> {
 export interface MatchedCard {
   card_id: string;
   card_title: string;
+  category?: string | null;
+  description?: string | null;
+  image_path?: string | null;
 }
 
 /**

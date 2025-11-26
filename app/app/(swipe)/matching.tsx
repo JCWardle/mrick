@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, Snackbar, ActivityIndicator } from 'react-native-paper';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -7,6 +7,9 @@ import { GradientBackground } from '../../components/ui/GradientBackground';
 import { useAuth } from '../../hooks/useAuth';
 import { checkInvitationAccepted } from '../../lib/deepLinkHandler';
 import { getMatchedCards, MatchedCard } from '../../lib/swipes';
+import { groupMatchedCardsByCategory } from '../../utils/cardHelpers';
+import { CategorySection } from '../../components/swipe/CategorySection';
+import { MatchedCardModal } from '../../components/swipe/MatchedCardModal';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
 
@@ -20,6 +23,8 @@ export default function MatchingScreen() {
   const isFetchingRef = useRef<boolean>(false);
   const [matchedCards, setMatchedCards] = useState<MatchedCard[]>([]);
   const [loadingMatches, setLoadingMatches] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<MatchedCard | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Initialize previousPartnerId on first load to prevent false positive snackbar
   useEffect(() => {
@@ -139,19 +144,23 @@ export default function MatchingScreen() {
                 <ActivityIndicator size="large" color={Colors.backgroundWhite} />
               </View>
             ) : matchedCards.length > 0 ? (
-              <FlatList
-                data={matchedCards}
-                keyExtractor={(item) => item.card_id}
-                renderItem={({ item }) => (
-                  <View style={styles.cardItem}>
-                    <Text variant="bodyLarge" style={styles.cardTitle}>
-                      {item.card_title}
-                    </Text>
-                  </View>
-                )}
-                contentContainerStyle={styles.listContent}
+              <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
-              />
+              >
+                {groupMatchedCardsByCategory(matchedCards).map((categoryGroup) => (
+                  <CategorySection
+                    key={categoryGroup.category}
+                    category={categoryGroup.category}
+                    cards={categoryGroup.cards}
+                    onCardPress={(card) => {
+                      setSelectedCard(card);
+                      setModalVisible(true);
+                    }}
+                  />
+                ))}
+              </ScrollView>
             ) : (
               <Text variant="bodyLarge" style={styles.placeholderText}>
                 No matches yet. Keep swiping to find what you both like!
@@ -164,6 +173,15 @@ export default function MatchingScreen() {
           </Text>
         )}
       </View>
+
+      <MatchedCardModal
+        visible={modalVisible}
+        card={selectedCard}
+        onDismiss={() => {
+          setModalVisible(false);
+          setSelectedCard(null);
+        }}
+      />
 
       <Snackbar
         visible={snackbarVisible}
@@ -204,17 +222,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  listContent: {
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
     paddingBottom: Spacing.xl,
-  },
-  cardItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    padding: Spacing.md,
-    marginBottom: Spacing.sm,
-  },
-  cardTitle: {
-    color: Colors.backgroundWhite,
   },
   snackbar: {
     marginBottom: Spacing.xl,

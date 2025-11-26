@@ -1,4 +1,5 @@
 import { Card, Label } from '../hooks/useCards';
+import { MatchedCard } from '../lib/swipes';
 
 /**
  * Get intensity display label (e.g., "medium" for intensity 2-3)
@@ -137,5 +138,41 @@ export function sortCardsByIntensity(
   return [...cards].sort((a, b) => {
     return ascending ? a.intensity - b.intensity : b.intensity - a.intensity;
   });
+}
+
+/**
+ * Group matched cards by category
+ * Returns a record where keys are category names (or "Uncategorized" for null/undefined)
+ * and values are arrays of matched cards
+ */
+export interface CategoryGroup {
+  category: string;
+  cards: MatchedCard[];
+}
+
+export function groupMatchedCardsByCategory(
+  cards: MatchedCard[]
+): CategoryGroup[] {
+  const grouped: Record<string, MatchedCard[]> = {};
+  
+  cards.forEach((card) => {
+    const category = card.category || 'Uncategorized';
+    if (!grouped[category]) {
+      grouped[category] = [];
+    }
+    grouped[category].push(card);
+  });
+  
+  // Convert to array and sort categories alphabetically, with "Uncategorized" at the end
+  const categories = Object.keys(grouped).sort((a, b) => {
+    if (a === 'Uncategorized') return 1;
+    if (b === 'Uncategorized') return -1;
+    return a.localeCompare(b);
+  });
+  
+  return categories.map((category) => ({
+    category,
+    cards: grouped[category],
+  }));
 }
 
