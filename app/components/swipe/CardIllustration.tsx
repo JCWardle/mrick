@@ -74,38 +74,43 @@ export function CardIllustration({ cardText, category, imagePath, onLoadingChang
           resizeMode="contain"
         />
       ) : (
-        <Image
-          key={imageUrl} // Force re-render when URL changes
-          source={{ uri: imageUrl }}
-          style={styles.image}
-          resizeMode="cover"
-          onLoadStart={() => setImageLoading(true)}
-          onLoadEnd={() => {
-            setImageLoading(false);
-            setImageError(false);
-            onLoadingChange?.(false);
-          }}
-          onError={(error) => {
-            const errorInfo = error?.nativeEvent || error;
-            console.error('[CardIllustration] Image load error:', {
-              error: errorInfo?.error || 'Unknown error',
-              imageUrl,
-              imagePath,
-            });
-            setImageError(true);
-            setImageLoading(false);
-            onLoadingChange?.(false); // Error means we're done loading (using placeholder)
-          }}
-        />
-      )}
-      {imageLoading && !usePlaceholder && (
-        <View style={styles.loadingOverlay}>
+        <>
           <Image
-            source={cardPlaceholderImage}
-            style={[styles.image, styles.loadingImage]}
-            resizeMode="contain"
+            key={imageUrl} // Force re-render when URL changes
+            source={{ uri: imageUrl }}
+            style={styles.image}
+            resizeMode="cover"
+            onLoadStart={() => {
+              setImageLoading(true);
+              setImageError(false);
+            }}
+            onLoadEnd={() => {
+              setImageLoading(false);
+              setImageError(false);
+              onLoadingChange?.(false);
+            }}
+            onError={(error) => {
+              const errorInfo = error?.nativeEvent || error;
+              console.error('[CardIllustration] Image load error:', {
+                error: errorInfo?.error || 'Unknown error',
+                imageUrl,
+                imagePath,
+              });
+              setImageError(true);
+              setImageLoading(false);
+              onLoadingChange?.(false); // Error means we're done loading (using placeholder)
+            }}
           />
-        </View>
+          {imageLoading && (
+            <View style={styles.loadingOverlay} pointerEvents="none">
+              <Image
+                source={cardPlaceholderImage}
+                style={[styles.image, styles.loadingImage]}
+                resizeMode="contain"
+              />
+            </View>
+          )}
+        </>
       )}
     </View>
   );
@@ -118,6 +123,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    backgroundColor: 'transparent',
+    overflow: 'hidden',
   },
   image: {
     width: '100%',
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1,
   },
   loadingImage: {
     opacity: 0.3,

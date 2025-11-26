@@ -18,7 +18,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 // Calculate image height to maintain 4:3 aspect ratio (width:height = 4:3)
 // Use screen width minus some padding, then calculate height
 const MODAL_IMAGE_WIDTH = SCREEN_WIDTH * 0.9; // 90% of screen width with some padding
-const IMAGE_HEIGHT = MODAL_IMAGE_WIDTH * (3 / 4); // 4:3 aspect ratio
+const IMAGE_HEIGHT = MODAL_IMAGE_WIDTH * (4 / 3); // 4:3 aspect ratio
 
 export function MatchedCardModal({ visible, card, onDismiss }: MatchedCardModalProps) {
   if (!card) return null;
@@ -87,14 +87,18 @@ const styles = StyleSheet.create({
     height: IMAGE_HEIGHT,
     alignSelf: 'center',
     backgroundColor: Colors.backgroundGray,
+    marginTop: Spacing.md,
   },
   content: {
     flex: 1,
+    marginTop: Spacing.md,
+    marginBottom: Spacing.md,
   },
   contentContainer: {
     paddingHorizontal: Spacing.xl,
     paddingTop: Spacing.lg,
-    paddingBottom: Spacing.xl,
+    paddingBottom: Spacing.lg,
+    flexGrow: 1,
   },
   title: {
     color: Colors.textPrimary,
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: Spacing.md,
     backgroundColor: Colors.backgroundWhite,
+    width: '100%',
   },
   closeButton: {
     backgroundColor: Colors.primary,
