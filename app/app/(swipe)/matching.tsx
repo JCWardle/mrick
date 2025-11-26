@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, Snackbar, ActivityIndicator } from 'react-native-paper';
+import { Text, Snackbar, ActivityIndicator, IconButton } from 'react-native-paper';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { GradientBackground } from '../../components/ui/GradientBackground';
 import { useAuth } from '../../hooks/useAuth';
 import { checkInvitationAccepted } from '../../lib/deepLinkHandler';
 import { getMatchedCards, MatchedCard } from '../../lib/swipes';
-import { groupMatchedCardsByCategory } from '../../utils/cardHelpers';
-import { CategorySection } from '../../components/swipe/CategorySection';
+import { groupMatchedCardsByCategory, CategoryGroup } from '../../utils/cardHelpers';
+import { MatchedCardGrid } from '../../components/swipe/MatchedCardGrid';
 import { MatchedCardModal } from '../../components/swipe/MatchedCardModal';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
@@ -25,6 +25,7 @@ export default function MatchingScreen() {
   const [loadingMatches, setLoadingMatches] = useState(false);
   const [selectedCard, setSelectedCard] = useState<MatchedCard | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
   // Initialize previousPartnerId on first load to prevent false positive snackbar
   useEffect(() => {
@@ -136,31 +137,84 @@ export default function MatchingScreen() {
       <View style={styles.content}>
         {profile?.partner_id ? (
           <View style={styles.listContainer}>
-            <Text variant="titleMedium" style={styles.listTitle}>
-              Your Matches
-            </Text>
             {loadingMatches ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={Colors.backgroundWhite} />
               </View>
             ) : matchedCards.length > 0 ? (
-              <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-              >
-                {groupMatchedCardsByCategory(matchedCards).map((categoryGroup) => (
-                  <CategorySection
-                    key={categoryGroup.category}
-                    category={categoryGroup.category}
-                    cards={categoryGroup.cards}
-                    onCardPress={(card) => {
-                      setSelectedCard(card);
-                      setModalVisible(true);
+              (() => {
+                const categoryGroups = groupMatchedCardsByCategory(matchedCards);
+                // Flatten into items: [header0, content0?, header1, content1?, ...]
+                const flatItems: Array<{ type: 'header' | 'content'; category: string; cards: MatchedCard[]; index: number }> = [];
+                categoryGroups.forEach((group, idx) => {
+                  flatItems.push({ type: 'header', category: group.category, cards: group.cards, index: idx });
+                  if (expandedCategories.has(group.category)) {
+                    flatItems.push({ type: 'content', category: group.category, cards: group.cards, index: idx });
+                  }
+                });
+                const stickyIndices = flatItems
+                  .map((item, idx) => (item.type === 'header' ? idx : -1))
+                  .filter(idx => idx !== -1);
+
+                return (
+                  <FlatList
+                    data={flatItems}
+                    keyExtractor={(item, index) => `${item.category}-${item.type}-${index}`}
+                    renderItem={({ item }) => {
+                      if (item.type === 'header') {
+                        const isExpanded = expandedCategories.has(item.category);
+                        const categoryDisplayName = item.category.charAt(0).toUpperCase() + item.category.slice(1);
+                        return (
+                          <TouchableOpacity
+                            style={styles.categoryHeader}
+                            onPress={() => {
+                              const newExpanded = new Set(expandedCategories);
+                              if (isExpanded) {
+                                newExpanded.delete(item.category);
+                              } else {
+                                newExpanded.add(item.category);
+                              }
+                              setExpandedCategories(newExpanded);
+                            }}
+                            activeOpacity={0.7}
+                          >
+                            <View style={styles.headerContent}>
+                              <Text variant="titleMedium" style={styles.categoryName}>
+                                {categoryDisplayName}
+                              </Text>
+                              <Text variant="bodyMedium" style={styles.cardCount}>
+                                {item.cards.length} {item.cards.length === 1 ? 'card' : 'cards'}
+                              </Text>
+                            </View>
+                            <IconButton
+                              icon={isExpanded ? 'chevron-up' : 'chevron-down'}
+                              size={24}
+                              iconColor={Colors.backgroundWhite}
+                              style={styles.expandIcon}
+                            />
+                          </TouchableOpacity>
+                        );
+                      } else {
+                        return (
+                          <View style={styles.categoryContent}>
+                            <MatchedCardGrid
+                              cards={item.cards}
+                              onCardPress={(card) => {
+                                setSelectedCard(card);
+                                setModalVisible(true);
+                              }}
+                            />
+                          </View>
+                        );
+                      }
                     }}
+                    stickyHeaderIndices={stickyIndices}
+                    style={styles.scrollView}
+                    contentContainerStyle={styles.scrollContent}
+                    showsVerticalScrollIndicator={false}
                   />
-                ))}
-              </ScrollView>
+                );
+              })()
             ) : (
               <Text variant="bodyLarge" style={styles.placeholderText}>
                 No matches yet. Keep swiping to find what you both like!
@@ -214,11 +268,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
   },
-  listTitle: {
-    color: Colors.backgroundWhite,
-    marginBottom: Spacing.md,
-    textAlign: 'center',
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -229,6 +278,41 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: Spacing.xl,
+  },
+  categoryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    backgroundColor: 'rgba(107, 70, 193, 0.98)', // More opaque background to cover content, using primary color
+    marginBottom: Spacing.md,
+    zIndex: 10,
+    elevation: 10, // For Android
+  },
+  headerContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+  },
+  categoryName: {
+    color: Colors.backgroundWhite,
+    fontWeight: '600',
+  },
+  cardCount: {
+    color: Colors.backgroundWhite,
+    opacity: 0.8,
+  },
+  expandIcon: {
+    margin: 0,
+  },
+  categoryContent: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    marginBottom: Spacing.md,
+    marginHorizontal: 0,
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   snackbar: {
     marginBottom: Spacing.xl,
