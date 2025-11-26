@@ -160,3 +160,68 @@ export async function getSwipeForCard(cardId: string): Promise<Swipe | null> {
   return data || null;
 }
 
+/**
+ * Matched card interface
+ */
+export interface MatchedCard {
+  card_id: string;
+  card_title: string;
+}
+
+/**
+ * Get cards that both partners have matched on (both responded 'yum')
+ * Only returns matches for the current user's partner
+ */
+export async function getMatchedCards(): Promise<MatchedCard[]> {
+  console.log('[getMatchedCards] Starting fetch');
+  
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError) {
+    console.error('[getMatchedCards] Auth error:', {
+      code: authError.code,
+      message: authError.message,
+      details: authError,
+    });
+    throw new Error('Authentication error. Please sign in again.');
+  }
+  
+  if (!user) {
+    console.error('[getMatchedCards] No user found');
+    throw new Error('Not authenticated. Please sign in to view matches.');
+  }
+
+  console.log('[getMatchedCards] Calling RPC with user_id:', user.id);
+  const { data, error } = await supabase
+    .rpc('get_matched_cards', { user_uuid: user.id });
+
+  if (error) {
+    console.error('[getMatchedCards] Database error:', {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      fullError: error,
+    });
+    
+    // If user has no partner, return empty array instead of throwing
+    if (
+      error.message?.includes('partner') || 
+      error.message?.includes('Partnership') ||
+      error.message?.includes('no partner') ||
+      error.code === 'PGRST116' // No rows returned
+    ) {
+      console.log('[getMatchedCards] No partner or no matches, returning empty array');
+      return [];
+    }
+    
+    throw new Error(error.message || 'Failed to fetch matched cards.');
+  }
+
+  console.log('[getMatchedCards] Success:', {
+    count: data?.length || 0,
+    data: data,
+  });
+
+  return data || [];
+}
+

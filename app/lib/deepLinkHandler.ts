@@ -17,6 +17,7 @@ export function isHandledDeepLink(url: string): boolean {
 /**
  * Extract invitation code from deep link URL
  * Format: mrick://partner/invite/{code}
+ * Normalizes code to uppercase to match database storage
  */
 function extractInvitationCode(url: string): string | null {
   try {
@@ -26,13 +27,13 @@ function extractInvitationCode(url: string): string | null {
       // Extract code from path segments
       const segments = parsed.pathSegments || [];
       if (segments.length > 0) {
-        return segments[0];
+        return segments[0].toUpperCase();
       }
     }
     // Alternative format: mrick://partner/invite/CODE
     const match = url.match(/partner\/invite\/([^/?]+)/);
     if (match && match[1]) {
-      return match[1];
+      return match[1].toUpperCase();
     }
     return null;
   } catch (error) {
@@ -93,6 +94,19 @@ export async function checkInvitationAccepted(): Promise<boolean> {
     }
     return false;
   } catch (error) {
+    return false;
+  }
+}
+
+/**
+ * Check if there's a pending invitation without clearing it
+ */
+export async function hasPendingInvitation(): Promise<boolean> {
+  try {
+    const code = await SecureStore.getItemAsync(PENDING_INVITATION_KEY);
+    return code !== null;
+  } catch (error) {
+    console.error('Error checking pending invitation:', error);
     return false;
   }
 }

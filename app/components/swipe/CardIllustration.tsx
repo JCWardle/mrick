@@ -6,6 +6,7 @@ interface CardIllustrationProps {
   cardText: string;
   category?: string | null;
   imagePath?: string | null; // Path to image in Supabase storage (e.g., "card-images/morning-kisses-titled.png" or "morning-kisses-titled.png")
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
 const cardPlaceholderImage = require('../../assets/images/verticle_test.png');
@@ -35,19 +36,34 @@ function getSupabaseImageUrl(imagePath: string | null | undefined): string | nul
   return data.publicUrl;
 }
 
-export function CardIllustration({ cardText, category, imagePath }: CardIllustrationProps) {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
-
+export function CardIllustration({ cardText, category, imagePath, onLoadingChange }: CardIllustrationProps) {
   const imageUrl = getSupabaseImageUrl(imagePath);
+  const usePlaceholder = !imageUrl;
+  
+  // Initialize loading state: if no image URL, we're not loading (using placeholder)
+  // Otherwise, we need to load the image
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(!usePlaceholder);
 
   // Reset state when imagePath changes
   useEffect(() => {
     setImageError(false);
-    setImageLoading(true);
-  }, [imagePath]);
+    // If there's no image URL, we're not loading (using placeholder)
+    // Otherwise, we need to load the image
+    if (!imageUrl) {
+      setImageLoading(false);
+    } else {
+      setImageLoading(true);
+    }
+  }, [imagePath, imageUrl]);
 
-  const usePlaceholder = !imageUrl || imageError;
+  // Notify parent of loading state changes
+  useEffect(() => {
+    // If using placeholder (no image URL or error), consider it "loaded" (not loading)
+    // If we have an image URL, report the actual loading state
+    const isLoading = !usePlaceholder && imageLoading;
+    onLoadingChange?.(isLoading);
+  }, [usePlaceholder, imageLoading, onLoadingChange]);
 
   return (
     <View style={styles.container}>
@@ -67,6 +83,7 @@ export function CardIllustration({ cardText, category, imagePath }: CardIllustra
           onLoadEnd={() => {
             setImageLoading(false);
             setImageError(false);
+            onLoadingChange?.(false);
           }}
           onError={(error) => {
             const errorInfo = error?.nativeEvent || error;
@@ -77,6 +94,7 @@ export function CardIllustration({ cardText, category, imagePath }: CardIllustra
             });
             setImageError(true);
             setImageLoading(false);
+            onLoadingChange?.(false); // Error means we're done loading (using placeholder)
           }}
         />
       )}

@@ -7,7 +7,7 @@ import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
 import { SWIPE_THRESHOLD_X } from '../../constants/swipeThresholds';
 import { CardIllustration } from './CardIllustration';
-import { useImperativeHandle, forwardRef } from 'react';
+import { useImperativeHandle, forwardRef, useState, useEffect } from 'react';
 
 interface SwipeableCardProps {
   card: Card;
@@ -18,6 +18,7 @@ interface SwipeableCardProps {
   onShowDetails?: () => void;
   topCardTranslateX?: SharedValue<number>;
   isTopCardMoving?: SharedValue<number>;
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
 export interface SwipeableCardRef {
@@ -33,18 +34,37 @@ export const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(({
   onShowDetails,
   topCardTranslateX,
   isTopCardMoving,
+  onLoadingChange,
 }, ref) => {
   // Safety check: if card is invalid, don't render
   if (!card || !card.id || !card.text) {
     return null;
   }
 
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
   const isTopCard = index === 0;
   const isSecondCard = index === 1;
+  
+  // Reset loading state when card changes
+  useEffect(() => {
+    setIsImageLoading(true);
+  }, [card.id]);
+  
+  // Disable gesture when image is loading (only for top card)
+  const gestureEnabled = isTopCard && enabled && !isImageLoading;
+  
   const { gesture, animatedStyle, translateX, animateOffScreen } = useSwipeGesture({
     onSwipe,
-    enabled: isTopCard && enabled,
+    enabled: gestureEnabled,
   });
+
+  // Notify parent of loading state changes (only for top card)
+  useEffect(() => {
+    if (isTopCard) {
+      onLoadingChange?.(isImageLoading);
+    }
+  }, [isImageLoading, isTopCard, onLoadingChange]);
 
   // Expose animateOffScreen function via ref so parent can trigger animation
   useImperativeHandle(ref, () => ({
@@ -144,6 +164,7 @@ export const SwipeableCard = forwardRef<SwipeableCardRef, SwipeableCardProps>(({
               cardText={card.text} 
               category={card.category}
               imagePath={card.image_path}
+              onLoadingChange={setIsImageLoading}
             />
           )}
         </View>

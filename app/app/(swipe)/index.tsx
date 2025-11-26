@@ -2,7 +2,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text, ActivityIndicator, Snackbar, IconButton } from 'react-native-paper';
 import { useRouter } from 'expo-router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { CardStack, CardStackRef } from '../../components/swipe/CardStack';
 import { SwipeButtons } from '../../components/swipe/SwipeButtons';
 import { DeleteAccountDialog } from '../../components/swipe/DeleteAccountDialog';
@@ -61,6 +61,12 @@ export default function SwipeScreen() {
 
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
   const [showSwipeError, setShowSwipeError] = useState(false);
+  const [isCardLoading, setIsCardLoading] = useState(true);
+
+  // Stable callback for loading state changes
+  const handleCardLoadingChange = useCallback((isLoading: boolean) => {
+    setIsCardLoading(isLoading);
+  }, []);
 
   // Show swipe error when it occurs
   useEffect(() => {
@@ -224,6 +230,7 @@ export default function SwipeScreen() {
           onSwipe={handleSwipe}
           currentIndex={currentIndex}
           onShowDetails={() => setDetailsModalVisible(true)}
+          onTopCardLoadingChange={handleCardLoadingChange}
         />
       </View>
 
@@ -240,7 +247,7 @@ export default function SwipeScreen() {
             }
           }}
           onInfo={() => setDetailsModalVisible(true)}
-          disabled={isSaving || !currentCard}
+          disabled={isSaving || !currentCard || isCardLoading}
         />
       </View>
 

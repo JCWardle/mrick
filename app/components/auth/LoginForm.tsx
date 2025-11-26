@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Snackbar } from 'react-native-paper';
+import { useRouter } from 'expo-router';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
 import { GoogleLoginButton } from '../ui/GoogleLoginButton';
@@ -13,9 +14,11 @@ import { Typography } from '../../constants/typography';
 
 type LoginFormProps = {
   onSuccess?: () => void;
+  hasInvite?: boolean;
 };
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
+export function LoginForm({ onSuccess, hasInvite = false }: LoginFormProps) {
+  const router = useRouter();
   const { loginWithEmail, loginWithGoogle, loginWithApple } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -74,6 +77,21 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   return (
     <View style={styles.container}>
+      {hasInvite && (
+        <View style={styles.inviteMessageContainer}>
+          <Text style={styles.inviteMessage}>
+            You've been invited! Log in to peek at your partner's yums
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push('/(auth)/signup')}
+            style={styles.signupLinkContainer}
+          >
+            <Text style={styles.signupLinkText}>
+              Don't have an account? <Text style={styles.signupLink}>Sign up</Text>
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <Input
         label="Email"
         type="text"
@@ -155,6 +173,34 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+  },
+  inviteMessageContainer: {
+    marginBottom: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    alignItems: 'center',
+  },
+  inviteMessage: {
+    ...Typography.body,
+    color: Colors.backgroundWhite,
+    textAlign: 'center',
+    fontSize: 16,
+    lineHeight: 22,
+    marginBottom: Spacing.sm,
+  },
+  signupLinkContainer: {
+    marginTop: Spacing.xs,
+  },
+  signupLinkText: {
+    ...Typography.body,
+    color: Colors.lavenderLight,
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  signupLink: {
+    ...Typography.body,
+    color: Colors.backgroundWhite,
+    textDecorationLine: 'underline',
+    fontSize: 14,
   },
   input: {
     marginBottom: 0,

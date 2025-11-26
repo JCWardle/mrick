@@ -15,9 +15,11 @@ import { Typography } from '../../constants/typography';
 
 type SignUpFormProps = {
   onSuccess?: () => void;
+  hasInvite?: boolean;
 };
 
-export function SignUpForm({ onSuccess }: SignUpFormProps) {
+export function SignUpForm({ onSuccess, hasInvite = false }: SignUpFormProps) {
+  const router = useRouter();
   const { signUpWithEmail, loginWithGoogle, loginWithApple } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -134,6 +136,21 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Create an Account</Text>
+        {hasInvite && (
+          <View style={styles.inviteMessageContainer}>
+            <Text style={styles.inviteMessage}>
+              You've been invited! Sign up to peek at your partner's yums
+            </Text>
+            <TouchableOpacity
+              onPress={() => router.push('/(auth)/login')}
+              style={styles.loginLinkContainer}
+            >
+              <Text style={styles.loginLinkText}>
+                Already have an account? <Text style={styles.loginLink}>Log in</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <Input
@@ -231,14 +248,43 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: Spacing.md,
   },
   title: {
     ...Typography.h1,
     color: Colors.backgroundWhite,
     textAlign: 'center',
+  },
+  inviteMessageContainer: {
+    marginTop: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    alignItems: 'center',
+  },
+  inviteMessage: {
+    ...Typography.body,
+    color: Colors.backgroundWhite,
+    textAlign: 'center',
+    fontSize: 16,
+    lineHeight: 22,
+    marginBottom: Spacing.sm,
+  },
+  loginLinkContainer: {
+    marginTop: Spacing.xs,
+  },
+  loginLinkText: {
+    ...Typography.body,
+    color: Colors.lavenderLight,
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  loginLink: {
+    ...Typography.body,
+    color: Colors.backgroundWhite,
+    textDecorationLine: 'underline',
+    fontSize: 14,
   },
   input: {
     marginBottom: 0,

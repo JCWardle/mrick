@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { handleDeepLink } from '../../../lib/deepLinkHandler';
+import { handleDeepLink, hasPendingInvitation } from '../../../lib/deepLinkHandler';
 import { useAuth } from '../../../hooks/useAuth';
 
 /**
@@ -16,25 +16,39 @@ export default function PartnerInviteRoute() {
   const { isAuthenticated, isProfileComplete } = useAuth();
 
   useEffect(() => {
-    if (!code) {
+    // Handle case where code might be an array from useLocalSearchParams
+    const invitationCode = Array.isArray(code) ? code[0] : code;
+    
+    if (!invitationCode) {
       // No code provided, redirect to home
       router.replace('/');
       return;
     }
 
-    // Construct the deep link URL
-    const deepLink = `mrick://partner/invite/${code}`;
+    // Normalize code to uppercase and construct the deep link URL
+    const normalizedCode = invitationCode.toUpperCase();
+    const deepLink = `mrick://partner/invite/${normalizedCode}`;
     
     // Handle the deep link (this will accept the invitation if user is authenticated)
-    handleDeepLink(deepLink).then(() => {
+    handleDeepLink(deepLink).then(async () => {
       // After handling, redirect to appropriate screen
       if (!isAuthenticated) {
-        router.replace('/(auth)');
+        // If there's a pending invitation, redirect directly to signup
+        const hasInvite = await hasPendingInvitation();
+        if (hasInvite) {
+          router.replace('/(auth)/signup');
+        } else {
+          router.replace('/(auth)');
+        }
       } else if (!isProfileComplete) {
         router.replace('/(auth)/onboarding');
       } else {
         router.replace('/(swipe)');
       }
+    }).catch((error) => {
+      console.error('Error handling deep link:', error);
+      // On error, redirect to home
+      router.replace('/');
     });
   }, [code, router, isAuthenticated, isProfileComplete]);
 

@@ -10,13 +10,14 @@ interface CardStackProps {
   onSwipe: (cardId: string, action: SwipeAction) => void;
   currentIndex: number;
   onShowDetails?: () => void;
+  onTopCardLoadingChange?: (isLoading: boolean) => void;
 }
 
 export interface CardStackRef {
   animateTopCard: (direction: 'left' | 'right' | 'up') => void;
 }
 
-export const CardStack = forwardRef<CardStackRef, CardStackProps>(({ cards, onSwipe, currentIndex, onShowDetails }, ref) => {
+export const CardStack = forwardRef<CardStackRef, CardStackProps>(({ cards, onSwipe, currentIndex, onShowDetails, onTopCardLoadingChange }, ref) => {
   // Show up to 3 cards in the stack
   const visibleCards = cards.slice(currentIndex, currentIndex + 3);
   
@@ -69,6 +70,7 @@ export const CardStack = forwardRef<CardStackRef, CardStackProps>(({ cards, onSw
             onShowDetails={isTopCard ? onShowDetails : undefined}
             topCardTranslateX={isTopCard ? topCardTranslateX : undefined}
             isTopCardMoving={topCardTranslateX}
+            onLoadingChange={isTopCard ? onTopCardLoadingChange : undefined}
           />
         );
       })}

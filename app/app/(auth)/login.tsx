@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,11 +11,22 @@ import { SafeScreen } from '../../components/ui/SafeScreen';
 import { Colors } from '../../constants/colors';
 import { Spacing } from '../../constants/spacing';
 import { Image } from 'expo-image';
+import { hasPendingInvitation } from '../../lib/deepLinkHandler';
 
 export default function LoginScreen() {
   const router = useRouter();
   const { isAuthenticated, isProfileComplete, isLoading } = useAuth();
+  const [hasInvite, setHasInvite] = useState(false);
   usePendingInvitation(); // Handle pending invitations after login
+
+  // Check for pending invitation on mount
+  useEffect(() => {
+    const checkInvite = async () => {
+      const hasInvitation = await hasPendingInvitation();
+      setHasInvite(hasInvitation);
+    };
+    checkInvite();
+  }, []);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
@@ -53,6 +64,7 @@ export default function LoginScreen() {
       {/* Login Form */}
       <View style={styles.formContainer}>
         <LoginForm
+          hasInvite={hasInvite}
           onSuccess={() => {
             // Navigation handled by useEffect
           }}

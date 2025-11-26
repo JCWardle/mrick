@@ -129,26 +129,45 @@ export async function createInvitation(): Promise<PartnerInvitation> {
 
 /**
  * Get invitation by code using secure RPC function
+ * Normalizes code to uppercase to match database storage
  */
 export async function getInvitationByCode(code: string): Promise<PartnerInvitation | null> {
+  // Normalize code to uppercase to ensure case-insensitive matching
+  const normalizedCode = code.toUpperCase();
+  
+  console.log(`[getInvitationByCode] Looking up code: ${normalizedCode} (original: ${code})`);
+  
   const { data, error } = await supabase.rpc('get_invitation_by_code', {
-    invitation_code: code,
+    invitation_code: normalizedCode,
   });
 
   if (error) {
+    console.error(`[getInvitationByCode] RPC error:`, {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+    
     // If function doesn't exist yet (migration not run), fall back to direct query
     // This is a temporary fallback for development
     if (error.code === '42883') {
+      console.log('[getInvitationByCode] Function not found, using fallback query');
       const { data: fallbackData, error: fallbackError } = await supabase
         .from('partner_invitations')
         .select('*')
-        .eq('code', code)
+        .eq('code', normalizedCode)
         .is('used_at', null)
         .gt('expires_at', new Date().toISOString())
         .single();
 
       if (fallbackError) {
+        console.error(`[getInvitationByCode] Fallback query error:`, {
+          code: fallbackError.code,
+          message: fallbackError.message,
+        });
         if (fallbackError.code === 'PGRST116') {
+          console.log('[getInvitationByCode] Invitation not found (PGRST116)');
           return null; // Not found
         }
         throw new InvitationError(
@@ -157,26 +176,37 @@ export async function getInvitationByCode(code: string): Promise<PartnerInvitati
         );
       }
 
+      console.log('[getInvitationByCode] Fallback query succeeded:', fallbackData);
       return fallbackData;
     }
 
     throw new InvitationError(
-      `Failed to lookup invitation: ${error.message}`,
+      `Failed to lookup invitation: ${error.message} (code: ${error.code})`,
       'NETWORK_ERROR'
     );
   }
 
+  console.log(`[getInvitationByCode] RPC response:`, {
+    data,
+    isArray: Array.isArray(data),
+    length: Array.isArray(data) ? data.length : 'N/A',
+  });
+
   // RPC function returns TABLE, which Supabase returns as an array
   // Handle both array and single object responses
   if (!data) {
+    console.log('[getInvitationByCode] No data returned');
     return null;
   }
 
   if (Array.isArray(data)) {
-    return data.length > 0 ? data[0] : null;
+    const result = data.length > 0 ? data[0] : null;
+    console.log(`[getInvitationByCode] Array result:`, result ? 'found' : 'not found');
+    return result;
   }
 
   // If it's already a single object, return it
+  console.log('[getInvitationByCode] Single object result:', data);
   return data;
 }
 
@@ -212,81 +242,105 @@ export async function getActiveInvitation(): Promise<PartnerInvitation | null> {
 
 /**
  * Accept a partner invitation by code
+ * This combines lookup and acceptance in a single atomic database operation
+ * All validation (including partner check) is handled by the database function
  */
 export async function acceptInvitation(code: string): Promise<PartnerInvitation> {
+  // Normalize code to uppercase to ensure case-insensitive matching
+  const normalizedCode = code.toUpperCase();
+  
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
-  // Check if user already has a partner
-  const profile = await getProfile();
-  if (profile?.partner_id) {
-    throw new InvitationError(
-      'You are already linked with a partner',
-      'ALREADY_LINKED'
-    );
-  }
+  console.log(`[acceptInvitation] Attempting to accept invitation with code: ${normalizedCode}`);
 
-  // Get invitation by code
-  const invitation = await getInvitationByCode(code);
-  if (!invitation) {
-    throw new InvitationError(
-      'Invitation not found or has expired',
-      'NOT_FOUND'
-    );
-  }
-
-  // Check if expired
-  if (new Date(invitation.expires_at) <= new Date()) {
-    throw new InvitationError(
-      'This invitation has expired',
-      'EXPIRED'
-    );
-  }
-
-  // Check if already used
-  if (invitation.used_at) {
-    throw new InvitationError(
-      'This invitation has already been used',
-      'ALREADY_USED'
-    );
-  }
-
-  // Prevent self-invite
-  if (invitation.inviter_id === user.id) {
-    throw new InvitationError(
-      'You cannot accept your own invitation',
-      'SELF_INVITE'
-    );
-  }
-
-  // Update invitation to accept it
-  const { data, error } = await supabase
-    .from('partner_invitations')
-    .update({
-      invitee_id: user.id,
-      used_at: new Date().toISOString(),
-    })
-    .eq('id', invitation.id)
-    .select()
-    .maybeSingle();
+  // Call the RPC function which handles lookup, validation, and acceptance atomically
+  const { data, error } = await supabase.rpc('accept_invitation_by_code', {
+    invitation_code: normalizedCode,
+    user_id: user.id,
+  });
 
   if (error) {
+    console.error(`[acceptInvitation] RPC error:`, {
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
+    
+    // If function doesn't exist, provide helpful error
+    if (error.code === '42883') {
+      throw new InvitationError(
+        'Invitation acceptance function not available. Please run database migrations.',
+        'NETWORK_ERROR'
+      );
+    }
+
+    // Map database error messages to invitation error codes
+    const errorMessage = error.message || '';
+    if (errorMessage.includes('already linked with a partner')) {
+      throw new InvitationError(
+        errorMessage,
+        'ALREADY_LINKED'
+      );
+    }
+    if (errorMessage.includes('not found') || errorMessage.includes('expired')) {
+      throw new InvitationError(
+        errorMessage,
+        'NOT_FOUND'
+      );
+    }
+    if (errorMessage.includes('already been used')) {
+      throw new InvitationError(
+        errorMessage,
+        'ALREADY_USED'
+      );
+    }
+    if (errorMessage.includes('cannot accept your own')) {
+      throw new InvitationError(
+        errorMessage,
+        'SELF_INVITE'
+      );
+    }
+    if (errorMessage.includes('has expired')) {
+      throw new InvitationError(
+        errorMessage,
+        'EXPIRED'
+      );
+    }
+
     throw new InvitationError(
-      `Failed to accept invitation: ${error.message}`,
+      `Failed to accept invitation: ${errorMessage}`,
       'NETWORK_ERROR'
     );
   }
 
+  // RPC function returns TABLE, which Supabase returns as an array
   if (!data) {
-    // This shouldn't happen, but handle gracefully
     throw new InvitationError(
       'Invitation was not found or has already been accepted',
       'NOT_FOUND'
     );
   }
 
+  let acceptedInvitation: PartnerInvitation;
+  if (Array.isArray(data)) {
+    if (data.length === 0) {
+      throw new InvitationError(
+        'Invitation was not found or has already been accepted',
+        'NOT_FOUND'
+      );
+    }
+    acceptedInvitation = data[0];
+  } else {
+    acceptedInvitation = data;
+  }
+
+  console.log(`[acceptInvitation] Successfully accepted invitation:`, acceptedInvitation);
+  
   // The database trigger will automatically link partners
   // Return the updated invitation
-  return data;
+  return acceptedInvitation;
 }
+
 

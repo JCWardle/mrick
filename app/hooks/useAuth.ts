@@ -70,6 +70,7 @@ export function useAuth() {
               gender: profile.gender,
               sexual_preference: profile.sexual_preference,
               relationship_status: profile.relationship_status,
+              partner_id: profile.partner_id,
             } : null,
           });
           setState((prev) => ({
@@ -159,6 +160,7 @@ export function useAuth() {
               gender: profile.gender,
               sexual_preference: profile.sexual_preference,
               relationship_status: profile.relationship_status,
+              partner_id: profile.partner_id,
             } : null,
           });
           setState((prev) => ({

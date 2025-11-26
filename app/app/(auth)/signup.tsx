@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,11 +8,22 @@ import { usePendingInvitation } from '../../hooks/usePendingInvitation';
 import { ActivityIndicator } from 'react-native-paper';
 import { SafeScreen } from '../../components/ui/SafeScreen';
 import { Colors } from '../../constants/colors';
+import { hasPendingInvitation } from '../../lib/deepLinkHandler';
 
 export default function SignUpScreen() {
   const router = useRouter();
   const { isAuthenticated, isProfileComplete, isLoading } = useAuth();
+  const [hasInvite, setHasInvite] = useState(false);
   usePendingInvitation(); // Handle pending invitations after signup
+
+  // Check for pending invitation on mount
+  useEffect(() => {
+    const checkInvite = async () => {
+      const hasInvitation = await hasPendingInvitation();
+      setHasInvite(hasInvitation);
+    };
+    checkInvite();
+  }, []);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
@@ -39,6 +50,7 @@ export default function SignUpScreen() {
   return (
     <SafeScreen gradientId="signupGradient" showBackButton={true}>
       <SignUpForm
+        hasInvite={hasInvite}
         onSuccess={() => {
           // Navigation handled by useEffect
         }}
