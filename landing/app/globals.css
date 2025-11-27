@@ -101,11 +101,22 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     min-height: 100vh;
+    height: 100%;
+    overflow-x: hidden;
+    /* Prevent overscroll bounce on mobile */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
   }
   body {
     color: #FFFFFF;
-    background: transparent;
+    background: linear-gradient(to bottom, #6B46C1 0%, #000000 100%);
+    background-attachment: fixed;
     min-height: 100vh;
+    height: 100%;
+    overflow-x: hidden;
+    /* Prevent overscroll bounce on mobile */
+    overscroll-behavior: none;
+    position: relative;
   }
 }
 
