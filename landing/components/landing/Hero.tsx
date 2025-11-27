@@ -4,8 +4,9 @@ import { SITE_CONFIG } from "@/constants/site";
 
 export function Hero() {
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24 lg:py-32">
-      <div className="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
+    <section className="w-full min-h-screen flex items-center justify-center px-4 py-16 md:py-24 lg:py-32">
+      <div className="container mx-auto max-w-5xl">
+        <div className="flex flex-col items-center text-center space-y-8">
         {/* Logo */}
         <div className="mb-4">
           <Image
@@ -19,10 +20,10 @@ export function Hero() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">
             {SITE_CONFIG.messaging.hero}
           </h1>
-          <p className="text-xl md:text-2xl text-text-secondary max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-white max-w-2xl mx-auto drop-shadow-md">
             {SITE_CONFIG.messaging.heroSub}
           </p>
         </div>
@@ -30,30 +31,31 @@ export function Hero() {
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
           <Button 
             size="lg" 
-            className="bg-primary text-white hover:bg-primary-dark px-8 py-6 text-lg"
+            className="bg-primary text-white hover:bg-primary-dark px-8 py-6 text-lg shadow-lg font-bold"
           >
             Download for iOS
           </Button>
           <Button 
             size="lg" 
             variant="outline"
-            className="border-primary text-primary hover:bg-primary hover:text-white px-8 py-6 text-lg"
+            className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-6 text-lg shadow-lg font-bold bg-white/5 backdrop-blur-sm"
           >
             Download for Android
           </Button>
         </div>
 
-        <p className="text-sm text-text-tertiary flex items-center gap-2">
+        <p className="text-sm text-white flex items-center gap-2 drop-shadow-sm">
           <span className="text-yummy">🔒</span>
           {SITE_CONFIG.messaging.trust}
         </p>
 
         {/* Hero Visual Placeholder */}
         <div className="mt-12 w-full max-w-md mx-auto">
-          <div className="aspect-[9/16] bg-gradient-to-br from-primary/20 to-lavender/20 rounded-2xl border border-primary/20 flex items-center justify-center">
-            <p className="text-text-secondary text-sm">App Mockup</p>
+          <div className="aspect-[9/16] bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 flex items-center justify-center">
+            <p className="text-white text-sm drop-shadow-sm">App Mockup</p>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

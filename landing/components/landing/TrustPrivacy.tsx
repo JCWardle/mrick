@@ -1,31 +1,26 @@
 import { SITE_CONFIG } from "@/constants/site";
-import { Card, CardContent } from "@/components/ui/card";
 
 export function TrustPrivacy() {
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24 bg-background-gray">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
+    <section className="w-full py-16 md:py-24">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
             Trust & Privacy
           </h2>
-          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto drop-shadow-md">
             Your privacy is our top priority
           </p>
         </div>
 
-        <Card className="border-primary/20">
-          <CardContent className="pt-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {SITE_CONFIG.trust.map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <span className="text-yummy text-xl">✓</span>
-                  <p className="text-text-primary">{item}</p>
-                </div>
-              ))}
+        <div className="grid md:grid-cols-2 gap-8 bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+          {SITE_CONFIG.trust.map((item, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <span className="text-yummy text-xl">✓</span>
+                  <p className="text-white drop-shadow-sm">{item}</p>
             </div>
-          </CardContent>
-        </Card>
+          ))}
+        </div>
       </div>
     </section>
   );

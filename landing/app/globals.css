@@ -10,15 +10,15 @@ body {
 
 @layer base {
   h1 {
-    @apply text-h1 font-bold text-text-primary;
+    @apply text-h1 font-bold;
   }
   
   h2 {
-    @apply text-h2 font-medium text-text-primary;
+    @apply text-h2 font-medium;
   }
   
   p {
-    @apply text-body text-text-primary;
+    @apply text-body;
   }
   
   button {
@@ -96,8 +96,16 @@ body {
   * {
     @apply border-border;
   }
+  html {
+    background: linear-gradient(to bottom, #6B46C1 0%, #000000 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+  }
   body {
-    @apply bg-background text-foreground;
+    color: #FFFFFF;
+    background: transparent;
+    min-height: 100vh;
   }
 }
 
